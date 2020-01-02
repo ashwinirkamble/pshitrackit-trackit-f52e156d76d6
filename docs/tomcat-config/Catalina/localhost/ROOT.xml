@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context path="" docBase="c:/cloaked/pshi" crossContext="true"
+	displayName="Premier Solutions HI, LLC" reloadable="false">
+	<Resource name="jdbc/pshi" auth="Container" type="javax.sql.DataSource"
+		driverClassName="org.sqlite.JDBC" url="jdbc:sqlite:/C:/sqlite3_db/pshi.db"
+		factory="org.apache.tomcat.dbcp.dbcp.BasicDataSourceFactory"
+		validationQuery="select 1" />
+</Context>

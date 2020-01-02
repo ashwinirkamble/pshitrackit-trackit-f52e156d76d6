@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.premiersolutionshi.support.dao.ShipDao">
+	<resultMap type="Ship" id="simpleShipResult">
+		<id property="id" column="ship_pk" />
+		<result property="uic" column="s_uic" />
+		<result property="shipName" column="s_ship_name" />
+		<result property="type" column="s_type" />
+		<result property="hull" column="s_hull" />
+		<result property="serviceCode" column="s_service_code" />
+		<result property="tycom" column="s_tycom" />
+		<result property="homeport" column="s_homeport" />
+		<result property="rsupply" column="s_rsupply" />
+	</resultMap>
+
+	<resultMap type="Ship" id="shipResult" extends="simpleShipResult">
+		<collection property="pocList" notNullColumn="poc_pk"
+			resultMap="com.premiersolutionshi.support.dao.PocDao.simplePocResult" />
+	</resultMap>
+
+	<sql id="columns">
+		ship_pk,
+		s.uic AS s_uic,
+		s.ship_name AS s_ship_name,
+		s.type AS s_type,
+		s.hull AS s_hull,
+		s.service_code AS s_service_code,
+		s.tycom AS s_tycom,
+		s.homeport AS s_homeport,
+		s.rsupply AS s_rsupply
+	</sql>
+
+	<sql id="baseSelect">
+		SELECT
+		<include refid="columns" />
+		,
+		<include refid="com.premiersolutionshi.support.dao.PocDao.columns" />
+		,
+		<include refid="com.premiersolutionshi.common.dao.OrganizationDao.columns" />
+		,
+		NULL AS primary_poc_pk
+		FROM ship s
+		LEFT OUTER JOIN (
+		poc p
+		LEFT OUTER JOIN (
+		organization o
+		LEFT OUTER JOIN users cbu ON cbu.user_pk = o.created_by_fk
+		LEFT OUTER JOIN users lubu ON lubu.user_pk = o.last_updated_by_fk
+		) ON o.organization_pk = p.organization_fk
+		) ON ship_pk = p.ship_fk
+	</sql>
+
+	<select id="getAll" resultMap="shipResult">
+		<include refid="baseSelect" />
+		ORDER BY s.ship_name, p.first_name, p.last_name
+	</select>
+
+	<select id="getById" resultMap="shipResult">
+		<include refid="baseSelect" />
+		WHERE ship_pk = #{id}
+	</select>
+
+	<select id="getHomeportList" resultType="java.lang.String">
+		SELECT DISTINCT homeport FROM ship
+		WHERE homeport IS NOT NULL ORDER BY homeport
+	</select>
+
+	<insert id="insert" useGeneratedKeys="true"
+		parameterType="com.premiersolutionshi.support.domain.Ship">
+		INSERT INTO ship (
+		uic,
+		ship_name,
+		type,
+		hull,
+		service_code,
+		tycom,
+		homeport,
+		rsupply
+		)
+		VALUES (
+		{uic},
+		{shipName},
+		{type},
+		{hull},
+		{serviceCode},
+		{tycom},
+		{homeport},
+		{rsupply}
+		)
+	</insert>
+
+	<update id="update" parameterType="com.premiersolutionshi.support.domain.Ship">
+		UPDATE ship SET
+		uic = {uic},
+		ship_name = {shipName},
+		type = {type},
+		hull = {hull},
+		service_code = {serviceCode},
+		tycom = {tycom},
+		homeport = {homeport},
+		rsupply = {rsupply}
+		WHERE ship_pk = #{id}
+	</update>
+
+	<delete id="deleteById">
+		DELETE FROM ship
+		WHERE ship_pk = #{id}
+	</delete>
+</mapper>

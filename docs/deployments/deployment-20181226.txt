@@ -1,0 +1,24 @@
+-------------------------------------------------------------------------------
+  Deployment Email
+-------------------------------------------------------------------------------
+
+To: PremierSolutionsHI Support;
+Cc: Darby Meyer; Amanda Crabtree; David Tribble
+Subject: TrackIT Deployed to Production 12/26/2018
+
+TrackIT Team,
+
+Deployment fixes:
+
+* Using COPY feature- comments section doesn’t stick (previously reported by Miracle but not on the list). Also, retain the configured system if one is selected in the issue that’s getting copied, otherwise default to blank and required
+
+* When updating a report, changes were getting sent to Person Assigned even though it is the same user.
+
+* 2. Support Issues: When closing associated issues via a Follow-Up Training issue, those issues should get Assigned To updated to match current issue (added to this list 11/1/18)
+
+I sent Darby questions about High Priority Items 3 and 7 and while I’m waiting, I’ll start working on the "Monthly Business Volume Report".
+
+v/r,
+Lewis Nakao | Software Engineer | Premier Solutions Hi, LLC
+Email: lewis.nakao@premiersoltuionshi.com 
+desk 808.784.3310 main 808.396.4444 ext 110 cell 541.357.7473

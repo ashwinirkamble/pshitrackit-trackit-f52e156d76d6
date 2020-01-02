@@ -1,0 +1,205 @@
+<%@ page language="java" %>
+<%@ page import="util.CommonMethods" %>
+
+<%@ taglib prefix="bean"  uri="http://struts.apache.org/tags-bean" %>
+<%@ taglib prefix="html"  uri="http://struts.apache.org/tags-html" %>
+<%@ taglib prefix="logic" uri="http://struts.apache.org/tags-logic" %>
+
+<bean:define id="defaultPageTitle" value="Installation Checklist"/>
+<jsp:useBean id="customPageTitle" scope="request" class="java.lang.String"/><bean:define id="pageTitle" name="customPageTitle"/><logic:equal name="pageTitle" value=""><bean:define id="pageTitle" name="defaultPageTitle"/></logic:equal>
+<jsp:useBean id="loginBean" scope="request" class="com.premiersolutionshi.old.bean.LoginBean"/>
+
+<jsp:useBean id="systemBean" scope="request" class="com.premiersolutionshi.old.bean.SystemBean"/>
+
+<%
+	response.setHeader("Pragma", "public");
+	response.setHeader("Cache-Control", "max-age=0");
+	response.setContentType("application/vnd.ms-word");
+	response.setHeader("Content-Disposition", "attachment;filename=vessel_data_sheet_" + systemBean.getUic() + ".doc");
+%>
+
+<html>
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta name=ProgId content=Word.Document>
+<meta name=Generator content="Microsoft Word 14">
+<meta name=Originator content="Microsoft Word 14">
+<style>
+<!--
+	body {
+		font-family: Arial;
+		font-size: 11pt;
+		font-weight: bold;
+	}
+
+	.docTable {
+		border-collapse: collapse;
+	}
+
+	.docTable td {
+		border: 0;
+		padding: 5px 0 5px 0;
+		vertical-align: top;
+		}
+
+	.docTable td.fieldName {
+		font-weight: bold;
+		text-transform: uppercase;
+		}
+
+	.docTable td.fieldValue {
+		border-bottom: 1px solid black;
+		padding-left: 10px;
+		}
+
+	.equipmentTable {
+		border-collapse: collapse;
+	}
+
+	.equipmentTable td {
+		border: 1px solid black;
+		padding: 4px 5px;
+		vertical-align: top;
+		}
+
+	@page WordSection1
+		{size:8.5in 11.0in;
+		margin:.5in .5in .5in .5in;
+		mso-header-margin:.5in;
+		mso-footer-margin:.5in;
+		mso-paper-source:0;}
+
+div.WordSection1
+	{page:WordSection1;}
+-->
+</style>
+<!--[if gte mso 10]>
+<style>
+ /* Style Definitions */
+ table.MsoNormalTable
+	{mso-style-name:"Table Normal";
+	mso-tstyle-rowband-size:0;
+	mso-tstyle-colband-size:0;
+	mso-style-noshow:yes;
+	mso-style-priority:99;
+	mso-style-parent:"";
+	mso-padding-alt:0in 5.4pt 0in 5.4pt;
+	mso-para-margin-top:0in;
+	mso-para-margin-right:0in;
+	mso-para-margin-bottom:10.0pt;
+	mso-para-margin-left:0in;
+	line-height:115%;
+	mso-pagination:widow-orphan;
+	font-size:11.0pt;
+	font-family:"Arial","sans-serif";
+	mso-ascii-font-family:Arial;
+	mso-ascii-theme-font:minor-latin;
+	mso-hansi-font-family:Arial;
+	mso-hansi-theme-font:minor-latin;}
+</style>
+<![endif]--><!--[if gte mso 9]><xml>
+ <o:shapedefaults v:ext="edit" spidmax="1026"/>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <o:shapelayout v:ext="edit">
+  <o:idmap v:ext="edit" data="1"/>
+ </o:shapelayout></xml><![endif]-->
+</head>
+
+<body lang=EN-US style='tab-interval:.5in'>
+<div class=WordSection1>
+
+<p align="right" style="font-size:14pt;font-weight:bold;">
+HARDWARE SIGN OFF SHEET
+</p>
+
+<p align="right" style="font-size:14pt;font-weight:bold;border-bottom:3px solid #777;">
+<br/>
+</p>
+
+<p align="left">
+<table class="docTable" cellspacing="0">
+<tbody>
+	<tr>
+		<td width="110" class="fieldName" nowrap>COMMAND:</td>
+		<td width="300" class="fieldValue" nowrap><bean:write name="systemBean" property="shipName"/></td>
+		<td width="50">&nbsp;</td>
+		<td width="70" class="fieldName" nowrap>DATE:</td>
+		<td width="170" class="fieldValue" nowrap>&nbsp;</td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+	</tr>
+	<tr>
+		<td class="fieldName" nowrap>POC NAME:</td>
+		<td class="fieldValue" nowrap>&nbsp;</td>
+		<td>&nbsp;</td>
+		<td class="fieldName" nowrap>TEL:</td>
+		<td class="fieldValue" nowrap>&nbsp;</td>
+	</tr>
+</tbody>
+</table>
+</p><br/>
+
+<hr style="color:#777;background-color:#777;height:3px;"/>
+
+<br/>
+<p align="center">
+<table class="equipmentTable" cellspacing="0">
+<tbody>
+	<tr>
+		<td width="390">EQUIPMENT</td>
+		<td width="210">Serial No.</td>
+	</tr>
+
+	<% if (!CommonMethods.isEmpty(systemBean.getLaptopPk())) { %>
+		<tr>
+			<td><bean:write name="systemBean" property="laptopProductName"/></td>
+			<td><bean:write name="systemBean" property="laptopSerialNumber"/></td>
+		</tr>
+	<% } %>
+
+	<% if (!CommonMethods.isEmpty(systemBean.getScannerPk())) { %>
+		<tr>
+			<td><bean:write name="systemBean" property="scannerProductName"/></td>
+			<td><bean:write name="systemBean" property="scannerSerialNumber"/></td>
+		</tr>
+	<% } %>
+
+	<% if (CommonMethods.isEmpty(systemBean.getLaptopPk()) && CommonMethods.isEmpty(systemBean.getScannerPk())) { %>
+		<tr>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+		</tr>
+	<% } %>
+</tbody>
+</table>
+</p><br/>
+
+<hr style="color:#777;background-color:#777;height:3px;"/>
+
+<p align="left">
+I acknowledge receipt of the equipment listed above from Premier Solutions HI, LLC.<br/><br/>
+
+<table class="docTable" cellspacing="0">
+<tbody>
+	<tr>
+		<td width="110" class="fieldName">POC NAME:</td>
+		<td width="300" class="fieldValue">&nbsp;</td>
+		<td width="50">&nbsp;</td>
+		<td width="70" class="fieldName">DATE:</td>
+		<td width="170" class="fieldValue">&nbsp;</td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+	</tr>
+	<tr>
+		<td class="fieldName">SIGNATURE:</td>
+		<td class="fieldValue">&nbsp;</td>
+	</tr>
+</tbody>
+</table>
+</p>
+
+</div>
+</body>
+</html>

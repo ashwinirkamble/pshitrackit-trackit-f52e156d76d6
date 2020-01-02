@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<%@ page language="java" %>
+<%@ page import="util.CommonMethods" %>
+
+<%@ taglib prefix="bean"  uri="http://struts.apache.org/tags-bean" %>
+<%@ taglib prefix="html"  uri="http://struts.apache.org/tags-html" %>
+<%@ taglib prefix="logic" uri="http://struts.apache.org/tags-logic" %>
+
+<jsp:useBean id="systemBean" scope="request" class="com.premiersolutionshi.old.bean.SystemBean"/>
+
+<html>
+<head>
+  <title></title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+	<style>
+		@media screen {
+			body {
+				margin:0;
+				padding: 30px 0 0 50px;
+				font: 16px Arial, Helvetica,"Lucida Grande", serif;
+				font-weight: bold;
+				width: 680px;
+				text-align:left;
+				}
+		}
+
+		@media print {
+			body {
+				margin:0;
+				padding:0;
+				line-height: 1.4em;
+				word-spacing:1px;
+				letter-spacing:0.2px;
+				font: 12pt Arial, Helvetica,"Lucida Grande", serif;
+				font-weight: bold;
+				color: #000;
+				text-align: left;
+				}
+		}
+
+		div:not(:first-child) { margin: 15px 0; }
+
+		table { margin: 0; padding: 0; border: 0; }
+
+		#equipmentTable { padding: 20px 0; }
+		#equipmentTable td { padding: 4px 5px; }
+
+		.formTable td { padding: 5px 0 5px 0; vertical-align: top; }
+		td.fieldValue { border-bottom: 1px solid black; padding-left: 10px; }
+
+		hr { display: block; height: 1px; background: transparent; width: 100%; border: none; border-top: 5px solid #777; padding: 0; margin: 0; }
+	</style>
+</head>
+<body onload="window.print();">
+	<div id="header">
+		<table width="100%" border="0" cellspacing="0">
+		<tbody>
+			<tr>
+				<td width="185" rowspan="2"><img src="images/logo_pshi.png" width="180"/></td>
+				<td style="vertical-align:top;padding-top:13px;font-weight:bold;font-size:16pt;text-align:right;color:#666;">HARDWARE SIGN OFF SHEET</td>
+			</tr>
+		</tbody>
+		</table>
+	</div>
+
+	<hr/>
+
+	<div id="section1">
+		<table class="formTable" border="0" cellspacing="0">
+		<colgroup>
+			<col width="110"/>
+			<col width="280"/>
+			<col width="50"/>
+			<col width="70"/>
+			<col width="150"/>
+		</colgroup>
+		<tbody>
+			<tr>
+				<td class="fieldName" nowrap>COMMAND:</td>
+				<td class="fieldValue" nowrap><bean:write name="systemBean" property="shipName"/></td>
+				<td>&nbsp;</td>
+				<td class="fieldName" nowrap>DATE:</td>
+				<td class="fieldValue" nowrap>&nbsp;</td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td class="fieldName" nowrap>POC NAME:</td>
+				<td class="fieldValue" nowrap>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td class="fieldName" nowrap>TEL:</td>
+				<td class="fieldValue" nowrap>&nbsp;</td>
+			</tr>
+		</tbody>
+		</table>
+	</div>
+
+	<hr/>
+
+	<div id="section2">
+		<center>
+		<table id="equipmentTable" border="1" cellspacing="0">
+		<colgroup>
+			<col width="390"/>
+			<col width="210"/>
+		</colgroup>
+		<tbody>
+			<tr>
+				<td>EQUIPMENT</td>
+				<td>Serial No.</td>
+			</tr>
+
+			<% if (!CommonMethods.isEmpty(systemBean.getLaptopPk())) { %>
+				<tr>
+					<td><bean:write name="systemBean" property="laptopProductName"/></td>
+					<td><bean:write name="systemBean" property="laptopSerialNumber"/></td>
+				</tr>
+			<% } %>
+
+			<% if (!CommonMethods.isEmpty(systemBean.getScannerPk())) { %>
+				<tr>
+					<td><bean:write name="systemBean" property="scannerProductName"/></td>
+					<td><bean:write name="systemBean" property="scannerSerialNumber"/></td>
+				</tr>
+			<% } %>
+
+			<% if (CommonMethods.isEmpty(systemBean.getLaptopPk()) && CommonMethods.isEmpty(systemBean.getScannerPk())) { %>
+				<tr>
+					<td>&nbsp;</td>
+					<td>&nbsp;</td>
+				</tr>
+			<% } %>
+		</tbody>
+		</table>
+		</center>
+	</div>
+
+	<hr/>
+
+	<div id="section3">
+		I acknowledge receipt of the equipment listed above from Premier Solutions HI, LLC.<br/><br/>
+
+		<table class="formTable" border="0" cellspacing="0">
+		<colgroup>
+			<col width="110"/>
+			<col width="280"/>
+			<col width="50"/>
+			<col width="70"/>
+			<col width="150"/>
+		</colgroup>
+		<tbody>
+			<tr>
+				<td class="fieldName">POC NAME:</td>
+				<td class="fieldValue">&nbsp;</td>
+				<td>&nbsp;</td>
+				<td class="fieldName">DATE:</td>
+				<td class="fieldValue">&nbsp;</td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td class="fieldName">SIGNATURE:</td>
+				<td class="fieldValue">&nbsp;</td>
+			</tr>
+		</tbody>
+		</table>
+	</div>
+</body>
+</html>

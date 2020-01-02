@@ -1,0 +1,30 @@
+-------------------------------------------------------------------------------
+  Deployment Email
+-------------------------------------------------------------------------------
+
+To: PremierSolutionsHI Support;
+Cc: Amanda Crabtree; David Tribble
+Subject: TrackIT Deployed to Production 12/28/2018
+
+TrackIT Team,
+
+Deployment fixes:
+
+* Tiffaney's issue: Issues not there anymore or say do not exist.
+-- If you have the Issue #s I can dig around the database for the ones you can't seem to find anymore.
+-- I implemented some more validation to ensure that blank required fields prevent a "Save" from occurring.
+
+* Amanda requested the removal of the Project headers like "Compacflt", "NMC", etc.
+
+* Created "Organizations" so we can store and modify addresses for status reports. You can find this in the "Administration" page.
+
+* Now using some new UI elements, which improve usability such as the top-right "Options" dropdown.
+
+* Status Reports: In progress
+
+Awaiting responses for High Priority Items 3 and 7.
+
+v/r,
+Lewis Nakao | Software Engineer | Premier Solutions Hi, LLC
+Email: lewis.nakao@premiersoltuionshi.com 
+desk 808.784.3310 main 808.396.4444 ext 110 cell 541.357.7473

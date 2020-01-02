@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.premiersolutionshi.support.dao.GovPropertyDao">
+	<resultMap type="GovProperty" id="govPropertyResult">
+		<id property="id" column="gov_property_pk" />
+		<result property="dateListed" column="gp_date_listed" />
+		<result property="nationalStockNumber" column="gp_national_stock_number" />
+		<result property="description" column="gp_description" />
+		<result property="projectContract" column="gp_project_contract" />
+		<result property="received" column="gp_received" />
+		<result property="issued" column="gp_issued" />
+		<result property="transferred" column="gp_transferred" />
+		<result property="onHand" column="gp_on_hand" />
+		<result property="location" column="gp_location" />
+		<result property="disposition" column="gp_disposition" />
+		<result property="createdByFk" column="gp_created_by_fk" />
+		<result property="createdDate" column="gp_created_date" />
+		<result property="lastUpdatedByFk" column="gp_last_updated_by_fk" />
+		<result property="lastUpdatedDate" column="gp_last_updated_date" />
+		<result property="createdBy" column="gp_created_by" />
+		<result property="lastUpdatedBy" column="gp_last_updated_by" />
+	</resultMap>
+
+	<sql id="columns">
+		gov_property_pk,
+		strftime('%Y-%m-%d %H:%M:%f', gp.date_listed) AS gp_date_listed,
+		gp.national_stock_number AS gp_national_stock_number,
+		gp.id_number AS gp_id_number,
+		gp.description AS gp_description,
+		gp.project_contract AS gp_project_contract,
+		gp.received AS gp_received,
+		gp.issued AS gp_issued,
+		gp.transferred AS gp_transferred,
+		gp.on_hand AS gp_on_hand,
+		gp.location AS gp_location,
+		gp.disposition AS gp_disposition,
+		gp.created_by_fk AS gp_created_by_fk,
+		strftime('%Y-%m-%d %H:%M:%f', gp.created_date) AS gp_created_date,
+		gp.last_updated_by_fk AS gp_last_updated_by_fk,
+		strftime('%Y-%m-%d %H:%M:%f', gp.last_updated_date) AS gp_last_updated_date,
+		cbu.first_name || ' ' || cbu.last_name AS gp_created_by,
+		lubu.first_name || ' ' || lubu.last_name AS gp_last_updated_by
+	</sql>
+
+	<sql id="baseSelect">
+		SELECT
+		<include refid="columns" />
+		FROM gov_property gp
+		LEFT OUTER JOIN users cbu ON cbu.user_pk = gp.created_by_fk
+		LEFT OUTER JOIN users lubu ON lubu.user_pk = gp.last_updated_by_fk
+	</sql>
+
+	<select id="getAll" resultMap="govPropertyResult">
+		<include refid="baseSelect" />
+	</select>
+
+	<select id="getById" resultMap="govPropertyResult">
+		<include refid="baseSelect" />
+		WHERE gov_property_pk = #{id}
+	</select>
+
+	<insert id="insert" useGeneratedKeys="true" parameterType="GovProperty">
+		INSERT INTO gov_property (
+		date_listed,
+		national_stock_number,
+		description,
+		project_contract,
+		received,
+		issued,
+		transferred,
+		on_hand,
+		location,
+		disposition,
+		created_by_fk,
+		created_date,
+		last_updated_by_fk,
+		last_updated_date
+		)
+		VALUES (
+		#{dateListedSql},
+		#{nationalStockNumber},
+		#{description},
+		#{projectContract},
+		#{received},
+		#{issued},
+		#{transferred},
+		#{onHand},
+		#{location},
+		#{disposition},
+		#{createdByFk},
+		datetime('now', 'localtime'),
+		#{lastUpdatedByFk},
+		datetime('now', 'localtime')
+		)
+	</insert>
+
+	<update id="update" parameterType="GovProperty">
+		UPDATE gov_property SET
+		date_listed = #{dateListedSql},
+		national_stock_number = #{nationalStockNumber},
+		description = #{description},
+		project_contract = #{projectContract},
+		received = #{received},
+		issued = #{issued},
+		transferred = #{transferred},
+		on_hand = #{onHand},
+		location = #{location},
+		disposition = #{disposition},
+		last_updated_by_fk = #{lastUpdatedByFk},
+		last_updated_date = datetime('now', 'localtime')
+		WHERE gov_property_pk = #{id}
+	</update>
+
+	<delete id="deleteById">
+		DELETE FROM gov_property
+		WHERE gov_property_pk = #{id}
+	</delete>
+</mapper>

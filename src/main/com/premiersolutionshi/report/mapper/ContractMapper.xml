@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.premiersolutionshi.report.dao.ContractDao">
+	<resultMap type="Contract" id="simpleContractResult">
+		<id property="id" column="c_contract_pk" />
+		<result property="contractNumber" column="c_contract_number" />
+		<result property="name" column="c_name" />
+		<result property="organizationFk" column="c_organization_fk" />
+		<result property="startDate" column="c_start_date" />
+		<result property="endDate" column="c_end_date" />
+	</resultMap>
+
+	<resultMap type="Contract" id="contractResult" extends="simpleContractResult">
+		<result property="notes" column="c_notes" />
+		<result property="createdByFk" column="c_created_by_fk" />
+		<result property="createdDate" column="c_created_date" />
+		<result property="lastUpdatedByFk" column="c_last_updated_by_fk" />
+		<result property="lastUpdatedDate" column="c_last_updated_date" />
+		<result property="createdBy" column="c_created_by" />
+		<result property="lastUpdatedBy" column="c_last_updated_by" />
+		<association property="organization" notNullColumn="organization_pk"
+			resultMap="com.premiersolutionshi.common.dao.OrganizationDao.simpleOrganizationResult" />
+	</resultMap>
+
+	<sql id="columns">
+		c.contract_pk AS c_contract_pk,
+		c.contract_number AS c_contract_number,
+		c.name AS c_name,
+		c.notes AS c_notes,
+		c.organization_fk AS c_organization_fk,
+		strftime('%Y-%m-%d %H:%M:%f', c.start_date) AS c_start_date,
+		strftime('%Y-%m-%d %H:%M:%f', c.end_date) AS c_end_date,
+		c.created_by_fk AS c_created_by_fk,
+		strftime('%Y-%m-%d %H:%M:%f', c.created_date) AS c_created_date,
+		c.last_updated_by_fk AS c_last_updated_by_fk,
+		strftime('%Y-%m-%d %H:%M:%f', c.last_updated_date) AS c_last_updated_date,
+		cbu.first_name || ' ' || cbu.last_name AS c_created_by,
+		lubu.first_name || ' ' || lubu.last_name AS c_last_updated_by
+	</sql>
+
+	<sql id="baseSelect">
+		SELECT
+		<include refid="columns" />
+		,
+		<include refid="com.premiersolutionshi.common.dao.OrganizationDao.columns" />
+		FROM contract c
+		LEFT OUTER JOIN users cbu ON cbu.user_pk = c.created_by_fk
+		LEFT OUTER JOIN users lubu ON lubu.user_pk = c.last_updated_by_fk
+		LEFT OUTER JOIN organization o ON organization_pk = c.organization_fk
+	</sql>
+
+	<select id="getAll" resultMap="contractResult">
+		<include refid="baseSelect" />
+	</select>
+
+	<select id="getByStatusReportFk" resultMap="contractResult">
+		<include refid="baseSelect" />
+		INNER JOIN status_report_contract_join srcj ON c.contract_pk =
+		srcj.contract_fk
+		WHERE srcj.status_report_fk = #{statusReportFk}
+	</select>
+
+	<select id="getById" resultMap="contractResult">
+		<include refid="baseSelect" />
+		WHERE c.contract_pk = #{id}
+	</select>
+
+	<insert id="insert" useGeneratedKeys="true" parameterType="Contract">
+		INSERT INTO contract (
+		contract_number,
+		name,
+		notes,
+		organization_fk,
+		start_date,
+		end_date,
+		created_by_fk,
+		created_date,
+		last_updated_by_fk,
+		last_updated_date
+		)
+		VALUES (
+		#{contractNumber},
+		#{name},
+		#{notes},
+		#{organizationFk},
+		#{startDateSql},
+		#{endDateSql},
+		#{createdByFk},
+		datetime('now', 'localtime'),
+		#{lastUpdatedByFk},
+		datetime('now', 'localtime')
+		)
+	</insert>
+
+	<update id="update" parameterType="Contract">
+		UPDATE contract SET
+		contract_number = #{contractNumber},
+		name = #{name},
+		notes = #{notes},
+		organization_fk = #{organizationFk},
+		start_date = #{startDateSql},
+		end_date = #{endDateSql},
+		last_updated_by_fk = #{lastUpdatedByFk},
+		last_updated_date = datetime('now', 'localtime')
+		WHERE contract_pk = #{id}
+	</update>
+
+	<delete id="deleteById">
+		DELETE FROM contract
+		WHERE contract_pk = #{id}
+	</delete>
+</mapper>
+

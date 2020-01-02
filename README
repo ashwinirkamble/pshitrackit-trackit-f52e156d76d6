@@ -1,0 +1,52 @@
+
+================================================================================
+ TrackIT Project
+================================================================================
+
+TrackIT is an internal tracking software accessible only within the PSHI network
+that tracks:
+* Support Issues
+* Tasks
+* Workflows
+
+There are two other projects not version controlled, since they haven't been modified:
+* P:\Java-development\source\pshi-backfile-tool
+* P:\Java-development\source\pshi-emailer
+
+================================================================================
+ POCs
+================================================================================
+Lewis Nakao, Developer
+(808) 784-3310
+lewis.nakao@premiersolutionshi.com
+
+David Tribble, Manager
+(808) 784-3307
+david.tribble@premiersolutionshi.com
+
+================================================================================
+ Access Information
+================================================================================
+
+Repository
+https://bitbucket.org/lewis-nakao-pshi/pshi-tracker
+
+Ask Lewis or David for access to the TrackIT git repository.
+
+Server Name: PREMIERSOL-WEB
+IP Address: 10.28.31.55
+"P:\" => Public Drive on "RD01" remote desktop computer
+"X:\" => \\10.28.31.53\sqlite3_db
+
+Intranet UI
+http://10.28.31.55/menu.do
+Click on FACET link under Projects to see the section we use the most
+
+Intranet Server
+PremierSol-Web / 10.28.31.55
+* "C:\Java" seems to be where the website files are at, but not positive
+* "C:\sqlite3_db" is where the intranet database files are. "pshi.db" is the intranet database
+
+Intranet Architecture
+* See this file for some summary info: "P:\Java-development\Java Technologies Utilized.txt". Versions listed may not be accurate, please update as you discover info and add as much useful info as you can. It would be great to have an as-built document for the intranet so that we have a visual of the architecture
+* Looks like the source code is at "P:\Java-development\source"

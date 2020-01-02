@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.premiersolutionshi.support.dao.IssueCategoryDao">
+	<resultMap type="IssueCategory" id="issueCategoryResult">
+		<id property="id" column="issue_category_pk" />
+		<result property="projectFk" column="ic_project_fk" />
+		<result property="category" column="ic_category" />
+		<result property="lastUpdatedBy" column="ic_last_updated_by" />
+		<result property="lastUpdatedDate" column="ic_last_updated_date" />
+	</resultMap>
+
+	<sql id="columns">
+		issue_category_pk,
+		ic.project_fk AS ic_project_fk,
+		ic.category AS ic_category,
+		ic.last_updated_by AS ic_last_updated_by,
+		strftime('%Y-%m-%d %H:%M:%f', ic.last_updated_date) AS ic_last_updated_date
+	</sql>
+
+	<sql id="baseSelect">
+		SELECT
+		<include refid="columns" />
+		FROM issue_category ic
+	</sql>
+
+	<sql id="orderBy">ORDER BY ic.category</sql>
+
+	<select id="getByName" resultMap="issueCategoryResult">
+		<include refid="baseSelect" />
+		WHERE category = #{categoryName}
+	</select>
+
+	<select id="getAll" resultMap="issueCategoryResult">
+		<include refid="baseSelect" />
+		<include refid="orderBy" />
+	</select>
+
+	<select id="getByProjectFk" resultMap="issueCategoryResult">
+		<include refid="baseSelect" />
+		WHERE project_fk = #{projectFk}
+		<include refid="orderBy" />
+	</select>
+
+	<select id="getById" resultMap="issueCategoryResult">
+		<include refid="baseSelect" />
+		WHERE issue_category_pk = #{id}
+	</select>
+
+	<insert id="insert" useGeneratedKeys="true" parameterType="IssueCategory">
+		INSERT INTO issue_category (
+		issue_category_pk,
+		project_fk,
+		category,
+		last_updated_by,
+		last_updated_date
+		)
+		VALUES (
+		#{issueCategoryPk},
+		#{projectFk},
+		#{category},
+		#{lastUpdatedBy},
+		datetime('now', 'localtime')
+		)
+	</insert>
+
+	<update id="update" parameterType="IssueCategory">
+		UPDATE issue_category SET
+		issue_category_pk = {issueCategoryPk},
+		project_fk = #{projectFk},
+		category = #{category},
+		last_updated_by = #{lastUpdatedBy},
+		last_updated_date = datetime('now', 'localtime')
+		WHERE issue_category_pk = #{id}
+	</update>
+
+	<delete id="deleteById">
+		DELETE FROM issue_category
+		WHERE issue_category_pk = #{id}
+	</delete>
+</mapper>

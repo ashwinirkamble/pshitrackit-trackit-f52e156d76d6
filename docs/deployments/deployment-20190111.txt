@@ -1,0 +1,29 @@
+-------------------------------------------------------------------------------
+  Deployment Email
+-------------------------------------------------------------------------------
+
+To: PremierSolutionsHI Support;
+Cc: Amanda Crabtree; David Tribble
+Subject: TrackIT Deployed 1/11/2019
+
+TrackIT Team,
+
+I have just been removed from the TrackIT project as I have received the necessary resources to work on CLIPBoard.
+
+I suppose I can be called upon for critical issues, but nothing else.
+
+Here's one last update. Have a good weekend everybody!
+
+Deployment updates:
+
+* (FIXED) Move the Search and View All buttons back to the middle of the page
+* (FIXED) Add S-3 and S-4 divisions to the search criteria (changed to a drop down since it got wide)
+* (FIXED) Single quote character conversion in issue comments are coming out unreadable.
+* New "Manage Contracts" list (will be used for Monthly/Weekly Status Reports and other features potentially)
+
+My status: in the middle of working on Status Reports.
+
+v/r,
+Lewis Nakao | Software Engineer | Premier Solutions Hi, LLC
+Email: lewis.nakao@premiersoltuionshi.com 
+desk 808.784.3310 main 808.396.4444 ext 110 cell 541.357.7473

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.premiersolutionshi.support.dao.ConfiguredSystemLocHistDao">
+	<resultMap type="ConfiguredSystemLocHist" id="configuredSystemLocHistResult">
+		<id property="id" column="configured_system_loc_hist_pk" />
+		<result property="configuredSystemFk" column="cslh_configured_system_fk" />
+		<result property="location" column="cslh_location" />
+		<result property="locationDate" column="cslh_location_date" />
+		<result property="reason" column="cslh_reason" />
+		<result property="createdBy" column="cslh_created_by" />
+		<result property="createdDate" column="cslh_created_date" />
+	</resultMap>
+
+	<sql id="columns">
+		configured_system_loc_hist_pk,
+		cslh.configured_system_fk AS cslh_configured_system_fk,
+		cslh.location AS cslh_location,
+		strftime('%Y-%m-%d %H:%M:%f', cslh.location_date) AS cslh_location_date,
+		cslh.reason AS cslh_reason,
+		cslh.created_by AS cslh_created_by,
+		strftime('%Y-%m-%d %H:%M:%f', cslh.created_date) AS cslh_created_date
+	</sql>
+
+	<sql id="columnsCurrent">
+		configured_system_loc_hist_pk,
+		cslh.configured_system_fk AS cslh_configured_system_fk,
+		cslh.location AS cslh_location,
+		strftime('%Y-%m-%d %H:%M:%f', cslh.location_date) AS cslh_location_date,
+		--strftime('%Y-%m-%d %H:%M:%f', MAX(cslh.location_date)) AS
+		cslh_location_date,
+		cslh.reason AS cslh_reason,
+		cslh.created_by AS cslh_created_by,
+		strftime('%Y-%m-%d %H:%M:%f', cslh.created_date) AS cslh_created_date
+	</sql>
+
+	<sql id="baseSelect">
+		SELECT
+		<include refid="columns" />
+		FROM configured_system_loc_hist cslh
+	</sql>
+
+	<select id="getAll" resultMap="configuredSystemLocHistResult">
+		<include refid="baseSelect" />
+	</select>
+
+	<select id="getById" resultMap="configuredSystemLocHistResult">
+		<include refid="baseSelect" />
+		WHERE configured_system_loc_hist_pk = #{id}
+	</select>
+
+	<insert id="insert" useGeneratedKeys="true" parameterType="ConfiguredSystemLocHist">
+		INSERT INTO configured_system_loc_hist (
+		configured_system_fk,
+		location,
+		location_date,
+		reason,
+		created_by,
+		created_date
+		)
+		VALUES (
+		#{configuredSystemFk},
+		#{location},
+		#{locationDate},
+		#{reason},
+		#{createdBy},
+		#{createdDate}
+		)
+	</insert>
+
+	<update id="update" parameterType="ConfiguredSystemLocHist">
+		UPDATE configured_system_loc_hist SET
+		configured_system_fk = {configuredSystemFk},
+		location = #{location},
+		location_date = #{locationDate},
+		reason = #{reason},
+		created_by = #{createdBy},
+		created_date = #{createdDate}
+		WHERE configured_system_loc_hist_pk = #{id}
+	</update>
+
+	<delete id="deleteById">
+		DELETE FROM configured_system_loc_hist
+		WHERE configured_system_loc_hist_pk = #{id}
+	</delete>
+</mapper>

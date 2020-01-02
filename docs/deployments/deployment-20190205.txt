@@ -1,0 +1,35 @@
+-------------------------------------------------------------------------------
+  Deployment Email
+-------------------------------------------------------------------------------
+
+To: PremierSolutionsHI Support;
+Cc: Amanda Crabtree; David Tribble
+Subject: TrackIT Deployed 2/5/2019
+
+TrackIT Team,
+
+An unusual Configured System data entry was stored on the database which broke the Bulk E-mail tool.
+
+I resolved the issue and deployed the change. Some additional changes were made previously, so they have been included in the deployment.
+
+Deployment updates:
+
+* (FIXED) Bulk E-Mail Tool fixed.
+* (FIXED) Single quote character conversion in issue comments are coming out unreadable.
+* Added "Notes" field to POCs.
+
+v/r,
+Lewis Nakao | Software Engineer | Premier Solutions Hi, LLC
+Email: lewis.nakao@premiersoltuionshi.com 
+desk 808.784.3310 main 808.396.4444 ext 110 cell 541.357.7473
+
+
+
+TrackIT Team,
+
+Deployed again.
+
+I figured it was the same issue so I went ahead and worked on it. It’s fixed now.
+
+*ATO Update page had the same problem
+

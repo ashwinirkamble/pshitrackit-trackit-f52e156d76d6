@@ -1,0 +1,26 @@
+-------------------------------------------------------------------------------
+  Deployment Email
+-------------------------------------------------------------------------------
+
+To: PremierSolutionsHI Support;
+Cc: Amanda Crabtree; David Tribble; Miracle Leao;
+Subject: TrackIT Deployed 4/3/2019
+
+TrackIT Team,
+
+Bulk E-mail Tool POC email data is now getting populated correctly.
+
+v/r,
+Lewis Nakao | Software Engineer | Premier Solutions Hi, LLC
+Email: lewis.nakao@premiersoltuionshi.com 
+desk 808.784.3310 main 808.396.4444 ext 110 cell 541.357.7473
+
+
+
+
+4/1/2019
+*Could not close "FACET Update Issue."
+
+The problem was that the Configured System did not have a FACET Version which did not have a null check.
+
+Null pointer error was causing the Issue to not finish being saved to the database.

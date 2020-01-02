@@ -1,0 +1,3 @@
+keytool -genkey -storepass logcop -keyalg RSA -alias cpf4.nmci.navy.mil -dname "CN=cpf4.nmci.navy.mil, O=PACFLT, OU=N/A, C=US" -validity 880
+keytool -selfcert -storepass logcop -alias cpf4.nmci.navy.mil -validity 880
+keytool -export -storepass logcop -alias cpf4.nmci.navy.mil -rfc -file cpf4.cer

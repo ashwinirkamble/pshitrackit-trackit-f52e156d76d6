@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<%@ page language="java" %>
+<%@ page import="util.CommonMethods" %>
+
+<%@ taglib prefix="bean"  uri="http://struts.apache.org/tags-bean" %>
+<%@ taglib prefix="html"  uri="http://struts.apache.org/tags-html" %>
+<%@ taglib prefix="logic" uri="http://struts.apache.org/tags-logic" %>
+
+<bean:define id="defaultPageTitle" value="Hardware/Software"/>
+<jsp:useBean id="customPageTitle" scope="request" class="java.lang.String"/><bean:define id="pageTitle" name="customPageTitle"/><logic:equal name="pageTitle" value=""><bean:define id="pageTitle" name="defaultPageTitle"/></logic:equal>
+<jsp:useBean id="loginBean" scope="request" class="com.premiersolutionshi.old.bean.LoginBean"/>
+
+<html>
+<head>
+  <title>TrackIT - <bean:write name="pageTitle"/></title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+  <link href="css/stylesheet.css" rel="stylesheet" type="text/css"/>
+  <script src="js/javascript.js" type="text/javascript"></script>
+</head>
+
+<body>
+<%@ include file="../include/app-header.jsp" %>
+
+<div class="colmask leftmenu"><div class="colright">
+	<div class="col1wrap"><div class="col1">
+		<p align="center">
+		<center>
+		<table border="0" cellspacing="0" cellpadding="10">
+			<tr>
+				<td align="center"><a href="hardware.do?action=laptopList"><img src="images/laptop.png" width="80" height="60"/></a></td>
+				<td align="center"><a href="hardware.do?action=scannerList"><img src="images/scanner.png" width="60" height="60"/></a></td>
+				<td align="center"><a href="software.do?action=kofaxLicenseList"><img src="images/logo_kofax.png" width="220" height="60"/></a></td>
+				<td align="center"><a href="software.do?action=msOfficeLicenseList"><img src="images/logo_msoffice.png" width="144" height="60"/></a></td>
+				<td align="center"><a href="system.do?action=configuredSystemList"><img src="images/configure.png" width="60" height="60"/></a></td>
+			</tr>
+			<tr>
+				<td align="center">Manage<br/>Laptops</td>
+				<td align="center">Manage<br/>Scanners</td>
+				<td align="center">Manage Kofax Licenses</td>
+				<td align="center">Manage MS Office Licenses</td>
+				<td align="center">Configure Systems</td>
+			</tr>
+			</tr>
+		</table>
+		</center>
+		</p>
+	</div></div>
+
+	<%@ include file="../include/app-col2.jsp" %>
+</div></div>
+
+<%@ include file="../include/app-footer.jsp" %>
+</body>
+</html>

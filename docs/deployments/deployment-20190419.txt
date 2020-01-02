@@ -1,0 +1,53 @@
+
+From: Lewis Nakao
+Sent: Friday, April 19, 2019 5:04 PM
+To: PremierSolutionsHI Support
+Cc: Amanda Crabtree; David Tribble; Kevin Zheng
+Subject: TrackIT Deployed 4/19/2019
+
+
+TrackIT Team,
+
+First off, thank you for the opportunity to work with this great company! I really enjoyed working with you all.
+
+Unfortunately, I was unable to get through all the critical tasks, but I was able to fix the items below. There are also so many changes I'd personally like to get done as well just to make the code easier to manage.
+
+Hopefully, I have been able to adequately set Kevin Zheng up to continue where I left off. Otherwise, I'd be happy to answer questions via email: lewdev@gmail.com 
+
+(DONE) Task #1190: Track it - POC List
+1. for Unit POC - Change "Dept" to DIV 
+2. Add button to email All POCs
+
+(DONE) Task #1185: Track it - Support Issues
+Change “Email Sent?” to “PSHI Email Sent” and “Responded?” to “Unit Responded”
+
+(DONE) Task #1153: Track it - UIC List (4-High)
+Do not allow - UIC List allows the same UIC for different entries if the case (upper case, lower, etc) is different
+
+(DONE) Task #1152: Track it - Scanner List (1-Critical)
+1. Prepped date should not be a forced field
+
+(DONE) Task #1176: Track it -Support Issues (4-Low)
+Support Issues: Make Resolution field longer
+
+(DONE) Add "Configured Systems" to the left menu and moved "Configured Systems" under "FACET Hardware."
+
+(DONE) Task #1175: Track it -Support Issues (4-Low)
+Support Issues: Update High Priority label to indicate it’s for unusable system
+
+(DONE) Task #1182: Track it - Task List
+Task List: Increase length of Title to 100 (currently 50)
+*Could only do up to 75 characters, at this time.
+
+(SHOULD BE FIXED) Task #1149: Track it - "Copy issue" function (3-Medium)
+Using copy of a support issue, it auto fills Tiffany's name in the Opened By field. It allows user to change it. Please update it default to current user and to not allow the user to make changes
+* This isn't an issue on my machine because I'm the only one using it. So I made an adjustment. Hopefully, it's fixed.
+
+It has been great, thanks!
+
+
+v/r,
+
+Lewis Nakao | Software Engineer | Premier Solutions Hi, LLC
+Email: lewis.nakao@premiersoltuionshi.com 
+desk 808.784.3310 main 808.396.4444 ext 110

@@ -1,0 +1,188 @@
+Contacts
+
+  Darby Meyer <Darbym@premiersolutionshi.com>
+  Manages data and generates monthly and weekly reports using TrackIT data.‎
+
+  Jon Lim <jon@limpacific.com>
+  Manages VPN and server backup and maintenance.
+
+  Miracle Leao <miraclel@premiersolutionshi.com>
+  A major user of TrackIT and is also responsible for monthly reports. She also requests bug fixes and feature changes.
+
+-------------------------------------------------------------------------------
+  Server Info
+-------------------------------------------------------------------------------
+Entire server is backed up daily for with 2-3 weeks worth of the most recent backups.
+
+URL: http://10.28.31.55
+
+Shared folder: \\10.28.31.55\sqlite3_db
+
+*Be careful when access the "sqlite3_db" folder because it contains the production database: pshi.db
+
+
+-------------------------------------------------------------------------------
+  VPN Access
+-------------------------------------------------------------------------------
+If you are not working on the same network as the TrackIT server, you'll need 
+to gain access by contacting Jon Lim <jon@limpacific.com> and David Tribble (for authorization).
+
+
+-------------------------------------------------------------------------------
+  BitBucket (git) Access
+-------------------------------------------------------------------------------
+You need a git client before getting started. I used "Git for Windows."
+
+An admin of the PSHI BitBucket repositories must add you to the project to give you access.
+
+The admin should be able to send you an invite via email to set up your account.
+
+Once the account is created, the admin must add you to the "CLIPBoard" group.
+
+When you have access, you should be able to see "trackit" in "Repositories."
+
+Click on the "Clone" button when viewing the "trackit" source code to get the git clone URI.
+
+Run the clone command in your "workspace" directory in your home directory.
+
+-------------------------------------------------------------------------------
+  View code using Eclipse
+-------------------------------------------------------------------------------
+Use Eclipse to open the project:
+
+  File > Import...
+
+Then select "Existing Projects into Workspace" and select the path to your trackit folder.
+
+Once you get the TrackIT repo code, you should read this file for the rest of the dev environment setup:
+
+  /trackit/docs/dev-setup/dev-setup-2018.txt
+
+-------------------------------------------------------------------------------
+  Setting up your development environment
+-------------------------------------------------------------------------------
+Essentially, we are creating a similar environment as our production server. You can
+set up your local environment without access to the server, but I've never done it before.
+If you want to try, see "Configuring Tomcat from scratch"
+
+Download from Server:
+
+\\10.28.31.55\sqlite3_db\dev-setup\Java in C-drive.zip
+\\10.28.31.55\sqlite3_db\dev-setup\php.7z
+
+Unzip:
+- Java in C-drive.zip   ->  C:\Java
+- php.7z                ->  C:\php
+
+Also create these directories: "C:\sqlite3_db" and "C:\cloaked"
+
+Copy C:\sqlite3_db\pshi.db from the web server to your computer in the same folder.
+
+What these files contain:
+
+- C:\Java\apache-httpd-2.4.25
+- C:\Java\apache-tomcat-8.5.29
+- C:\Java\jre1.8.0_161
+- C:\php\php-7.1.1-Win32-VC14-x64
+- C:\cloaked\pshi
+
+(The server will have the same set of files. So you can actually copy those files
+directly from the server.)
+
+The php installation is for the wiki that is not really used.
+
+The "cloaked" directory is where the Tomcat "webapps" code resides. This is configured here:
+
+  C:\Java\apache-tomcat-8.5.29\conf\Catalina\localhost
+
+  (see in this project "/docs/tomcat-confg/")
+
+-------------------------------------------------------------------------------
+  Setup your environment variables
+-------------------------------------------------------------------------------
+* Go to "Edit environment variables for your account" in the start menu
+* Add to PATH: C:\Program Files\Java\jdk1.8.0_181\bin
+* Add new variable:
+-- name: TOMCAT_HOME    value: C:\Java\apache-tomcat-8.5.29
+-- name: JAVA_HOME      value: C:\Program Files\Java\jdk1.8.0_181
+
+* Add to PATH variable:
+    C:\Java\apache-ant-1.7.1\bin;C:\Java\apache-tomcat-5.5.26\bin
+
+-------------------------------------------------------------------------------
+  Set up Apache as a service
+-------------------------------------------------------------------------------
+Open Command Prompt as Administrator
+
+# Setup your Apache Server as a service on your computer
+# this will start on startup.
+> C:\Java\apache-httpd-2.4.25\bin\httpd.exe -k install -n "Apache HTTP PSHI Tracker"
+
+# Start, Stop, Restart the Service:
+> C:\Java\apache-httpd-2.4.25\bin\httpd.exe -k start -n "Apache HTTP PSHI Tracker"
+> C:\Java\apache-httpd-2.4.25\bin\httpd.exe -k stop -n "Apache HTTP PSHI Tracker"
+> C:\Java\apache-httpd-2.4.25\bin\httpd.exe -k restart -n "Apache HTTP PSHI Tracker"
+
+NOTE:
+If you want to run the ONE Platform instance on your computer, you will have to 
+stop this service as there will be a port 80 conflict.
+
+
+-------------------------------------------------------------------------------
+  Configuring Tomcat from scratch
+-------------------------------------------------------------------------------
+If you don't copy tomcat from the web server and start off with a download from the Internet,
+copy the contents of "/docs/tomcat-config" into "C:\apache-tomcat-8.5.29\conf"
+
+*Note: I never tested this, so I recommend just copying what's on the server.
+
+-------------------------------------------------------------------------------
+  Building TrackIT
+-------------------------------------------------------------------------------
+
+I recommend adding the "Ant" view in Eclipse and adding the build file (build.xml).
+
+  Go to: Window > Show View > Other...
+
+  Find: "Ant" and select it.
+
+Click and drag "build.xml" into the "Ant" view.
+
+Use the ant command "build-restart." This will compile and copy your code and restart tomcat.
+
+It will still work even if tomcat on your machine isn't started yet. Currently tomcat is configured to
+not restart when a code change is detected. I never bothered to change this setting, which is why we're 
+manually restarting tomcat.
+
+
+-------------------------------------------------------------------------------
+  Deploying TrackIT
+-------------------------------------------------------------------------------
+
+The ant command "deploy-to-prod-prep" will perform the following:
+
+  1. Delete and build the application in "C:\cloaked\pshi"
+
+  2. Overwrite contents of the code with "WEB-INF-prod" to with production-specific code.
+
+  3. Zip the application as "pshi.zip"
+
+  4. Move "pshi.zip" to the web server in "//10.28.31.55/sqlite3_db"
+
+  5. Start a remote desktop session.
+
+Access the server using Remote desktop and go to "C:/sqlite3_db/bak/scripts" and do the following:
+
+  1. Run "trackit-backup.bat"
+
+    This runs checks before executing so take a look at those results before moving forward.
+    This saves zip files of the database and application code into the "bak" folder.
+
+  2. Run "trackit-deploy.bat" This stops tomcat
+
+    This runs checks before executing so take a look at those results before moving forward.
+    This will delete the old code (which is backed up already) and unzip the new code into "C:\cloaked\pshi" folder.
+
+The whole process is full automated and quick. I haven't had much problems deploying in the middle of the day, but
+try to avoid that.
+

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<!-- MyBatis v3.4.6 -->
+<configuration>
+<!--   <properties url="file:///c:/cloaked/pshi/WEB-INF/config/config.properties"> -->
+<!--   <properties> -->
+<!--     <property name="DB_DRIVER" value="org.sqlite.JDBC"/> -->
+<!--     <property name="DB_URL" value="jdbc:sqlite:C:/sqlite3_db/pshi.db"/> -->
+<!--   </properties> -->
+
+  <typeAliases> 
+    <typeAlias alias="BasePoc"                    type="com.premiersolutionshi.common.domain.BasePoc"/>
+    <typeAlias alias="Customer"                   type="com.premiersolutionshi.common.domain.Customer"/>
+    <typeAlias alias="FileInfo"                   type="com.premiersolutionshi.common.domain.FileInfo"/>
+    <typeAlias alias="JoinDomain"                 type="com.premiersolutionshi.common.domain.JoinDomain"/>
+    <typeAlias alias="ManagedListItem"            type="com.premiersolutionshi.common.domain.ManagedListItem"/>
+    <typeAlias alias="Organization"               type="com.premiersolutionshi.common.domain.Organization"/>
+    <typeAlias alias="Poc"                        type="com.premiersolutionshi.common.domain.Poc"/>
+    <typeAlias alias="Project"                    type="com.premiersolutionshi.common.domain.Project"/>
+    <typeAlias alias="User"                       type="com.premiersolutionshi.common.domain.User" />
+    <typeAlias alias="TestBlog"                   type="com.premiersolutionshi.common.domain.TestBlog" />
+
+    <typeAlias alias="Contract"                   type="com.premiersolutionshi.report.domain.Contract"/>
+    <typeAlias alias="StatusReport"               type="com.premiersolutionshi.report.domain.StatusReport"/>
+
+    <typeAlias alias="AtoUpdate"                  type="com.premiersolutionshi.support.domain.AtoUpdate"/>
+    <typeAlias alias="ConfiguredSystem"           type="com.premiersolutionshi.support.domain.ConfiguredSystem"/>
+    <typeAlias alias="ConfiguredSystemLocHist"    type="com.premiersolutionshi.support.domain.ConfiguredSystemLocHist"/>
+    <typeAlias alias="FkAndCount"                 type="com.premiersolutionshi.support.domain.FkAndCount"/>
+    <typeAlias alias="FkAndStringList"            type="com.premiersolutionshi.support.domain.FkAndStringList"/>
+    <typeAlias alias="GovProperty"                type="com.premiersolutionshi.support.domain.GovProperty"/>
+    <typeAlias alias="Issue"                      type="com.premiersolutionshi.support.domain.Issue"/>
+    <typeAlias alias="IssueSupportVisit"          type="com.premiersolutionshi.support.domain.IssueSupportVisit"/>
+    <typeAlias alias="IssueCategory"              type="com.premiersolutionshi.support.domain.IssueCategory"/>
+    <typeAlias alias="IssueComments"              type="com.premiersolutionshi.support.domain.IssueComments"/>
+    <typeAlias alias="Laptop"                     type="com.premiersolutionshi.support.domain.Laptop"/>
+    <typeAlias alias="Ship"                       type="com.premiersolutionshi.support.domain.Ship"/>
+    <typeAlias alias="TransmittalSummary"         type="com.premiersolutionshi.support.domain.TransmittalSummary"/>
+    <typeAlias alias="TransmittalComputerWithNumList" type="com.premiersolutionshi.support.domain.TransmittalComputerWithNumList"/>
+  </typeAliases>
+
+  <environments default="sqlite">
+    <environment id="sqlite">
+      <transactionManager type="JDBC">
+        <property name="poolMaximumActiveConnections" value="1"/>
+      </transactionManager>
+      <dataSource type="POOLED">
+        <!-- <property name="driver" value="${DB_DRIVER}" /> -->
+        <!-- <property name="url" value="${DB_URL}" /> -->
+        <property name="driver" value="org.sqlite.JDBC" />
+        <property name="url" value="jdbc:sqlite:C:\sqlite3_db\pshi.db" />
+        <property name="username" value="" />
+        <property name="password" value="" />
+      </dataSource>
+    </environment>
+  </environments>
+
+  <mappers>
+    <mapper resource="com/premiersolutionshi/common/mapper/FileInfoMapper.xml"/>
+    <mapper resource="com/premiersolutionshi/common/mapper/ManagedListItemMapper.xml"/>
+    <mapper resource="com/premiersolutionshi/common/mapper/TestBlogMapper.xml"/>
+    <mapper resource="com/premiersolutionshi/common/mapper/UserMapper.xml"/>
+    <mapper resource="com/premiersolutionshi/common/mapper/OrganizationMapper.xml"/>
+    <mapper resource="com/premiersolutionshi/common/mapper/ProjectMapper.xml"/>
+    <mapper resource="com/premiersolutionshi/common/mapper/UtilMapper.xml"/>
+
+    <mapper resource="com/premiersolutionshi/report/mapper/ContractMapper.xml"/>
+    <mapper resource="com/premiersolutionshi/report/mapper/StatusReportMapper.xml"/>
+  
+    <mapper resource="com/premiersolutionshi/support/mapper/AtoUpdateMapper.xml"/>
+    <mapper resource="com/premiersolutionshi/support/mapper/ConfiguredSystemMapper.xml"/>
+    <mapper resource="com/premiersolutionshi/support/mapper/ConfiguredSystemLocHistMapper.xml"/>
+    <mapper resource="com/premiersolutionshi/support/mapper/GovPropertyMapper.xml"/>
+    <mapper resource="com/premiersolutionshi/support/mapper/IssueMapper.xml"/>
+    <mapper resource="com/premiersolutionshi/support/mapper/IssueCategoryMapper.xml"/>
+    <mapper resource="com/premiersolutionshi/support/mapper/IssueCommentsMapper.xml"/>
+    <mapper resource="com/premiersolutionshi/support/mapper/LaptopMapper.xml"/>
+    <mapper resource="com/premiersolutionshi/support/mapper/PocMapper.xml"/>
+    <mapper resource="com/premiersolutionshi/support/mapper/ShipMapper.xml"/>
+    <mapper resource="com/premiersolutionshi/support/mapper/TransmittalMapper.xml"/>
+  </mappers>
+</configuration>
+

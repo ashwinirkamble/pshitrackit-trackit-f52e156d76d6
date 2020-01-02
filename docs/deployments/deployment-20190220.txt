@@ -1,0 +1,20 @@
+-------------------------------------------------------------------------------
+  Deployment Email
+-------------------------------------------------------------------------------
+
+To: PremierSolutionsHI Support;
+Cc: Amanda Crabtree; David Tribble
+Subject: TrackIT Deployed 2/20/2019
+
+TrackIT Team,
+
+Task #1150 Track it - "Follow-Up Training Provided?" required
+>This section should be required when user is closing issue as 6 - Closed (Successful), not at the time of creating or updating support issue.
+
+This issue is fixed and deployed to production.
+
+
+v/r,
+Lewis Nakao | Software Engineer | Premier Solutions Hi, LLC
+Email: lewis.nakao@premiersoltuionshi.com 
+desk 808.784.3310 main 808.396.4444 ext 110 cell 541.357.7473

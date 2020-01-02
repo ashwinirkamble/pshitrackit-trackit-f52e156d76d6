@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!-- 1.0, 11/25/2013, Premier Solutions HI, LLC -->
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.3//EN"
+  "http://struts.apache.org/dtds/struts-config_1_3.dtd">
+
+<struts-config>
+  <!-- ================================= Form Bean Definitions ================================= -->
+  <form-beans>
+    <form-bean name="baseForm"            type="com.premiersolutionshi.old.bean.BaseBean"/>
+    <form-bean name="loginForm"           type="com.premiersolutionshi.old.bean.LoginBean"/>
+    <form-bean name="backfileForm"        type="com.premiersolutionshi.old.bean.BackfileBean"/>
+    <form-bean name="fileForm"            type="com.premiersolutionshi.old.bean.FileBean"/>
+    <form-bean name="decomForm"           type="com.premiersolutionshi.old.bean.DecomBean"/>
+    <form-bean name="dtsForm"             type="com.premiersolutionshi.old.bean.DtsBean"/>
+    <form-bean name="lookupForm"          type="com.premiersolutionshi.old.bean.LookupBean"/>
+    <form-bean name="projectForm"         type="com.premiersolutionshi.old.bean.ProjectBean"/>
+    <form-bean name="hardwareForm"        type="com.premiersolutionshi.old.bean.HardwareBean"/>
+    <form-bean name="reportForm"          type="com.premiersolutionshi.old.bean.ReportBean"/>
+    <form-bean name="shipForm"            type="com.premiersolutionshi.old.bean.ShipBean"/>
+    <form-bean name="softwareForm"        type="com.premiersolutionshi.old.bean.SoftwareBean"/>
+    <form-bean name="supportForm"         type="com.premiersolutionshi.old.bean.SupportBean"/>
+    <form-bean name="systemForm"          type="com.premiersolutionshi.old.bean.SystemBean"/>
+    <form-bean name="trainingForm"        type="com.premiersolutionshi.old.bean.TrainingBean"/>
+    <form-bean name="userForm"            type="com.premiersolutionshi.old.bean.UserBean"/>
+
+    <form-bean name="managedListItem"     type="com.premiersolutionshi.common.domain.ManagedListItem"/>
+    <form-bean name="organizationForm"    type="com.premiersolutionshi.common.ui.form.OrganizationForm"/>
+    <form-bean name="testBlog"            type="com.premiersolutionshi.common.domain.TestBlog"/>
+
+    <form-bean name="contractForm"        type="com.premiersolutionshi.report.ui.form.ContractForm"/>
+    <form-bean name="statusReportForm"    type="com.premiersolutionshi.report.ui.form.StatusReportForm"/>
+
+    <form-bean name="atoUpdateForm"       type="com.premiersolutionshi.support.ui.form.AtoUpdateForm"/>
+    <form-bean name="bulkIssueForm"       type="com.premiersolutionshi.support.ui.form.BulkIssueForm"/>
+    <form-bean name="issueForm"           type="com.premiersolutionshi.support.ui.form.IssueForm"/>
+    <form-bean name="govPropertyForm"     type="com.premiersolutionshi.support.ui.form.GovPropertyForm"/>
+    <form-bean name="pocForm"             type="com.premiersolutionshi.support.ui.form.PocForm"/>
+    <form-bean name="ship"                type="com.premiersolutionshi.support.domain.Ship"/>
+  </form-beans>
+
+  <global-exceptions>
+    <exception key="error.io.key" type="java.io.IOException" path="/error.jsp" />
+  </global-exceptions>
+
+  <!-- ================================= Global Forward Definitions ================================= -->
+  <global-forwards>
+    <forward   name="default"                                 path="/jsp/default.jsp"/>
+    <forward   name="changePassword"                          path="/jsp/changePassword.jsp"/>
+    <forward   name="error404"                                path="/jsp/error404.jsp"/>
+    <forward   name="errorDatabaseDown"                       path="/jsp/errorDatabaseDown.jsp"/>
+    <forward   name="errorExpiredSession"                     path="/jsp/errorExpiredSession.jsp"/>
+    <forward   name="errorNoRole"                             path="/jsp/errorNoRole.jsp"/>
+    <forward   name="errorUnexpected"                         path="/jsp/errorUnexpected.jsp"/>
+  </global-forwards>
+
+  <!-- ================================= Action Mapping Definitions ================================= -->
+  <action-mappings>
+    <action path="/atoUpdate" type="com.premiersolutionshi.support.ui.action.AtoUpdateAction" name="atoUpdateForm" scope="request" input="/jsp/default.jsp">
+      <forward name="add"                                     path="/jsp/support/atoUpdate/atoUpdateEdit.jsp"/>
+      <forward name="edit"                                    path="/jsp/support/atoUpdate/atoUpdateEdit.jsp"/>
+      <forward name="saveDo"                                  path="/jsp/support/atoUpdate/atoUpdateEdit.jsp"/>
+      <forward name="list"                                    path="/jsp/support/atoUpdate/atoUpdateList.jsp"/>
+    </action>
+
+    <action path="/contract" type="com.premiersolutionshi.report.ui.action.ContractAction" name="contractForm" scope="request" input="/jsp/default.jsp">
+      <forward name="index"                                   path="/jsp/report/contract/contractList.jsp"/>
+      <forward name="view"                                    path="/jsp/report/contract/contractView.jsp"/>
+      <forward name="form"                                    path="/jsp/report/contract/contractForm.jsp"/>
+    </action>
+
+    <action path="/bulkIssue" type="com.premiersolutionshi.support.ui.action.BulkIssueAction" name="bulkIssueForm" scope="request" input="/jsp/default.jsp">
+      <forward name="index"                                   path="/jsp/support/bulkIssue/bulkIssue.jsp"/>
+      <forward name="preview"                                 path="/jsp/support/bulkIssue/bulkIssuePreview.jsp"/>
+    </action>
+
+    <action path="/issue" type="com.premiersolutionshi.support.ui.action.IssueAction" name="issueForm" scope="request" input="/jsp/default.jsp">
+      <forward name="index"                                   path="/jsp/support/issue/issueView.jsp"/>
+      <forward name="view"                                    path="/jsp/support/issue/issueView.jsp"/>
+      <forward name="add"                                     path="/jsp/support/issue/issueAdmin.jsp"/>
+      <forward name="edit"                                    path="/jsp/support/issue/issueAdmin.jsp"/>
+      <forward name="copy"                                    path="/jsp/support/issue/issueAdmin.jsp"/>
+    </action>
+
+    <action path="/govProperty" type="com.premiersolutionshi.support.ui.action.GovPropertyAction" name="govPropertyForm" scope="request" input="/jsp/default.jsp">
+      <forward name="index"                                   path="/jsp/support/govProperty/govPropertyList.jsp"/>
+      <forward name="form"                                    path="/jsp/support/govProperty/govPropertyForm.jsp"/>
+    </action>
+
+    <action path="/managedList" type="com.premiersolutionshi.common.ui.action.ManagedListItemAction" name="managedListItem" scope="request" input="/jsp/default.jsp">
+      <forward name="index"                                   path="/jsp/common/managedList/managedList.jsp"/>
+    </action>
+
+    <action path="/organization" type="com.premiersolutionshi.common.ui.action.OrganizationAction" name="organizationForm" scope="request" input="/jsp/default.jsp">
+      <forward name="index"                                   path="/jsp/common/organization/organizationList.jsp"/>
+      <forward name="form"                                    path="/jsp/common/organization/organizationForm.jsp"/>
+      <forward name="view"                                    path="/jsp/common/organization/organizationView.jsp"/>
+      <forward name="unitPocList"                             path="/jsp/common/organization/unitPocList.jsp"/>
+    </action>
+
+    <action path="/poc" type="com.premiersolutionshi.support.ui.action.PocAction" name="pocForm" scope="request" input="/jsp/default.jsp">
+      <forward name="index"                                   path="/jsp/support/poc/pocList.jsp"/>
+      <forward name="form"                                    path="/jsp/support/poc/pocForm.jsp"/>
+      <forward name="view"                                    path="/jsp/support/poc/pocView.jsp"/>
+      <forward name="search"                                  path="/jsp/support/poc/pocSearch.jsp"/>
+    </action>
+
+    <action path="/page" type="com.premiersolutionshi.common.ui.action.PageAction" scope="request" input="/jsp/default.jsp">
+      <forward name="index"                                   path="/jsp/common/site/adminMenu.jsp"/>
+      <forward name="view"                                    path="/jsp/common/site/projectDash.jsp"/>
+    </action>
+
+    <action path="/unit" type="com.premiersolutionshi.common.ui.action.UnitAction" name="ship" scope="request" input="/jsp/default.jsp">
+      <forward name="index"                                   path="/jsp/common/unit/unitModal.jsp"/>
+    </action>
+
+    <action path="/statusReport" type="com.premiersolutionshi.report.ui.action.StatusReportAction" name="statusReportForm" scope="request" input="/jsp/default.jsp">
+      <forward name="index"                                   path="/jsp/report/statusReport/statusReportList.jsp"/>
+      <forward name="view"                                    path="/jsp/report/statusReport/statusReportView.jsp"/>
+      <forward name="form"                                    path="/jsp/report/statusReport/statusReportForm.jsp"/>
+      <forward name="monthlyBusinessVolume"                   path="/jsp/report/statusReport/monthly/monthlyBusinessVolume.jsp"/>
+    </action>
+
+    <action path="/testBlog" type="com.premiersolutionshi.common.ui.action.TestBlogAction" name="testBlog" scope="request" input="/jsp/default.jsp">
+      <forward name="index"                                   path="/jsp/test/testBlogList.jsp"/>
+      <forward name="list"                                    path="/jsp/test/testBlogList.jsp"/>
+      <forward name="add"                                     path="/jsp/test/testBlogEdit.jsp"/>
+      <forward name="edit"                                    path="/jsp/test/testBlogEdit.jsp"/>
+    </action>
+
+    <!-- ================================= Old Actions ================================= -->
+    <action path="/ajax" type="com.premiersolutionshi.old.action.AjaxAction" name="lookupForm" scope="request" input="/jsp/default.jsp"/>
+
+    <action path="/download" type="com.premiersolutionshi.old.action.DownloadAction" name="fileForm" scope="request" input="/jsp/default.jsp"/>
+
+    <action path="/export" type="com.premiersolutionshi.old.action.ExportAction" name="lookupForm" scope="request" input="/jsp/default.jsp"/>
+
+    <action path="/login" type="com.premiersolutionshi.old.action.LoginAction" name="loginForm" scope="request" input="/jsp/default.jsp"/>
+
+    <action path="/menu" type="com.premiersolutionshi.old.action.MenuAction" name="lookupForm" scope="request" input="/jsp/default.jsp">
+      <forward name="index"                                   path="/jsp/menu/index.jsp"/>
+      <forward name="reports"                                 path="/jsp/menu/reports.jsp"/>
+      <forward name="gitLog"                                  path="/jsp/menu/gitLog.jsp"/>
+      <forward name="gitShow"                                 path="/jsp/menu/gitShow.jsp"/>
+       
+    </action>
+
+    <action path="/backfile" type="com.premiersolutionshi.old.action.BackfileAction" name="backfileForm" scope="request" input="/jsp/default.jsp">
+      <forward name="workflowSummary"                         path="/jsp/backfile/backfileWorkflowSummary.jsp"/>
+      <forward name="workflowSummaryXls2"                     path="/jsp/backfile/backfileWorkflowSummaryXls2.jsp"/>
+      <forward name="workflowAdd"                             path="/jsp/backfile/backfileWorkflowEdit.jsp"/>
+      <forward name="workflowEdit"                            path="/jsp/backfile/backfileWorkflowEdit.jsp"/>
+    </action>
+
+    <action path="/decom" type="com.premiersolutionshi.old.action.DecomAction" name="decomForm" scope="request" input="/jsp/default.jsp">
+      <forward name="workflowSummary"                         path="/jsp/decom/decomWorkflowSummary.jsp"/>
+      <forward name="workflowEdit"                            path="/jsp/decom/decomWorkflowEdit.jsp"/>
+    </action>
+
+    <action path="/dts" type="com.premiersolutionshi.old.action.DtsAction" name="dtsForm" scope="request" input="/jsp/default.jsp">
+      <forward name="dtsUpload"                               path="/jsp/dts/dtsUpload.jsp"/>
+    </action>
+
+    <action path="/hardware" type="com.premiersolutionshi.old.action.HardwareAction" name="hardwareForm" scope="request" input="/jsp/default.jsp">
+      <forward name="laptopList"                              path="/jsp/hardware/laptopList.jsp"/>
+      <forward name="laptopAdd"                               path="/jsp/hardware/laptopEdit.jsp"/>
+      <forward name="laptopEdit"                              path="/jsp/hardware/laptopEdit.jsp"/>
+      <forward name="scannerList"                             path="/jsp/hardware/scannerList.jsp"/>
+      <forward name="scannerAdd"                              path="/jsp/hardware/scannerEdit.jsp"/>
+      <forward name="scannerEdit"                             path="/jsp/hardware/scannerEdit.jsp"/>
+      <forward name="miscList"                                path="/jsp/hardware/miscHardwareList.jsp"/>
+      <forward name="miscAdd"                                 path="/jsp/hardware/miscHardwareEdit.jsp"/>
+      <forward name="miscEdit"                                path="/jsp/hardware/miscHardwareEdit.jsp"/>
+    </action>
+
+    <action path="/lookup" type="com.premiersolutionshi.old.action.LookupAction" name="lookupForm" scope="request" input="/jsp/default.jsp"/>
+
+    <action path="/project" type="com.premiersolutionshi.old.action.ProjectAction" name="projectForm" scope="request" input="/jsp/default.jsp">
+      <forward name="projectList"                             path="/jsp/project/projectList.jsp"/>
+      <forward name="taskList"                                path="/jsp/project/taskList.jsp"/>
+      <forward name="taskDetail"                              path="/jsp/project/taskDetail.jsp"/>
+      <forward name="taskAdd"                                 path="/jsp/project/taskEdit.jsp"/>
+      <forward name="taskEdit"                                path="/jsp/project/taskEdit.jsp"/>
+    </action>
+
+    <action path="/report" type="com.premiersolutionshi.old.action.ReportAction" name="reportForm" scope="request" input="/jsp/default.jsp">
+      <forward name="missingTransmittal"                      path="/jsp/report/missingTransmittal.jsp"/>
+      <forward name="transmittalSummary"                      path="/jsp/report/transmittalSummary.jsp"/>
+      <forward name="transmittalDetail"                       path="/jsp/report/transmittalDetail.jsp"/>
+    </action>
+
+    <action path="/ship" type="com.premiersolutionshi.old.action.ShipAction" name="shipForm" scope="request" input="/jsp/default.jsp">
+      <forward name="shipList"                                path="/jsp/ship/shipList.jsp"/>
+      <forward name="shipAdd"                                 path="/jsp/ship/shipEdit.jsp"/>
+      <forward name="shipEdit"                                path="/jsp/ship/shipEdit.jsp"/>
+    </action>
+
+    <action path="/software" type="com.premiersolutionshi.old.action.SoftwareAction" name="softwareForm" scope="request" input="/jsp/default.jsp">
+      <forward name="kofaxLicenseList"                        path="/jsp/software/kofaxLicenseList.jsp"/>
+      <forward name="kofaxLicenseAdd"                         path="/jsp/software/kofaxLicenseEdit.jsp"/>
+      <forward name="kofaxLicenseEdit"                        path="/jsp/software/kofaxLicenseEdit.jsp"/>
+      <forward name="bulkKofaxLicenseEdit"                    path="/jsp/software/bulkKofaxLicenseEdit.jsp"/>
+      <forward name="vrsLicenseList"                          path="/jsp/software/vrsLicenseList.jsp"/>
+      <forward name="vrsLicenseAdd"                           path="/jsp/software/vrsLicenseEdit.jsp"/>
+      <forward name="vrsLicenseEdit"                          path="/jsp/software/vrsLicenseEdit.jsp"/>
+      <forward name="msOfficeLicenseList"                     path="/jsp/software/msOfficeLicenseList.jsp"/>
+      <forward name="msOfficeLicenseAdd"                      path="/jsp/software/msOfficeLicenseEdit.jsp"/>
+      <forward name="msOfficeLicenseEdit"                     path="/jsp/software/msOfficeLicenseEdit.jsp"/>
+      <forward name="miscLicenseList"                         path="/jsp/software/miscLicenseList.jsp"/>
+      <forward name="miscLicenseAdd"                          path="/jsp/software/miscLicenseEdit.jsp"/>
+      <forward name="miscLicenseEdit"                         path="/jsp/software/miscLicenseEdit.jsp"/>
+    </action>
+
+    <action path="/support" type="com.premiersolutionshi.old.action.SupportAction" name="supportForm" scope="request" input="/jsp/default.jsp">
+      <forward name="issueList"                               path="/jsp/support/issueList.jsp"/>
+      <forward name="issueListAll"                            path="/jsp/support/issueListAll.jsp"/>
+      <forward name="myIssueList"                             path="/jsp/support/issueListAll.jsp"/>
+      <forward name="issueDetail"                             path="/jsp/support/issueDetail.jsp"/>
+      <forward name="issueAdd"                                path="/jsp/support/issueEdit.jsp"/>
+      <forward name="issueEdit"                               path="/jsp/support/issueEdit.jsp"/>
+      <forward name="issueReports"                            path="/jsp/support/issueReports.jsp"/>
+      <forward name="issueMonthlyChart"                       path="/jsp/support/issueMonthlyChart.jsp"/>
+      <forward name="generateFeedbackForm"                    path="/jsp/support/supportGenerateFeedbackForm.jsp"/>
+      <forward name="supportFeedbackForm"                     path="/jsp/support/supportFeedbackForm.jsp"/>
+      <forward name="shipVisitCalendar"                       path="/jsp/support/shipVisitCalendar.jsp"/>
+      <forward name="bulkEmailTool"                           path="/jsp/support/bulkEmailTool.jsp"/>
+      <forward name="atoList"                                 path="/jsp/support/atoList.jsp"/>
+      <forward name="atoAdd"                                  path="/jsp/support/atoEdit.jsp"/>
+      <forward name="atoEdit"                                 path="/jsp/support/atoEdit.jsp"/>
+      <forward name="atoAdd2"                                 path="/jsp/support/atoEdit2.jsp"/>
+      <forward name="atoEdit2"                                path="/jsp/support/atoEdit2.jsp"/>
+    </action>
+
+    <action path="/system" type="com.premiersolutionshi.old.action.SystemAction" name="systemForm" scope="request" input="/jsp/default.jsp">
+      <forward name="configuredSystemList"                    path="/jsp/system/configuredSystemList.jsp"/>
+      <forward name="configuredSystemDetail"                  path="/jsp/system/configuredSystemDetail.jsp"/>
+      <forward name="configuredSystemAdd"                     path="/jsp/system/configuredSystemEdit.jsp"/>
+      <forward name="configuredSystemEdit"                    path="/jsp/system/configuredSystemEdit.jsp"/>
+      <forward name="vesselDataSheetDoc"                      path="/jsp/system/vesselDataSheetDoc.jsp"/>
+      <forward name="checkListStep1Doc"                       path="/jsp/system/checkListStep1Doc.jsp"/>
+      <forward name="checkListStep2Doc"                       path="/jsp/system/checkListStep2Doc.jsp"/>
+      <forward name="zbookCheckListStep1Doc"                  path="/jsp/system/zbookCheckListStep1Doc.jsp"/>
+      <forward name="zbookCheckListStep2Doc"                  path="/jsp/system/zbookCheckListStep2Doc.jsp"/>
+      <forward name="postInstallChecklistDoc"                 path="/jsp/system/postInstallChecklistDoc.jsp"/>
+      <forward name="systemVariables"                         path="/jsp/system/systemVariables.jsp"/>
+    </action>
+
+    <action path="/training" type="com.premiersolutionshi.old.action.TrainingAction" name="trainingForm" scope="request" input="/jsp/default.jsp">
+      <forward name="workflowSummary"                          path="/jsp/training/trainingWorkflowSummary.jsp"/>
+      <forward name="workflowChart"                            path="/jsp/training/trainingWorkflowChart.jsp"/>
+      <forward name="workflowEdit"                             path="/jsp/training/trainingWorkflowEdit.jsp"/>
+    </action>
+
+    <action path="/user" type="com.premiersolutionshi.old.action.UserAction" name="userForm" scope="request" input="/jsp/default.jsp">
+      <forward name="userList"                                path="/jsp/user/userList.jsp"/>
+      <forward name="userAdd"                                 path="/jsp/user/userEdit.jsp"/>
+      <forward name="userEdit"                                path="/jsp/user/userEdit.jsp"/>
+      <forward name="pocList"                                 path="/jsp/user/pocList.jsp"/>
+      <forward name="pocAdd"                                  path="/jsp/user/pocEdit.jsp"/>
+      <forward name="pocEdit"                                 path="/jsp/user/pocEdit.jsp"/>
+      <forward name="ptoTravelList"                           path="/jsp/user/ptoTravelList.jsp"/>
+      <forward name="ptoTravelAdd"                            path="/jsp/user/ptoTravelEdit.jsp"/>
+      <forward name="ptoTravelEdit"                           path="/jsp/user/ptoTravelEdit.jsp"/>
+      <forward name="shipPocAdd"                              path="/jsp/user/shipPocEdit.jsp"/>
+      <forward name="shipPocEdit"                             path="/jsp/user/shipPocEdit.jsp"/>
+     
+      
+    </action>
+  </action-mappings>
+
+  <message-resources parameter="com.premiersolutionshi.properties.Common" />
+</struts-config>

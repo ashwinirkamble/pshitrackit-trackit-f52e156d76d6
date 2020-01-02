@@ -1,0 +1,11 @@
+-------------------------------------------------------------------------------
+  Deployment Steps for 2018-11-01
+-------------------------------------------------------------------------------
+
+* backup tomcat files in C:/cloaked/pshi
+* backup sqlite file in C:/sqlite3_db
+* shutdown tomcat
+* Run schema_update
+* copy files from dev into pshi
+* start tomcat
+* test

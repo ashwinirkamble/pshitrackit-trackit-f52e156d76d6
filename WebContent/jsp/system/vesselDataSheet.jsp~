@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<%@ page language="java" %>
+<%@ page import="util.CommonMethods" %>
+
+<%@ taglib prefix="bean"  uri="http://struts.apache.org/tags-bean" %>
+<%@ taglib prefix="html"  uri="http://struts.apache.org/tags-html" %>
+<%@ taglib prefix="logic" uri="http://struts.apache.org/tags-logic" %>
+
+<jsp:useBean id="systemBean" 		scope="request" class="com.premiersolutionshi.old.bean.SystemBean"/>
+<jsp:useBean id="backfileBean" 	scope="request" class="com.premiersolutionshi.old.bean.BackfileBean"/>
+<jsp:useBean id="trainingBean" 	scope="request" class="com.premiersolutionshi.old.bean.TrainingBean"/>
+
+<html>
+<head>
+  <title></title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+	<style>
+		@media screen {
+			body {
+				margin:0;
+				padding: 30px 0 0 50px;
+				font: 16px Arial, Helvetica,"Lucida Grande", serif;
+				font-weight: bold;
+				width: 680px;
+				text-align:left;
+				}
+		}
+
+		@media print {
+			body {
+				margin:0;
+				padding:0;
+				line-height: 1.4em;
+				word-spacing:1px;
+				letter-spacing:0.2px;
+				font: 12pt Arial, Helvetica,"Lucida Grande", serif;
+				font-weight: bold;
+				color: #000;
+				text-align: left;
+				}
+		}
+
+		div:not(:first-child) { margin: 15px 0; }
+
+		div:first-child table { margin: 0; padding: 0; border: 0; }
+		div:not(:first-child) table { margin: 0 0 0 20px; padding: 15px 0 0 0; border: 0; }
+		div:not(:first-child) table.workflowTable { margin: 0; padding: 0; }
+
+		.formTable td { padding: 5px 0 10px 0; }
+
+		td { vertical-align: top; }
+		td.fieldValue { font-weight: normal; }
+
+		td.workflowBox { padding: 5px 3px; border: 1px solid black; font-size: 11px; font-weight: normal; width: 80px; text-align: center; }
+		td.workflowValue { font-size: 14px; font-weight: normal; text-align: center; border-bottom: 1px solid black; }
+
+		hr { display: block; height: 1px; background: transparent; width: 100%; border: none; border-top: 5px solid #777; padding: 0; margin: 0; }
+		hr.thin { display: block; height: 1px; background: transparent; width: 100%; border: none; border-top: 1px solid #777; padding: 0; margin: 0 0 0 0; }
+	</style>
+</head>
+<body>
+	<div id="header">
+		<table width="100%" border="0" cellspacing="0">
+		<tbody>
+			<tr>
+				<td width="185" rowspan="2"><img src="images/logo_pshi.png" width="180"/></td>
+				<td style="vertical-align:bottom;font-weight:bold;font-size:16pt;text-align:right;color:#666;">COMMAND DATA SHEET</td>
+			</tr>
+			<tr>
+				<td style="vertical-align:bottom;font-size:16pt;font-weight:bold;text-align:right;"><bean:write name="systemBean" property="shipName"/></td>
+			</tr>
+		</tbody>
+		</table>
+	</div>
+
+	<hr/>
+
+	<div id="section0_training" style="padding:5px 0 10px 0;">
+		TRAINING INFO:
+
+		<table class="formTable" border="0" cellspacing="0">
+		<colgroup>
+			<col width="200"/>
+			<col width="220"/>
+			<col width="100"/>
+			<col width="140"/>
+		</colgroup>
+		<tbody>
+			<tr>
+				<td>TRAINING DATE:</td>
+				<td class="fieldValue">
+					<% if (!CommonMethods.isEmpty(trainingBean.getSchedTrainingDate())) { %>
+						<bean:write name="trainingBean" property="schedTrainingDate"/>
+						<% if (!CommonMethods.isEmpty(trainingBean.getSchedTrainingTime())) { %>
+							<bean:write name="trainingBean" property="schedTrainingTime"/>
+						<% } %>
+					<% } else { %>
+						_________________
+					<% } %>
+				</td>
+				<td>TRAINER:</td>
+				<td class="fieldValue">
+					<% if (!CommonMethods.isEmpty(trainingBean.getTrainerFullName())) { %>
+						<bean:write name="trainingBean" property="trainerFullName"/>
+					<% } else { %>
+						--
+					<% } %>
+				</td>
+			</tr>
+			<tr>
+				<td>TRAINING LOCATION:</td>
+				<td class="fieldValue" colspan="3">
+					<% if (!CommonMethods.isEmpty(trainingBean.getSchedTrainingLoc())) { %>
+						<bean:write name="trainingBean" property="schedTrainingLoc"/>
+					<% } else { %>
+						--
+					<% } %>
+				</td>
+			</tr>
+			<tr>
+				<td>TRAINING POC:</td>
+				<td class="fieldValue">xxx</td>
+				<td>POC TEL.:</td>
+				<td class="fieldValue">xxx</td>
+			</tr>
+		</tbody>
+		</table>
+	</div>
+
+	<hr/>
+
+	<div id="section1" style="padding:5px 0 10px 0;">
+		SECTION 1:&nbsp; COMMAND
+
+		<table class="border-zero cellspacing-zero">
+		<colgroup>
+			<col width="180"/>
+			<col width="250"/>
+			<col width="150"/>
+			<col width="60"/>
+		</colgroup>
+		<tbody>
+			<tr>
+				<td>UNIT NAME:</td>
+				<td class="fieldValue">
+					<% if (!CommonMethods.isEmpty(systemBean.getShipName())) { %>
+						<bean:write name="systemBean" property="shipName"/>
+					<% } else { %>
+						--
+					<% } %>
+				</td>
+				<td style="vertical-align:bottom;">LOGCOP ACCESS <br/> STATUS:</td>
+				<td class="fieldValue" style="vertical-align:bottom;">Pending</td>
+			</tr>
+			<tr>
+				<td>REGION:</td>
+				<td class="fieldValue">
+					<% if (!CommonMethods.isEmpty(systemBean.getHomeport())) { %>
+						<bean:write name="systemBean" property="homeport"/>
+					<% } else { %>
+						--
+					<% } %>
+				</td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td>R-SUPPLY VERSION:</td>
+				<td class="fieldValue">
+					<% if (!CommonMethods.isEmpty(systemBean.getRsupply())) { %>
+						<bean:write name="systemBean" property="rsupply"/>
+					<% } else { %>
+						--
+					<% } %>
+				</td>
+			</tr>
+		</tbody>
+		</table>
+	</div>
+
+	<hr/>
+
+	<div id="section2" style="padding:5px 0 10px 0;">
+		SECTION 2:&nbsp; ACCESS
+
+		<table class="border-zero cellspacing-zero">
+		<colgroup>
+			<col width="280"/>
+			<col/>
+		</colgroup>
+		<tbody>
+			<tr>
+				<td>BASE ACCESS	GRANTED ON:</td>
+				<td class="fieldValue">xxx</td>
+			</tr>
+			<tr>
+				<td>BASE ACCESS GRANTED BY:</td>
+				<td class="fieldValue">xxx</td>
+			</tr>
+
+			<tr>
+				<td colspan="2">&nbsp;</td>
+			</tr>
+
+			<tr>
+				<td>VESSEL ACCESS GRANTED ON:</td>
+				<td class="fieldValue">xxx</td>
+			</tr>
+			<tr>
+				<td>VESSEL ACCESS GRANTED BY:</td>
+				<td class="fieldValue">xxx</td>
+			</tr>
+		</tbody>
+		</table>
+	</div>
+
+	<hr/>
+
+	<div id="section3" style="padding:5px 0 10px 0;">
+	SECTION 3:&nbsp; CONTACTS
+		<table class="border-zero cellspacing-zero">
+		<colgroup>
+			<col width="120"/>
+			<col/>
+		</colgroup>
+		<tbody>
+			<tr>
+				<td>TRAINED:</td>
+				<td class="fieldValue">xxx</td>
+			</tr>
+		</tbody>
+		</table>
+	</div>
+
+	<hr/>
+
+	<div id="section4" style="padding:5px 0 10px 0;">
+		SECTION 4:&nbsp; BACKFILE INFO
+
+		<table class="border-zero cellspacing-zero">
+		<colgroup>
+			<col width="220"/>
+			<col/>
+		</colgroup>
+		<tbody>
+			<tr>
+				<td colspan="2">FY15 BACKFILE STATUS:</td>
+				<td class="fieldValue">
+					<% if (!CommonMethods.isEmpty(backfileBean.getFy15MailedDate())) { %>
+						Completed
+					<% } else if (!CommonMethods.isEmpty(backfileBean.getFy15CompletedDate())) { %>
+						Completed
+					<% } else if (!CommonMethods.isEmpty(backfileBean.getReceivedDate())) { %>
+						Received
+					<% } else { %>
+						Pending
+					<% } %>
+				</td>
+			</tr>
+		</tbody>
+		</table>
+
+		<table class="workflowTable" border="0" cellspacing="20">
+		<tbody>
+			<tr>
+				<td class="workflowBox">FY15 <br/> Backfile <br/> Received</td>
+				<td class="workflowBox">FY15 <br/> Backfile <br/> Completed</td>
+				<td class="workflowBox">FY15 <br/> Backfile to <br/> Vessel</td>
+			</tr>
+			<tr>
+				<td class="workflowValue"><bean:write name="backfileBean" property="receivedDate"/></td>
+				<td class="workflowValue"><bean:write name="backfileBean" property="fy15CompletedDate"/></td>
+				<td class="workflowValue"><bean:write name="backfileBean" property="fy15MailedDate"/></td>
+			</tr>
+		</tbody>
+		</table>
+
+		<table class="border-zero cellspacing-zero">
+		<colgroup>
+			<col width="220"/>
+			<col/>
+		</colgroup>
+		<tbody>
+			<tr>
+				<td colspan="2">FYNET BACKFILE STATUS:</td>
+				<td class="fieldValue">
+					<% if (!CommonMethods.isEmpty(backfileBean.getFy1314MailedDate())) { %>
+						Completed
+					<% } else if (!CommonMethods.isEmpty(backfileBean.getFy1314CompletedDate())) { %>
+						Completed
+					<% } else if (!CommonMethods.isEmpty(backfileBean.getReceivedDate())) { %>
+						Received
+					<% } else { %>
+						Pending
+					<% } %>
+				</td>
+			</tr>
+		</tbody>
+		</table>
+
+		<table class="workflowTable" border="0" cellspacing="20">
+		<tbody>
+			<tr>
+				<td class="workflowBox">FYNet <br/> Backfile <br/> Received</td>
+				<td class="workflowBox">FY14 <br/> Backfile <br/> Completed</td>
+				<td class="workflowBox">FY13 <br/> Backfile <br/> Completed</td>
+				<td class="workflowBox">FY13/14/15 <br/> Backfile to <br/> Vessel</td>
+				<td class="workflowBox">FY13/14/15 <br/> Backfile to <br/> LOGCOP</td>
+				<td class="workflowBox">FY13/14/15 <br/> Backfile to <br/> Laptop</td>
+			</tr>
+			<tr>
+				<td class="workflowValue"><bean:write name="backfileBean" property="receivedDate"/></td>
+				<td class="workflowValue"><bean:write name="backfileBean" property="fy1314CompletedDate"/></td>
+				<td class="workflowValue"><bean:write name="backfileBean" property="fy1314CompletedDate"/></td>
+				<td class="workflowValue"><bean:write name="backfileBean" property="fy1314MailedDate"/></td>
+				<td class="workflowValue"><bean:write name="backfileBean" property="logcopUploadedDate"/></td>
+				<td class="workflowValue"><bean:write name="backfileBean" property="laptopInstalledDate"/></td>
+			</tr>
+		</tbody>
+		</table>
+	</div>
+
+	<hr/>
+
+	<div id="section5" style="padding:5px 0 10px 0;">
+		SECTION 5:&nbsp; EQUIPMENT INFO
+
+		<table class="border-zero cellspacing-zero">
+		<colgroup>
+			<col width="220"/>
+			<col width="200"/>
+			<col width="150"/>
+			<col width="90"/>
+		</colgroup>
+		<tbody>
+			<tr>
+				<td>COMPUTER NAME:</td>
+				<td class="fieldValue">
+					<% if (!CommonMethods.isEmpty(systemBean.getComputerName())) { %>
+						<bean:write name="systemBean" property="computerName"/>
+					<% } else { %>
+						--
+					<% } %>
+				</td>
+				<td>LAPTOP TAG:</td>
+				<td class="fieldValue">
+					<% if (!CommonMethods.isEmpty(systemBean.getLaptopTag())) { %>
+						<bean:write name="systemBean" property="laptopTag"/>
+					<% } else { %>
+						--
+					<% } %>
+				</td>
+			</tr>
+			<tr>
+				<td>COMPUTER MODEL:</td>
+				<td class="fieldValue" colspan="3">
+					<% if (!CommonMethods.isEmpty(systemBean.getLaptopProductName())) { %>
+						<bean:write name="systemBean" property="laptopProductName"/>
+					<% } else { %>
+						--
+					<% } %>
+				</td>
+			</tr>
+			<tr>
+				<td>SERIAL NO:</td>
+				<td class="fieldValue" colspan="3">
+					<% if (!CommonMethods.isEmpty(systemBean.getLaptopSerialNumber())) { %>
+						<bean:write name="systemBean" property="laptopSerialNumber"/>
+					<% } else { %>
+						--
+					<% } %>
+				</td>
+			</tr>
+
+			<tr>
+				<td>&nbsp;</td>
+			</tr>
+
+			<tr>
+				<td>SCANNER MODEL:</td>
+				<td class="fieldValue">
+					<% if (!CommonMethods.isEmpty(systemBean.getScannerProductName())) { %>
+						<bean:write name="systemBean" property="scannerProductName"/>
+					<% } else { %>
+						--
+					<% } %>
+				</td>
+				<td>SCANNER TAG:</td>
+				<td class="fieldValue">
+					<% if (!CommonMethods.isEmpty(systemBean.getScannerTag())) { %>
+						<bean:write name="systemBean" property="scannerTag"/>
+					<% } else { %>
+						--
+					<% } %>
+				</td>
+			</tr>
+			<tr>
+				<td>SERIAL NO.:</td>
+				<td class="fieldValue" colspan="3">
+					<% if (!CommonMethods.isEmpty(systemBean.getScannerSerialNumber())) { %>
+						<bean:write name="systemBean" property="scannerSerialNumber"/>
+					<% } else { %>
+						--
+					<% } %>
+				</td>
+			</tr>
+
+			<tr>
+				<td>&nbsp;</td>
+			</tr>
+
+			<tr>
+				<td>EXTERNAL DRIVE MODEL:</td>
+				<td class="fieldValue">xxx</td>
+				<td>EXT. DRIVE TAG:</td>
+				<td class="fieldValue">xxx</td>
+			</tr>
+			<tr>
+				<td>SERIAL NO.:</td>
+				<td class="fieldValue" colspan="3">xxx</td>
+			</tr>
+		</tbody>
+		</table><br/>
+
+		<table width="660" border="0" cellspacing="0">
+		<tbody>
+			<tr>
+				<td><hr class="thin"/></td>
+			</tr>
+		</tbody>
+		</table><br/>
+
+		<table class="border-zero cellspacing-zero">
+		<colgroup>
+			<col width="320"/>
+			<col/>
+		</colgroup>
+		<tbody>
+			<tr>
+				<td>MICROSOFT:</td>
+				<td class="fieldValue">
+					<% if (!CommonMethods.isEmpty(systemBean.getMsOfficeProductName())) { %>
+						<bean:write name="systemBean" property="msOfficeProductName"/>
+					<% } else { %>
+						--
+					<% } %>
+				</td>
+			</tr>
+			<tr>
+				<td style="padding-left:30px;">ACCESS VERSION:</td>
+				<td class="fieldValue">
+					<% if (!CommonMethods.isEmpty(systemBean.getAccessVersion())) { %>
+						<bean:write name="systemBean" property="accessVersion"/>
+					<% } else { %>
+						--
+					<% } %>
+				</td>
+			</tr>
+			<tr>
+				<td style="padding-left:30px;">ACCESS VERSION HISTORY:</td>
+				<td class="fieldValue">
+					<% if (!CommonMethods.isEmpty(systemBean.getAccessVersionHistory())) { %>
+						<logic:iterate id="str" name="systemBean" property="accessVersionHistoryBr" indexId="i">
+							<bean:write name="str"/><% if (i+1 < systemBean.getAccessVersionHistoryBr().size()) { %><br/><% } %>
+						</logic:iterate>
+					<% } else { %>
+						--
+					<% } %>
+				</td>
+			</tr>
+
+			<tr>
+				<td>&nbsp;</td>
+			</tr>
+
+			<tr>
+				<td>KOFAX:
+				<td class="fieldValue">
+					<% if (!CommonMethods.isEmpty(systemBean.getKofaxProductName())) { %>
+						<bean:write name="systemBean" property="kofaxProductName"/>
+					<% } else { %>
+						--
+					<% } %>
+				</td>
+			</tr>
+			<tr>
+				<td style="padding-left:30px;">KOFAX SERIAL NO.:</td>
+				<td class="fieldValue">
+					<% if (!CommonMethods.isEmpty(systemBean.getKofaxLicenseKey())) { %>
+						<bean:write name="systemBean" property="kofaxLicenseKey"/>
+					<% } else { %>
+						--
+					<% } %>
+				</td>
+			</tr>
+			<tr>
+				<td style="padding-left:30px;">KOFAX PRODUCT CODE:</td>
+				<td class="fieldValue">
+					<% if (!CommonMethods.isEmpty(systemBean.getKofaxProductCode())) { %>
+						<bean:write name="systemBean" property="kofaxProductCode"/>
+					<% } else { %>
+						--
+					<% } %>
+				</td>
+			</tr>
+			<tr>
+				<td style="padding-left:30px;">KOFAX BATCH CLASS VERSION:</td>
+				<td class="fieldValue">
+					<% if (!CommonMethods.isEmpty(systemBean.getKofaxVersion())) { %>
+						<bean:write name="systemBean" property="kofaxVersion"/>
+					<% } else { %>
+						--
+					<% } %>
+				</td>
+			</tr>
+			<tr>
+				<td style="padding-left:30px;">KOFAX VERSION HISTORY:</td>
+				<td class="fieldValue">
+					<% if (!CommonMethods.isEmpty(systemBean.getKofaxVersionHistory())) { %>
+						<logic:iterate id="str" name="systemBean" property="kofaxVersionHistoryBr" indexId="i">
+							<bean:write name="str"/><% if (i+1 < systemBean.getKofaxVersionHistoryBr().size()) { %><br/><% } %>
+						</logic:iterate>
+					<% } else { %>
+						--
+					<% } %>
+				</td>
+			</tr>
+
+			<tr>
+				<td>&nbsp;</td>
+			</tr>
+
+			<tr>
+				<td>FACET DATABASE VERSION:</td>
+				<td class="fieldValue">
+					<% if (!CommonMethods.isEmpty(systemBean.getFacetVersion())) { %>
+						<bean:write name="systemBean" property="facetVersion"/>
+					<% } else { %>
+						--
+					<% } %>
+				</td>
+			</tr>
+
+			<tr>
+				<td>&nbsp;</td>
+			</tr>
+
+			<tr>
+				<td>DOCUMENTATION VERSION:</td>
+				<td class="fieldValue">
+					<% if (!CommonMethods.isEmpty(systemBean.getDocumentationVersion())) { %>
+						<bean:write name="systemBean" property="documentationVersion"/>
+					<% } else { %>
+						--
+					<% } %>
+				</td>
+			</tr>
+
+			<tr>
+				<td>&nbsp;</td>
+			</tr>
+
+			<tr>
+				<td>DOCUMENTATION VERSION HISTORY:</td>
+				<td class="fieldValue">
+					<% if (!CommonMethods.isEmpty(systemBean.getDocumentationVersionHistory())) { %>
+						<logic:iterate id="str" name="systemBean" property="documentationVersionHistoryBr" indexId="i">
+							<bean:write name="str"/><% if (i+1 < systemBean.getDocumentationVersionHistoryBr().size()) { %><br/><% } %>
+						</logic:iterate>
+					<% } else { %>
+						--
+					<% } %>
+				</td>
+			</tr>
+
+			<tr>
+				<td>&nbsp;</td>
+			</tr>
+
+			<tr>
+				<td>NOTES:</td>
+				<td class="fieldValue">
+					<% if (!CommonMethods.isEmpty(systemBean.getDummyDatabaseVersion())) { %>
+						Dummy Database Version <bean:write name="systemBean" property="dummyDatabaseVersion"/><br/>
+					<% } %>
+					<% if (!CommonMethods.isEmpty(systemBean.getNotes())) { %>
+						<logic:iterate id="str" name="systemBean" property="notesBr" indexId="i">
+							<bean:write name="str"/><% if (i+1 < systemBean.getNotesBr().size()) { %><br/><% } %>
+						</logic:iterate>
+					<% } %>
+					<% if (CommonMethods.isEmpty(systemBean.getDummyDatabaseVersion()) && CommonMethods.isEmpty(systemBean.getNotes())) { %>
+						--
+					<% } %>
+
+				</td>
+			</tr>
+		</tbody>
+		</table>
+	</div>
+
+	<hr/>
+
+	<div id="section6">
+		SECTION 6:&nbsp; NON-DATABASE
+
+		<table class="formTable" border="0" cellspacing="0">
+		<colgroup>
+			<col width="270"/>
+			<col/>
+		</colgroup>
+		<tbody>
+			<tr>
+				<td>HARDWARE SIGN OFF SHEET:</td>
+				<td class="fieldValue">Attached</td>
+			</tr>
+			<tr>
+				<td>ATTENDANCE SHEET:</td>
+				<td class="fieldValue">Attached</td>
+			</tr>
+		</tbody>
+		</table>
+	</div>
+</body>
+</html>

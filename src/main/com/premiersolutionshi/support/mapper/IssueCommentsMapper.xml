@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.premiersolutionshi.support.dao.IssueCommentsDao">
+	<resultMap type="IssueComments" id="issueCommentsResult">
+		<id property="id" column="issue_comments_pk" />
+		<result property="issueFk" column="ic_issue_fk" />
+		<result property="comments" column="ic_comments" />
+		<result property="createdBy" column="ic_created_by" />
+		<result property="createdDate" column="ic_created_date" />
+		<!-- <result property="createdDateStr" column="ic_created_date_str" /> -->
+	</resultMap>
+
+	<sql id="columns">
+		issue_comments_pk,
+		ic.issue_fk AS ic_issue_fk,
+		ic.comments AS ic_comments,
+		ic.created_by AS ic_created_by,
+		strftime('%Y-%m-%d %H:%M:%f', ic.created_date) AS ic_created_date,
+		ic.created_date AS ic_created_date_str
+	</sql>
+
+	<sql id="baseSelect">
+		SELECT
+		<include refid="columns" />
+		FROM issue_comments ic
+	</sql>
+
+	<select id="getAll" resultMap="issueCommentsResult">
+		<include refid="baseSelect" />
+	</select>
+
+	<select id="getById" resultMap="issueCommentsResult">
+		<include refid="baseSelect" />
+		WHERE issue_comments_pk = #{id}
+	</select>
+
+	<sql id="baseInsert">
+		INSERT INTO issue_comments (
+		issue_fk,
+		comments,
+		created_by,
+		created_date
+		) VALUES
+	</sql>
+
+	<insert id="insert" useGeneratedKeys="true" parameterType="IssueComments">
+		<include refid="baseInsert" />
+		(
+		#{issueFk},
+		#{comments},
+		#{createdBy},
+		datetime('now', 'localtime')
+		)
+	</insert>
+
+	<insert id="insertAll" useGeneratedKeys="true" parameterType="IssueComments">
+		<include refid="baseInsert" />
+		<foreach item="item" index="index" collection="list"
+			separator=",">
+			(
+			#{item.issueFk},
+			#{item.comments},
+			#{item.createdBy},
+			datetime('now', 'localtime')
+			)
+		</foreach>
+	</insert>
+
+	<update id="update" parameterType="IssueComments">
+		UPDATE issue_comments SET
+		issue_fk = #{issueFk},
+		comments = #{comments},
+		created_by = #{createdBy},
+		created_date = #{createdDateSql}
+		WHERE issue_comments_pk = #{id}
+	</update>
+
+	<delete id="deleteByIssueFk">
+		DELETE FROM issue_comments
+		WHERE issue_fk = #{issueFk}
+	</delete>
+
+	<delete id="deleteById">
+		DELETE FROM issue_comments
+		WHERE issue_comments_pk = #{id}
+	</delete>
+</mapper>

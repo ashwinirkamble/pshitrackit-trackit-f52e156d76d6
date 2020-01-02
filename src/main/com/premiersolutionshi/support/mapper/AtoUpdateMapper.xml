@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.premiersolutionshi.support.dao.AtoUpdateDao">
+	<resultMap type="com.premiersolutionshi.support.domain.AtoUpdate"
+		id="atoUpdateResult">
+		<id property="id" column="ato_pk" />
+		<result property="projectFk" column="a_project_fk" />
+		<result property="atoDate" column="a_ato_date" />
+		<result property="openedDate" column="a_opened_date" />
+		<result property="comments" column="a_comments" />
+		<result property="lastUpdatedBy" column="a_last_updated_by" />
+		<result property="lastUpdatedDate" column="a_last_updated_date" />
+		<result property="totalIssues" column="a_total_issues" />
+		<result property="totalIssuesClosed" column="a_total_issues_closed" />
+	</resultMap>
+
+	<sql id="columns">
+		ato_pk,
+		a.project_fk AS a_project_fk,
+		strftime('%Y-%m-%d %H:%M:%f', a.ato_date) AS a_ato_date,
+		strftime('%Y-%m-%d %H:%M:%f', a.opened_date) AS a_opened_date,
+		a.comments AS a_comments,
+		a.last_updated_by AS a_last_updated_by,
+		strftime('%Y-%m-%d %H:%M:%f', a.last_updated_date) AS a_last_updated_date,
+
+		COUNT(DISTINCT issue_c.issue_pk) AS a_total_issues,
+		SUM(CASE WHEN issue_c.status = '6 - Closed (Successful)' THEN 1 ELSE 0 END) AS
+		a_total_issues_closed
+	</sql>
+
+	<sql id="groupBy">
+		GROUP BY a.ato_pk,
+		a.project_fk,
+		a.ato_date,
+		a.last_updated_by,
+		a.last_updated_date
+	</sql>
+
+	<sql id="baseSelect">
+		SELECT
+		<include refid="columns" />
+		FROM ato a
+		LEFT OUTER JOIN issue issue_c ON a.ato_pk = issue_c.ato_fk
+	</sql>
+
+	<select id="getAll" resultMap="atoUpdateResult">
+		<include refid="baseSelect" />
+		<include refid="groupBy" />
+		ORDER BY a.ato_date DESC
+	</select>
+
+	<select id="getLimit" resultMap="atoUpdateResult">
+		<include refid="baseSelect" />
+		<include refid="groupBy" />
+		ORDER BY a.ato_date DESC
+		LIMIT #{startRow}, #{size}
+	</select>
+
+	<select id="getCount" resultType="int">
+		SELECT COUNT(*) FROM ato
+	</select>
+
+	<select id="getById" resultMap="atoUpdateResult">
+		<include refid="baseSelect" />
+		WHERE ato_pk = #{id}
+		<include refid="groupBy" />
+	</select>
+
+	<insert id="insert" useGeneratedKeys="true"
+		parameterType="com.premiersolutionshi.support.domain.AtoUpdate">
+		INSERT INTO ato (
+		project_fk,
+		ato_date,
+		opened_date,
+		comments,
+		last_updated_by,
+		last_updated_date
+		)
+		VALUES (
+		#{projectFk},
+		#{atoDateSql},
+		#{openedDateSql},
+		#{comments},
+		#{lastUpdatedBy},
+		datetime('now', 'localtime')
+		)
+	</insert>
+
+	<update id="update" parameterType="AtoUpdate">
+		UPDATE ato SET
+		project_fk = #{projectFk},
+		ato_date = #{atoDateSql},
+		opened_date = #{openedDateSql},
+		comments = #{comments},
+		last_updated_by = #{lastUpdatedBy},
+		last_updated_date = datetime('now', 'localtime')
+		WHERE ato_pk = #{id}
+	</update>
+
+	<delete id="deleteById">
+		DELETE FROM ato
+		WHERE ato_pk = #{id}
+	</delete>
+</mapper>

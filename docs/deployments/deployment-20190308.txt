@@ -1,0 +1,22 @@
+-------------------------------------------------------------------------------
+  Deployment Email
+-------------------------------------------------------------------------------
+
+To: PremierSolutionsHI Support;
+Cc: Amanda Crabtree; David Tribble
+Subject: TrackIT Deployed 3/8/2019
+
+TrackIT Team,
+
+The following changes have been implemented and deployed on production:
+
+> 1. Training workflow should not allow any future dates, only today and past dates allowed.
+The "Actual Training Date" now does not allow dates after the current date.
+
+> 2. When creating an issue, "initiated by" should not be auto filled, This will force the user to choose "PSHI or UNIT" when creating or closing issue.
+"Initiated by" no longer has a default value.
+
+v/r,
+Lewis Nakao | Software Engineer | Premier Solutions Hi, LLC
+Email: lewis.nakao@premiersoltuionshi.com 
+desk 808.784.3310 main 808.396.4444 ext 110 cell 541.357.7473

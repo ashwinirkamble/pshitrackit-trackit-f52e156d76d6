@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.premiersolutionshi.common.dao.OrganizationDao">
+	<resultMap type="Organization" id="simpleOrganizationResult">
+		<id property="id" column="organization_pk" />
+		<result property="name" column="o_name" />
+		<result property="address1" column="o_address_1" />
+		<result property="address2" column="o_address_2" />
+		<result property="zip" column="o_zip" />
+		<result property="city" column="o_city" />
+		<result property="stateProvince" column="o_state_province" />
+		<result property="country" column="o_country" />
+		<result property="email" column="o_email" />
+		<result property="url" column="o_url" />
+		<result property="phone" column="o_phone" />
+		<result property="faxNumber" column="o_fax_number" />
+		<result property="notes" column="o_notes" />
+		<result property="primaryPocFk" column="o_primary_poc_fk" />
+		<result property="projectFk" column="o_project_fk" />
+		<result property="createdByFk" column="o_created_by_fk" />
+		<result property="createdDate" column="o_created_date" />
+		<result property="lastUpdatedByFk" column="o_last_updated_by_fk" />
+		<result property="lastUpdatedDate" column="o_last_updated_date" />
+		<result property="createdBy" column="o_created_by" />
+		<result property="lastUpdatedBy" column="o_last_updated_by" />
+	</resultMap>
+
+	<resultMap type="Organization" id="organizationResult"
+		extends="simpleOrganizationResult">
+		<association property="primaryPoc" notNullColumn="poc_pk"
+			resultMap="com.premiersolutionshi.support.dao.PocDao.simplePocResult"
+			columnPrefix="primary_" />
+	</resultMap>
+
+	<sql id="columns">
+		o.organization_pk,
+		o.name AS o_name,
+		o.address_1 AS o_address_1,
+		o.address_2 AS o_address_2,
+		o.city AS o_city,
+		o.zip AS o_zip,
+		o.state_province AS o_state_province,
+		o.country AS o_country,
+		o.email AS o_email,
+		o.url AS o_url,
+		o.phone AS o_phone,
+		o.fax_number AS o_fax_number,
+		o.notes AS o_notes,
+		o.primary_poc_fk AS o_primary_poc_fk,
+		o.project_fk AS o_project_fk,
+		o.created_by_fk AS o_created_by_fk,
+		strftime('%Y-%m-%d %H:%M:%f', o.created_date) AS o_created_date,
+		o.last_updated_by_fk AS o_last_updated_by_fk,
+		strftime('%Y-%m-%d %H:%M:%f', o.last_updated_date) AS o_last_updated_date,
+		cbu.first_name || ' ' || cbu.last_name AS o_created_by,
+		lubu.first_name || ' ' || lubu.last_name AS o_last_updated_by
+	</sql>
+
+	<sql id="primaryPocColumns">
+		primaryPoc.poc_pk AS primary_poc_pk,
+		primaryPoc.project_fk AS primary_p_project_fk,
+		primaryPoc.last_name AS primary_p_last_name,
+		primaryPoc.first_name AS primary_p_first_name,
+		primaryPoc.title AS primary_p_title,
+		primaryPoc.email AS primary_p_email,
+		primaryPoc.work_number AS primary_p_work_number,
+		primaryPoc.fax_number AS primary_p_fax_number,
+		primaryPoc.cell_number AS primary_p_cell_number,
+		primaryPoc.last_updated_by AS primary_p_last_updated_by,
+		strftime('%Y-%m-%d %H:%M:%f', primaryPoc.last_updated_date) AS
+		primary_p_last_updated_date
+	</sql>
+
+	<sql id="baseSelect">
+		SELECT
+		<include refid="columns" />
+		,
+		<include refid="primaryPocColumns" />
+		FROM organization o
+		LEFT OUTER JOIN users cbu ON cbu.user_pk = o.created_by_fk
+		LEFT OUTER JOIN users lubu ON lubu.user_pk = o.last_updated_by_fk
+		LEFT OUTER JOIN poc primaryPoc ON primaryPoc.poc_pk = o.primary_poc_fk
+	</sql>
+
+	<select id="getAll" resultMap="organizationResult">
+		<include refid="baseSelect" />
+		WHERE o.deleted != 1
+		ORDER BY o.name
+	</select>
+
+	<select id="getByProjectFk" resultMap="organizationResult">
+		<include refid="baseSelect" />
+		WHERE o.deleted != 1
+		AND o.project_fk = ${projectFk}
+		ORDER BY o.name
+	</select>
+
+	<select id="getById" resultMap="organizationResult">
+		<include refid="baseSelect" />
+		WHERE organization_pk = #{id}
+	</select>
+
+	<insert id="insert" useGeneratedKeys="true" parameterType="Organization">
+		INSERT INTO organization (
+		name,
+		address_1,
+		address_2,
+		city,
+		state_province,
+		zip,
+		country,
+		email,
+		url,
+		phone,
+		fax_number,
+		notes,
+		primary_poc_fk,
+		project_fk,
+		created_by_fk,
+		created_date,
+		last_updated_by_fk,
+		last_updated_date
+		)
+		VALUES (
+		#{name},
+		#{address1},
+		#{address2},
+		#{city},
+		#{stateProvince},
+		#{zip},
+		#{country},
+		#{email},
+		#{url},
+		#{phone},
+		#{faxNumber},
+		#{notes},
+		#{primaryPocFk},
+		${projectFk},
+		#{createdByFk},
+		datetime('now', 'localtime'),
+		#{lastUpdatedByFk},
+		datetime('now', 'localtime')
+		)
+	</insert>
+
+	<update id="update" parameterType="Organization">
+		UPDATE organization SET
+		name = #{name},
+		address_1 = #{address1},
+		address_2 = #{address2},
+		city = #{city},
+		state_province = #{stateProvince},
+		zip = #{zip},
+		country = #{country},
+		email = #{email},
+		url = #{url},
+		phone = #{phone},
+		fax_number = #{faxNumber},
+		notes = #{notes},
+		primary_poc_fk = #{primaryPocFk},
+		last_updated_by_fk = #{lastUpdatedByFk},
+		last_updated_date = datetime('now', 'localtime')
+		WHERE organization_pk = #{id}
+	</update>
+
+	<delete id="deleteById">
+		UPDATE organization SET deleted = 1
+		WHERE organization_pk = #{id}
+	</delete>
+</mapper>

@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.premiersolutionshi.support.dao.ConfiguredSystemDao">
+	<resultMap type="ConfiguredSystem" id="configuredSystemSimpleResult">
+		<id property="id" column="configured_system_pk" />
+		<result property="laptopFk" column="cs_laptop_fk" />
+		<result property="scannerFk" column="cs_scanner_fk" />
+		<result property="kofaxLicenseFk" column="cs_kofax_license_fk" />
+		<result property="msOfficeLicenseFk" column="cs_ms_office_license_fk" />
+		<result property="uic" column="cs_uic" />
+		<result property="facetVersion" column="cs_facet_version" />
+		<result property="facetVersionHistory" column="cs_facet_version_history" />
+		<result property="kofaxProductName" column="cs_kofax_product_name" />
+		<result property="kofaxVersion" column="cs_kofax_version" />
+		<result property="kofaxVersionHistory" column="cs_kofax_version_history" />
+		<result property="accessVersion" column="cs_access_version" />
+		<result property="accessVersionHistory" column="cs_access_version_history" />
+		<result property="documentationVersion" column="cs_documentation_version" />
+		<result property="documentationVersionHistory" column="cs_documentation_version_history" />
+		<result property="notes" column="cs_notes" />
+		<result property="lastUpdatedBy" column="cs_last_updated_by" />
+		<result property="lastUpdatedDate" column="cs_last_updated_date" />
+		<result property="ghostVersion" column="cs_ghost_version" />
+		<result property="isPreppedInd" column="cs_is_prepped_ind" />
+		<result property="dummyDatabaseVersion" column="cs_dummy_database_version" />
+		<result property="networkAdapter" column="cs_network_adapter" />
+		<result property="adminPassword" column="cs_admin_password" />
+		<result property="dmsVersion" column="cs_dms_version" />
+		<result property="s2ClosureDate" column="cs_s2_closure_date" />
+		<result property="fuelClosureDate" column="cs_fuel_closure_date" />
+		<result property="multiShipInd" column="cs_multi_ship_ind" />
+		<result property="multiShipUicList" column="cs_multi_ship_uic_list" />
+		<result property="nwcfInd" column="cs_nwcf_ind" />
+		<result property="contractNumber" column="cs_contract_number" />
+		<result property="hardwareFileFk" column="cs_hardware_file_fk" />
+		<result property="trainingFileFk" column="cs_training_file_fk" />
+		<result property="laptop1FileFk" column="cs_laptop1_file_fk" />
+		<result property="laptop2FileFk" column="cs_laptop2_file_fk" />
+		<result property="postInstallFileFk" column="cs_post_install_file_fk" />
+		<result property="vrsLicenseFk" column="cs_vrs_license_fk" />
+		<result property="form1348NoLocationInd" column="cs_form_1348_no_location_ind" />
+		<result property="form1348NoClassInd" column="cs_form_1348_no_class_ind" />
+		<result property="osVersion" column="cs_os_version" />
+		<result property="shipFk" column="cs_ship_fk" />
+
+		<association property="laptop" notNullColumn="laptop_pk"
+			resultMap="com.premiersolutionshi.support.dao.LaptopDao.laptopResult" />
+	</resultMap>
+
+	<resultMap type="ConfiguredSystem" id="configuredSystemResult"
+		extends="configuredSystemSimpleResult">
+
+		<association property="ship" notNullColumn="ship_pk"
+			resultMap="com.premiersolutionshi.support.dao.ShipDao.shipResult" />
+
+		<collection property="currentLocation" notNullColumn="configured_system_loc_hist_pk"
+			resultMap="com.premiersolutionshi.support.dao.ConfiguredSystemLocHistDao.configuredSystemLocHistResult" />
+	</resultMap>
+
+	<resultMap type="FkAndCount" id="fkAndCountResult">
+		<result property="fk" column="fk" />
+		<result property="count" column="issue_count" />
+	</resultMap>
+
+	<sql id="columns">
+		configured_system_pk,
+		cs.laptop_fk AS cs_laptop_fk,
+		cs.scanner_fk AS cs_scanner_fk,
+		cs.kofax_license_fk AS cs_kofax_license_fk,
+		cs.ms_office_license_fk AS cs_ms_office_license_fk,
+		cs.uic AS cs_uic,
+		cs.facet_version AS cs_facet_version,
+		cs.facet_version_history AS cs_facet_version_history,
+		cs.kofax_product_name AS cs_kofax_product_name,
+		cs.kofax_version AS cs_kofax_version,
+		cs.kofax_version_history AS cs_kofax_version_history,
+		cs.access_version AS cs_access_version,
+		cs.access_version_history AS cs_access_version_history,
+		cs.documentation_version AS cs_documentation_version,
+		cs.documentation_version_history AS cs_documentation_version_history,
+		cs.notes AS cs_notes,
+		cs.last_updated_by AS cs_last_updated_by,
+		strftime('%Y-%m-%d %H:%M:%f', cs.last_updated_date) AS cs_last_updated_date,
+		cs.ghost_version AS cs_ghost_version,
+		cs.is_prepped_ind AS cs_is_prepped_ind,
+		cs.dummy_database_version AS cs_dummy_database_version,
+		cs.network_adapter AS cs_network_adapter,
+		cs.admin_password AS cs_admin_password,
+		cs.dms_version AS cs_dms_version,
+		strftime('%Y-%m-%d %H:%M:%f', cs.s2_closure_date) AS cs_s2_closure_date,
+		strftime('%Y-%m-%d %H:%M:%f', cs.fuel_closure_date) AS
+		cs_fuel_closure_date,
+		cs.multi_ship_ind AS cs_multi_ship_ind,
+		cs.multi_ship_uic_list AS cs_multi_ship_uic_list,
+		cs.nwcf_ind AS cs_nwcf_ind,
+		cs.contract_number AS cs_contract_number,
+		cs.hardware_file_fk AS cs_hardware_file_fk,
+		cs.training_file_fk AS cs_training_file_fk,
+		cs.laptop1_file_fk AS cs_laptop1_file_fk,
+		cs.laptop2_file_fk AS cs_laptop2_file_fk,
+		cs.post_install_file_fk AS cs_post_install_file_fk,
+		cs.vrs_license_fk AS cs_vrs_license_fk,
+		cs.form_1348_no_location_ind AS cs_form_1348_no_location_ind,
+		cs.form_1348_no_class_ind AS cs_form_1348_no_class_ind,
+		cs.os_version AS cs_os_version,
+		cs.ship_fk AS cs_ship_fk
+	</sql>
+
+	<sql id="baseSelect">
+		SELECT
+		<include refid="columns" />
+		,
+		<include
+			refid="com.premiersolutionshi.support.dao.ConfiguredSystemLocHistDao.columnsCurrent" />
+		,
+		<include refid="com.premiersolutionshi.support.dao.ShipDao.columns" />
+		,
+		<include refid="com.premiersolutionshi.support.dao.LaptopDao.columns" />
+		,
+		NULL AS poc_pk
+		FROM configured_system cs
+		LEFT OUTER JOIN configured_system_loc_hist cslh ON cs.configured_system_pk
+		= cslh.configured_system_fk
+		LEFT OUTER JOIN laptop l ON l.laptop_pk = cs.laptop_fk
+		LEFT OUTER JOIN ship s ON cs.ship_fk = s.ship_pk
+	</sql>
+
+	<sql id="baseSelectGroupBy">
+		GROUP BY cslh.configured_system_fk
+	</sql>
+
+	<sql id="baseSelectOrderBy">
+		--ORDER BY s.ship_name, l.computer_name, p.first_name, p.last_name
+		ORDER BY s.ship_name, l.computer_name, cslh.configured_system_loc_hist_pk
+		DESC
+	</sql>
+
+	<sql id="statusOpenIssue">
+		AND i.status NOT IN ('5 - Closed', '6 - Closed (Successful)', '7 - Closed
+		(No Response)', '8 - Closed (Unavailable)')
+	</sql>
+
+	<sql id="baseSelectNotRetired">
+		<include refid="baseSelect" />
+		WHERE cs.is_prepped_ind = 'A'
+		AND l.computer_name NOT LIKE '%- RETIRED%'
+	</sql>
+
+	<select id="getConfiguredSystemFkOpenIssueCountByCategory"
+		resultMap="fkAndCountResult">
+		SELECT
+		i.configured_system_fk AS fk,
+		COUNT(*) AS issue_count
+		FROM issue i
+		WHERE i.category = #{categoryName}
+		<include refid="statusOpenIssue" />
+		AND i.configured_system_fk IS NOT NULL
+		GROUP BY i.ship_fk
+	</select>
+
+	<select id="getAllNotRetired" resultMap="configuredSystemResult">
+		<include refid="baseSelectNotRetired" />
+		<include refid="baseSelectGroupBy" />
+		<include refid="baseSelectOrderBy" />
+	</select>
+
+	<select id="getAllNotRetiredByPkList" resultMap="configuredSystemResult">
+		<include refid="baseSelectNotRetired" />
+		WHERE configured_system_pk IN (
+		<foreach item="item" collection="list" separator=",">#{item}
+		</foreach>
+		)
+		<include refid="baseSelectGroupBy" />
+		<include refid="baseSelectOrderBy" />
+	</select>
+
+	<select id="getByIdList" resultMap="configuredSystemResult">
+		<include refid="baseSelect" />
+		WHERE configured_system_pk IN (
+		<foreach item="item" collection="list" separator=",">
+			#{item}
+		</foreach>
+		)
+		<include refid="baseSelectGroupBy" />
+		<include refid="baseSelectOrderBy" />
+	</select>
+
+	<select id="getAll" resultMap="configuredSystemResult">
+		<include refid="baseSelect" />
+		<include refid="baseSelectGroupBy" />
+		<include refid="baseSelectOrderBy" />
+	</select>
+
+	<select id="getByShipFk" resultMap="configuredSystemResult">
+		<include refid="baseSelect" />
+		WHERE cs.ship_fk = #{shipFk}
+		<include refid="baseSelectGroupBy" />
+		<include refid="baseSelectOrderBy" />
+	</select>
+
+	<select id="getById" resultMap="configuredSystemResult">
+		<include refid="baseSelect" />
+		WHERE configured_system_pk = #{id}
+		<include refid="baseSelectGroupBy" />
+		<include refid="baseSelectOrderBy" />
+	</select>
+
+	<insert id="insert" useGeneratedKeys="true"
+		parameterType="com.premiersolutionshi.support.domain.ConfiguredSystem">
+		INSERT INTO configured_system (
+		laptop_fk,
+		scanner_fk,
+		kofax_license_fk,
+		ms_office_license_fk,
+		uic,
+		facet_version,
+		facet_version_history,
+		kofax_product_name,
+		kofax_version,
+		kofax_version_history,
+		access_version,
+		access_version_history,
+		documentation_version,
+		documentation_version_history,
+		notes,
+		last_updated_by,
+		last_updated_date,
+		ghost_version,
+		is_prepped_ind,
+		dummy_database_version,
+		network_adapter,
+		admin_password,
+		dms_version,
+		s2_closure_date,
+		fuel_closure_date,
+		multi_ship_ind,
+		multi_ship_uic_list,
+		nwcf_ind,
+		contract_number,
+		hardware_file_fk,
+		training_file_fk,
+		laptop1_file_fk,
+		laptop2_file_fk,
+		post_install_file_fk,
+		vrs_license_fk,
+		form_1348_no_location_ind,
+		form_1348_no_class_ind,
+		os_version,
+		ship_fk
+		)
+		VALUES (
+		#{laptopFk},
+		#{scannerFk},
+		#{kofaxLicenseFk},
+		#{msOfficeLicenseFk},
+		#{uic},
+		#{facetVersion},
+		#{facetVersionHistory},
+		#{kofaxProductName},
+		#{kofaxVersion},
+		#{kofaxVersionHistory},
+		#{accessVersion},
+		#{accessVersionHistory},
+		#{documentationVersion},
+		#{documentationVersionHistory},
+		#{notes},
+		#{lastUpdatedBy},
+		datetime('now', 'localtime'),
+		#{ghostVersion},
+		#{isPreppedInd},
+		#{dummyDatabaseVersion},
+		#{networkAdapter},
+		#{adminPassword},
+		#{dmsVersion},
+		#{s2ClosureDate},
+		#{fuelClosureDate},
+		#{multiShipInd},
+		#{multiShipUicList},
+		#{nwcfInd},
+		#{contractNumber},
+		#{hardwareFileFk},
+		#{trainingFileFk},
+		#{laptop1FileFk},
+		#{laptop2FileFk},
+		#{postInstallFileFk},
+		#{vrsLicenseFk},
+		#{form1348NoLocationInd},
+		#{form1348NoClassInd},
+		#{osVersion},
+		#{shipFk}
+		)
+	</insert>
+
+	<update id="updateFacetVersionById">
+		UPDATE configured_system SET
+		facet_version = (
+		SELECT item_value FROM managed_list_item
+		WHERE managed_list_code = 8 AND current_default = 1 LIMIT 1
+		)
+		WHERE configured_system_pk = #{id}
+	</update>
+
+	<update id="update"
+		parameterType="com.premiersolutionshi.support.domain.ConfiguredSystem">
+		UPDATE configured_system SET
+		laptop_fk = #{laptopFk},
+		scanner_fk = #{scannerFk},
+		kofax_license_fk = #{kofaxLicenseFk},
+		ms_office_license_fk = #{msOfficeLicenseFk},
+		uic = #{uic},
+		facet_version = #{facetVersion},
+		facet_version_history = #{facetVersionHistory},
+		kofax_product_name = #{kofaxProductName},
+		kofax_version = #{kofaxVersion},
+		kofax_version_history = #{kofaxVersionHistory},
+		access_version = #{accessVersion},
+		access_version_history = #{accessVersionHistory},
+		documentation_version = #{documentationVersion},
+		documentation_version_history = #{documentationVersionHistory},
+		notes = #{notes},
+		last_updated_by = #{lastUpdatedBy},
+		last_updated_date = datetime('now', 'localtime'),
+		ghost_version = #{ghostVersion},
+		is_prepped_ind = #{isPreppedInd},
+		dummy_database_version = #{dummyDatabaseVersion},
+		network_adapter = #{networkAdapter},
+		admin_password = #{adminPassword},
+		dms_version = #{dmsVersion},
+		s2_closure_date = #{s2ClosureDate},
+		fuel_closure_date = #{fuelClosureDate},
+		multi_ship_ind = #{multiShipInd},
+		multi_ship_uic_list = #{multiShipUicList},
+		nwcf_ind = #{nwcfInd},
+		contract_number = #{contractNumber},
+		hardware_file_fk = #{hardwareFileFk},
+		training_file_fk = #{trainingFileFk},
+		laptop1_file_fk = #{laptop1FileFk},
+		laptop2_file_fk = #{laptop2FileFk},
+		post_install_file_fk = #{postInstallFileFk},
+		vrs_license_fk = #{vrsLicenseFk},
+		form_1348_no_location_ind = #{form1348NoLocationInd},
+		form_1348_no_class_ind = #{form1348NoClassInd},
+		os_version = #{osVersion},
+		ship_fk = #{shipFk}
+		WHERE configured_system_pk = #{id}
+	</update>
+
+	<delete id="deleteById">
+		DELETE FROM configured_system
+		WHERE configured_system_pk = #{id}
+	</delete>
+</mapper>

@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.premiersolutionshi.support.dao.PocDao">
+	<resultMap type="Poc" id="simplePocResult">
+		<id property="id" column="poc_pk" />
+		<result property="lastName" column="p_last_name" />
+		<result property="firstName" column="p_first_name" />
+		<result property="email" column="p_email" />
+		<result property="altEmail" column="p_alt_email" />
+		<result property="workNumber" column="p_work_number" />
+		<result property="workNumberExt" column="p_work_number_ext" />
+		<result property="faxNumber" column="p_fax_number" />
+		<result property="cellNumber" column="p_cell_number" />
+		<result property="dept" column="p_dept" />
+		<result property="notes" column="p_notes" />
+		<result property="lastUpdatedBy" column="p_last_updated_by" />
+		<result property="lastUpdatedDate" column="p_last_updated_date" />
+		<result property="projectFk" column="p_project_fk" />
+		<result property="title" column="p_title" />
+		<result property="rank" column="p_rank" />
+		<result property="primaryPoc" column="p_is_primary_poc" />
+		<result property="organizationFk" column="p_organization_fk" />
+		<result property="shipFk" column="p_ship_fk" />
+	</resultMap>
+	<resultMap type="Poc" id="pocResult" extends="simplePocResult">
+		<association property="organization" notNullColumn="organization_pk"
+			resultMap="com.premiersolutionshi.common.dao.OrganizationDao.simpleOrganizationResult" />
+		<association property="ship" notNullColumn="ship_pk"
+			resultMap="com.premiersolutionshi.support.dao.ShipDao.simpleShipResult" />
+	</resultMap>
+
+	<sql id="columns">
+		p.poc_pk,
+		p.project_fk AS p_project_fk,
+		p.organization_fk AS p_organization_fk,
+		p.is_primary_poc AS p_is_primary_poc,
+		p.ship_fk AS p_ship_fk,
+		p.last_name AS p_last_name,
+		p.first_name AS p_first_name,
+		p.title AS p_title,
+		p.rank AS p_rank,
+		p.email AS p_email,
+		p.alt_email AS p_alt_email,
+		p.work_number AS p_work_number,
+		p.work_number_ext AS p_work_number_ext,
+		p.fax_number AS p_fax_number,
+		p.cell_number AS p_cell_number,
+		p.dept AS p_dept,
+		p.notes AS p_notes,
+		p.last_updated_by AS p_last_updated_by,
+		strftime('%Y-%m-%d %H:%M:%f', p.last_updated_date) AS p_last_updated_date
+	</sql>
+
+	<sql id="baseSelect">
+		SELECT
+		<include refid="columns" />
+		,
+		<include refid="com.premiersolutionshi.common.dao.OrganizationDao.columns" />
+		,
+		<include refid="com.premiersolutionshi.support.dao.ShipDao.columns" />
+		FROM poc p
+		LEFT OUTER JOIN (
+		organization o
+		LEFT OUTER JOIN users cbu ON cbu.user_pk = o.created_by_fk
+		LEFT OUTER JOIN users lubu ON lubu.user_pk = o.last_updated_by_fk
+		) ON o.organization_pk = p.organization_fk
+		LEFT OUTER JOIN ship s ON s.ship_pk = p.ship_fk
+	</sql>
+
+	<select id="getAll" resultMap="pocResult">
+		<include refid="baseSelect" />
+	</select>
+
+	<select id="getById" resultMap="pocResult">
+		<include refid="baseSelect" />
+		WHERE p.poc_pk = #{id}
+	</select>
+
+	<select id="getByOrganizationFk" resultMap="pocResult">
+		<include refid="baseSelect" />
+		WHERE p.organization_fk = #{organizationFk}
+	</select>
+
+	<select id="getByShipFk" resultMap="pocResult">
+		<include refid="baseSelect" />
+		WHERE p.ship_fk = #{shipFk}
+	</select>
+
+	<select id="getByProjectFk" resultMap="pocResult">
+		<include refid="baseSelect" />
+		WHERE p.project_fk = #{projectFk}
+	</select>
+
+	<select id="search" resultMap="pocResult">
+		<include refid="baseSelect" />
+		WHERE
+		<foreach collection="searchTerms" item="item" separator=" AND ">
+			(
+			p.first_name LIKE '%${item}%'
+			OR p.last_name LIKE '%${item}%'
+			OR p.email LIKE '%${item}%'
+			OR p.dept LIKE '%${item}%'
+			OR p.notes LIKE '%${item}%'
+			)
+		</foreach>
+	</select>
+
+	<insert id="insert" useGeneratedKeys="true" parameterType="Poc">
+		INSERT INTO poc (
+		project_fk,
+		organization_fk,
+		ship_fk,
+		is_primary_poc,
+		organization, --deprecated but cannot be null.
+		last_name,
+		first_name,
+		title,
+		rank,
+		email,
+		alt_email,
+		work_number,
+		work_number_ext,
+		fax_number,
+		cell_number,
+		dept,
+		notes,
+		last_updated_by,
+		last_updated_date
+		)
+		VALUES (
+		#{projectFk},
+		#{organizationFk},
+		#{shipFk},
+		#{primaryPoc},
+		'null',
+		#{lastName},
+		#{firstName},
+		#{title},
+		#{rank},
+		#{email},
+		#{altEmail},
+		#{workNumber},
+		#{workNumberExt},
+		#{faxNumber},
+		#{cellNumber},
+		#{dept},
+		#{notes},
+		#{lastUpdatedBy},
+		datetime('now', 'localtime')
+		)
+	</insert>
+
+	<update id="update" parameterType="Poc">
+		UPDATE poc SET
+		project_fk = #{projectFk},
+		organization_fk = #{organizationFk},
+		ship_fk = #{shipFk},
+		is_primary_poc = #{primaryPoc},
+		last_name = #{lastName},
+		first_name = #{firstName},
+		title = #{title},
+		rank = #{rank},
+		email = #{email},
+		alt_email = #{altEmail},
+		work_number = #{workNumber},
+		work_number_ext = #{workNumberExt},
+		fax_number = #{faxNumber},
+		cell_number = #{cellNumber},
+		dept = #{dept},
+		notes = #{notes},
+		last_updated_by = #{lastUpdatedBy},
+		last_updated_date = datetime('now', 'localtime')
+		WHERE poc_pk = #{id}
+	</update>
+
+	<delete id="deleteById">
+		DELETE FROM poc WHERE poc_pk = #{id}
+	</delete>
+</mapper>

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.premiersolutionshi.common.dao.ManagedListItemDao">
+	<resultMap type="ManagedListItem" id="managedListItemResult">
+		<id property="id" column="managed_list_item_pk" />
+		<result property="managedListCode" column="mli_managed_list_code" />
+		<result property="itemValue" column="mli_item_value" />
+		<result property="projectFk" column="mli_project_fk" />
+		<result property="sortOrder" column="mli_sort_order" />
+		<result property="currentDefault" column="mli_current_default" />
+		<result property="lastUpdatedBy" column="mli_last_updated_by" />
+		<result property="lastUpdatedByFk" column="mli_last_updated_by_fk" />
+		<result property="lastUpdatedDate" column="mli_last_updated_date" />
+	</resultMap>
+
+	<sql id="columns">
+		managed_list_item_pk,
+		mli.managed_list_code AS mli_managed_list_code,
+		mli.item_value AS mli_item_value,
+		mli.project_fk AS mli_project_fk,
+		mli.sort_order AS mli_sort_order,
+		mli.current_default AS mli_current_default,
+		mli.last_updated_by_fk AS mli_last_updated_by_fk,
+		u.first_name || ' ' || u.last_name AS mli_last_updated_by,
+		strftime('%Y-%m-%d %H:%M:%f', mli.last_updated_date) AS mli_last_updated_date
+	</sql>
+
+	<sql id="baseSelect">
+		SELECT
+		<include refid="columns" />
+		FROM managed_list_item mli
+		LEFT OUTER JOIN users u ON user_pk = mli.last_updated_by_fk
+	</sql>
+
+	<sql id="orderBy">ORDER BY mli.managed_list_code, mli.sort_order,
+		mli.item_value</sql>
+
+	<select id="getAll" resultMap="managedListItemResult">
+		<include refid="baseSelect" />
+		<include refid="orderBy" />
+	</select>
+
+	<select id="getById" resultMap="managedListItemResult">
+		<include refid="baseSelect" />
+		WHERE managed_list_item_pk = #{id}
+		<include refid="orderBy" />
+	</select>
+
+	<select id="getByListCodeAndProjectFk" resultMap="managedListItemResult">
+		<include refid="baseSelect" />
+		WHERE mli.managed_list_code = #{managedListCode}
+		<if test="projectFk != null">
+			AND mli.project_fk = #{projectFk}
+		</if>
+		<include refid="orderBy" />
+	</select>
+
+	<select id="getCurrentDefault" resultType="java.lang.String">
+		SELECT
+		mli.item_value
+		FROM managed_list_item mli
+		WHERE mli.managed_list_code = #{managedListCode}
+		<if test="projectFk != null">
+			AND mli.project_fk = #{projectFk}
+		</if>
+		AND mli.current_default
+		LIMIT 1
+	</select>
+
+	<insert id="insert" useGeneratedKeys="true" parameterType="ManagedListItem">
+		INSERT INTO managed_list_item (
+		managed_list_code,
+		item_value,
+		project_fk,
+		sort_order,
+		current_default,
+		last_updated_by_fk,
+		last_updated_date
+		)
+		VALUES (
+		#{managedListCode},
+		#{itemValue},
+		#{projectFk},
+		#{sortOrder},
+		#{currentDefault},
+		#{lastUpdatedByFk},
+		datetime('now', 'localtime')
+		)
+	</insert>
+
+	<update id="update" parameterType="ManagedListItem">
+		UPDATE managed_list_item SET
+		managed_list_code = #{managedListCode},
+		item_value = #{itemValue},
+		project_fk = #{projectFk},
+		sort_order = #{sortOrder},
+		current_default = #{currentDefault},
+		last_updated_by_fk = #{lastUpdatedByFk},
+		last_updated_date = datetime('now', 'localtime')
+		WHERE managed_list_item_pk = #{id}
+	</update>
+
+	<delete id="deleteById">
+		DELETE FROM managed_list_item
+		WHERE managed_list_item_pk = #{id}
+	</delete>
+</mapper>

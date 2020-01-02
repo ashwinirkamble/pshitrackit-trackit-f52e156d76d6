@@ -1,0 +1,2 @@
+<div id="caldiv" style="z-index:2;position:absolute;visibility:hidden;background-color:white;layer-background-color:white;"></div>
+<iframe id="calOverSelect" width="152" style="z-index:1;position:absolute;visibility:hidden;background-color:white;layer-background-color:white;" src="javascript:false;"></iframe>

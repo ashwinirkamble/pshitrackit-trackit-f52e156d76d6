@@ -1,0 +1,59 @@
+Notes by Anthony Tsuhako
+
+
+APPLICATION LIST
+================
+Apache Tomcat 6.0.18
+Java JDK 1.6.0_13
+Apache Ant 1.7.1
+Apache Log4j 1.2.15
+
+INSTRUCTIONS
+============
+1   Install Java JDK 1.6.0_13 in C:\java\jdk1.6.0_13\ (JRE into C:\java\jre1.6.0_13)
+
+2   Install Apache Tomcat 6.0.18 in C:\java\apache-tomcat-6.0.18\
+
+3   Copy apache-ant-1.7.1 folder to C:\java\
+
+4   Copy apache-log4j-1.2.15 folder to C:\java\
+
+5   Copy .keystore folder to C:\java\
+
+6   Copy server.xml to C:\java\apache-tomcat-6.0.18\conf\ (rename existing file as server.bak)
+
+7   Copy utilities\dev_setup\tomcat_lib\ to C:\java\apache-tomcat-6.0.18\lib\ 
+
+8   Copy utilities\java\logcop_files\ to D:\java\logcop_files (make sure the folder is NOT marked as read-only)
+
+9   Create the following system properties
+      JAVA_HOME=C:\java\jdk1.6.0_13
+      ANT_HOME=C:\java\apache-ant-1.7.1
+
+10  Add to PATH the following entries:
+      C:\java\apache-ant-1.7.1\bin
+      C:\java\jdk1.6.0_13\bin
+      C:\java\apache-tomcat-5.5.26\bin
+
+      PATH += C:\java\jdk1.6.0_13\bin;C:\java\apache-ant-1.7.1\bin;C:\java\apache-tomcat-5.5.26\bin;
+
+11  Add to CLASSPATH the follow entries:
+      .
+      C:\java\apache-tomcat-6.0.18\lib\servlet-api.jar
+      C:\java\apache-tomcat-6.0.18\lib\sqljdbc4.jar
+      C:\java\apache-tomcat-6.0.18\lib\CordaServer.jar
+      C:\java\apache-tomcat-6.0.18\lib\poi-3.6-20091214.jar
+      C:\java\apache-tomcat-6.0.18\lib\poi-ooxml-3.6-20091214.jar;
+
+      CLASSPATH += .;C:\java\apache-tomcat-6.0.18\lib\servlet-api.jar;C:\java\apache-tomcat-6.0.18\lib\sqljdbc4.jar;C:\java\apache-tomcat-6.0.18\lib\CordaServer.jar;C:\java\apache-tomcat-6.0.18\lib\poi-3.6-20091214.jar;C:\java\apache-tomcat-6.0.18\lib\poi-ooxml-3.6-20091214.jar;
+      
+
+
+
+
+
+
+
+
+
+????  Copy sqljdbc_auth.dll to C:\java\apache-tomcat-6.0.18\bin\

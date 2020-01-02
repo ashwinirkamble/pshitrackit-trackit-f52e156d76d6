@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.premiersolutionshi.support.dao.TransmittalDao">
+	<resultMap type="TransmittalSummary" id="transmittalSummaryResult">
+		<result property="computerName" column="computer_name" />
+		<result property="facetVersion" column="facet_version" />
+		<result property="facetVersionOrder" column="facet_version_order" />
+		<result property="lastTransmittalNum" column="last_transmittal_num" />
+		<result property="lastUploadDate" column="last_upload_date" />
+		<result property="form1348UploadDate" column="form_1348_upload_date" />
+		<result property="form1149UploadDate" column="form_1149_upload_date" />
+		<result property="foodApprovalUploadDate" column="food_approval_upload_date" />
+		<result property="foodReceiptUploadDate" column="food_receipt_upload_date" />
+		<result property="pcardAdminUploadDate" column="pcard_admin_upload_date" />
+		<result property="pcardInvoiceUploadDate" column="pcard_invoice_upload_date" />
+		<result property="priceChangeUploadDate" column="price_change_upload_date" />
+		<result property="sfoedlUploadDate" column="sfoedl_upload_date" />
+		<result property="uolUploadDate" column="uol_upload_date" />
+	</resultMap>
+
+	<resultMap type="TransmittalComputerWithNumList" id="transmittalComputerWithNumListResult">
+		<result property="computerName" column="computer_name" />
+		<collection property="numList" ofType="Integer">
+			<result column="transmittal_num" />
+		</collection>
+	</resultMap>
+
+	<!-- SELECT ship_pk, ship_name, transmittal_num FROM logcop_report_vw WHERE 
+		ship_pk IS NOT NULL AND transmittal_num < 999999 ORDER BY ship_name, transmittal_order, 
+		doc_type_order -->
+	<select id="getTransmittalComputerWithNumList" resultMap="transmittalComputerWithNumListResult">
+		SELECT lr.computer_name, lr.transmittal_num
+		FROM logcop_report lr
+		WHERE lr.transmittal_num &lt; 999999
+		GROUP BY lr.computer_name, lr.transmittal_num
+		UNION ALL
+		SELECT l.computer_name, te.transmittal_num
+		FROM transmittal_exception te
+		INNER JOIN configured_system cs ON cs.ship_fk = te.ship_fk
+		INNER JOIN laptop l ON l.laptop_pk = cs.laptop_fk
+		ORDER BY computer_name, transmittal_num
+	</select>
+
+	<select id="getTransmittalSummaryList" resultMap="transmittalSummaryResult">
+		SELECT
+		l.computer_name,
+		MIN(f.sort_order) AS facet_version_order,
+		MIN(f.facet_version) AS facet_version,
+		MAX(l.transmittal_num) AS last_transmittal_num,
+		strftime('%Y-%m-%d 00:00:00.000', MAX(l.upload_date)) AS last_upload_date,
+		strftime('%Y-%m-%d 00:00:00.000', MAX(CASE WHEN l.doc_type = '1348-1A'
+		THEN upload_date ELSE NULL END)) AS form_1348_upload_date,
+		strftime('%Y-%m-%d 00:00:00.000', MAX(CASE WHEN l.doc_type = '1149'
+		THEN upload_date ELSE NULL END)) AS form_1149_upload_date,
+		strftime('%Y-%m-%d 00:00:00.000', MAX(CASE WHEN l.doc_type = 'Food
+		Requisition' THEN upload_date ELSE NULL END)) AS
+		food_approval_upload_date,
+		strftime('%Y-%m-%d 00:00:00.000', MAX(CASE WHEN l.doc_type = 'Food Receipt' THEN
+		upload_date ELSE NULL END)) AS food_receipt_upload_date,
+		strftime('%Y-%m-%d 00:00:00.000', MAX(CASE WHEN l.doc_type =
+		'PCard-Admin' THEN upload_date ELSE NULL END)) AS
+		pcard_admin_upload_date,
+		strftime('%Y-%m-%d 00:00:00.000', MAX(CASE WHEN l.doc_type = 'PCard-Invoice' THEN
+		upload_date ELSE NULL END)) AS pcard_invoice_upload_date,
+		strftime('%Y-%m-%d 00:00:00.000', MAX(CASE WHEN l.doc_type = 'SFOEDL
+		Report' THEN upload_date ELSE NULL END)) AS sfoedl_upload_date,
+		strftime('%Y-%m-%d 00:00:00.000', MAX(CASE WHEN l.doc_type = 'UOL
+		Report' THEN upload_date ELSE NULL END)) AS uol_upload_date,
+		strftime('%Y-%m-%d 00:00:00.000', MAX(CASE WHEN l.doc_type IN ('Price
+		Change Report', 'Monthly_CN Report', 'MLN_CN Report', 'APC Report')
+		THEN upload_date ELSE NULL END)) AS price_change_upload_date
+		FROM logcop_report l
+		LEFT OUTER JOIN facet_version f
+		ON (CASE WHEN l.facet_version LIKE 'v%' THEN SUBSTR(l.facet_version, 2)
+		ELSE l.facet_version END) = f.facet_version
+		GROUP BY l.computer_name
+	</select>
+</mapper>

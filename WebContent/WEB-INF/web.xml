@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- 1.0, 11/25/2013, Premier Solutions HI, LLC -->
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_4.xsd"
+  version="2.4">
+   
+<!--   xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" -->
+<!--   version="2.5"> -->
+  <!-- Action Servlet Configuration -->
+  <servlet>
+    <servlet-name>action</servlet-name>
+    <servlet-class>org.apache.struts.action.ActionServlet</servlet-class>
+
+    <init-param>
+      <param-name>config</param-name>
+      <param-value>/WEB-INF/config/struts-config.xml</param-value>
+    </init-param>
+    <init-param>
+      <param-name>debug</param-name>
+      <param-value>2</param-value>
+    </init-param>
+    <init-param>
+      <param-name>detail</param-name>
+      <param-value>2</param-value>
+    </init-param>
+    <init-param>
+      <param-name>validate</param-name>
+      <param-value>true</param-value>
+    </init-param>
+    <load-on-startup>3</load-on-startup>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>action</servlet-name>
+    <url-pattern>*.do</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>myBatisServlet</servlet-name>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    <init-param>
+      <param-name>contextConfigLocation</param-name>
+      <param-value>/WEB-INF/classes/spring-context-config.xml</param-value>
+    </init-param>
+  </servlet>
+
+  <!-- Log4j Servlet -->
+  <servlet>
+    <servlet-name>log4j-init</servlet-name>
+    <servlet-class>com.premiersolutionshi.old.util.Log4jInit</servlet-class>
+
+    <init-param>
+      <param-name>log4j-init-file</param-name>
+      <param-value>/WEB-INF/config/log4j.properties</param-value>
+    </init-param>
+
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  
+  <servlet>
+    <servlet-name>TrackItEmailServlet</servlet-name>    
+	<servlet-class>com.premiersolutionshi.mail.TrackItEmailServlet</servlet-class>    
+	<load-on-startup>2</load-on-startup>
+  </servlet>
+    
+  <!-- The Welcome File List -->
+  <welcome-file-list>
+    <welcome-file>jsp/default.jsp</welcome-file>
+  </welcome-file-list>
+
+  <!-- Define Session Timeout (in mins) -->
+  <session-config>
+    <session-timeout>60</session-timeout>
+  </session-config>
+
+<!--   File Directory
+ -->  
+ <context-param>
+    <param-name>fileDirectory</param-name>
+    <param-value>C:\Java\pshi</param-value>
+  </context-param>
+
+  <!-- Define a Security Constraint on this Application -->
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name>Project Tracking</web-resource-name>
+      <url-pattern>/*</url-pattern>
+    </web-resource-collection>
+    
+    <!-- <user-data-constraint>
+        <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+        </user-data-constraint>
+         -->
+    <auth-constraint>
+     <role-name>pshi</role-name>
+     <role-name>sysadmin</role-name>
+     <role-name>pshi-user-admin</role-name>
+        
+	<!--   <role-name>manager-gui</role-name>
+	 -->    
+  </auth-constraint>
+  </security-constraint>
+ 
+<resource-ref>
+<description>DB Connection</description>
+<res-ref-name>jdbc/pshi</res-ref-name>
+<res-type>javax.sql.DataSource</res-type>
+<res-auth>Container</res-auth>
+</resource-ref>
+
+  <!-- Define the Login Configuration for this Application -->
+  <login-config>
+   <auth-method>BASIC</auth-method> 
+	    <realm-name>Authentication</realm-name>
+   <!-- <auth-method>FORM</auth-method> 
+     <realm-name>file</realm-name> 
+    <form-login-config>
+    <form-login-page>/jsp/login/login.jsp</form-login-page>
+    <form-error-page>/jsp/login/loginError.jsp</form-error-page>
+     </form-login-config> -->
+  </login-config>
+  
+  
+  <!-- Media wiki start -->
+<!--   <repository>
+  <id>info-bliki-repository</id>
+  <url>http://gwtwiki.googlecode.com/svn/maven-repository/</url>
+  <releases>
+    <enabled>true</enabled>
+  </releases>
+</repository>
+bliki
+<dependency>
+  <groupId>info.bliki.wiki</groupId>
+  <artifactId>bliki-core</artifactId>
+  <version>3.0.17</version>
+</dependency>
+
+<dependency>
+  <groupId>info.bliki.wiki</groupId>
+  <artifactId>bliki-addons</artifactId>
+  <version>3.0.17</version>
+</dependency>
+ -->
+<!--mediawiki end -->
+<listener>
+<listener-class>org.quartz.ee.servlet.QuartzInitializerListener</listener-class>
+</listener> 
+</web-app>

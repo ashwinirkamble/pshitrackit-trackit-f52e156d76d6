@@ -1,0 +1,29 @@
+-------------------------------------------------------------------------------
+  Deployment Email
+-------------------------------------------------------------------------------
+
+To: PremierSolutionsHI Support;
+Cc: Darby Meyer; Amanda Crabtree; David Tribble
+Subject: TrackIT Deployed to Production 12/20/2018
+
+TrackIT Team,
+
+Deployment fixes:
+
+* Issue comments not being saved in order when entering multiple.
+
+* Issue dates are sorting “alphabetically” and not by date
+
+* Support Issues: Notify new assignee via email when assigned to changes (added to this list 3/7/18) and confirm that issues with assignee different than creator is sending email to assignee
+
+* In "Configured System Details" under "Template Files"
+-- FACET Laptop Configuration Info [Template] (needs to change to the correct template document)
+
+Had a meeting this morning (12/20) with Darby, Amanda, and Mary Ann on the Status Reports and about priorities.
+
+After the "High Priority" items 1, 2, 3, 7, I will start on the "Monthly Business Volume Report".
+
+v/r,
+Lewis Nakao | Software Engineer | Premier Solutions Hi, LLC
+Email: lewis.nakao@premiersoltuionshi.com 
+desk 808.784.3310 main 808.396.4444 ext 110 cell 541.357.7473

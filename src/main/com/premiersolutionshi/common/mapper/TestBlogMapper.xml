@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.premiersolutionshi.common.dao.TestBlogDao">
+	<resultMap type="TestBlog" id="testBlogResult">
+		<id property="id" column="test_blog_pk" />
+		<result property="title" column="title" />
+		<result property="body" column="body" />
+		<result property="lastUpdatedByFk" column="last_updated_by" />
+		<result property="lastUpdatedDate" column="last_updated_date" />
+		<association property="lastUpdatedUser" notNullColumn="last_updated_by"
+			resultMap="com.premiersolutionshi.common.dao.UserDao.userResult" />
+	</resultMap>
+
+	<sql id="columns">
+		tb.test_blog_pk,
+		tb.title,
+		tb.body,
+		tb.last_updated_by,
+		strftime('%Y-%m-%d %H:%M:%f', tb.last_updated_date) AS last_updated_date
+	</sql>
+
+	<sql id="baseSelect">
+		SELECT
+		<include refid="columns" />
+		,
+		<include refid="com.premiersolutionshi.common.dao.UserDao.columns" />
+		FROM test_blog tb
+		LEFT OUTER JOIN users u
+		ON tb.last_updated_by = user_pk
+	</sql>
+
+	<select id="getAll" resultMap="testBlogResult">
+		<include refid="baseSelect" />
+	</select>
+
+	<select id="getById" resultMap="testBlogResult">
+		<include refid="baseSelect" />
+		WHERE tb.test_blog_pk = #{id}
+	</select>
+
+	<insert id="insert" useGeneratedKeys="true"
+		parameterType="com.premiersolutionshi.common.domain.TestBlog">
+		INSERT INTO test_blog (
+		title,
+		body,
+		last_updated_by,
+		last_updated_date
+		)
+		VALUES (
+		#{title},
+		#{body},
+		#{lastUpdatedBy},
+		datetime('now', 'localtime')
+		)
+	</insert>
+
+	<update id="update" parameterType="com.premiersolutionshi.common.domain.TestBlog">
+		UPDATE test_blog SET
+		title = #{title},
+		body = #{body},
+		last_updated_by = #{lastUpdatedBy},
+		last_updated_date = datetime('now', 'localtime')
+		WHERE test_blog_pk = #{id}
+	</update>
+
+	<delete id="deleteById">
+		DELETE FROM test_blog
+		WHERE test_blog_pk = #{id}
+	</delete>
+</mapper>

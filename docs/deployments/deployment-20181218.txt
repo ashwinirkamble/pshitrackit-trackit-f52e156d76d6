@@ -1,0 +1,23 @@
+-------------------------------------------------------------------------------
+  Deployment Email for 2018-12-18
+-------------------------------------------------------------------------------
+
+To: Darby Meyer; PremierSolutionsHI Support;
+Cc: Amanda Crabtree; David Tribble
+Subject: TrackIT Deployed to Production 12/18/2018
+
+TrackIT Team,
+
+POC List
+* Sorting "Last Updated Date" by default.
+* Works in IE now.
+
+Support Issues
+* Email were being sent even though the person creating it was the same person it was assigned to.
+
+I sat down with Mary Ann to learn about the Weekly Reports.
+
+v/r,
+Lewis Nakao | Software Engineer | Premier Solutions Hi, LLC
+Email: lewis.nakao@premiersoltuionshi.com 
+desk 808.784.3310 main 808.396.4444 ext 110 cell 541.357.7473

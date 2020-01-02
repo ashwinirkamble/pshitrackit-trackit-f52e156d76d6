@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.premiersolutionshi.support.dao.LaptopDao">
+	<resultMap type="com.premiersolutionshi.support.domain.Laptop"
+		id="laptopResult">
+		<id property="id" column="laptop_pk" />
+		<result property="productName" column="l_product_name" />
+		<result property="computerName" column="l_computer_name" />
+		<result property="tag" column="l_tag" />
+		<result property="modelNumber" column="l_model_number" />
+		<result property="serialNumber" column="l_serial_number" />
+		<result property="origin" column="l_origin" />
+		<result property="receivedDate" column="l_received_date" />
+		<result property="notes" column="l_notes" />
+		<result property="lastUpdatedBy" column="l_last_updated_by" />
+		<result property="lastUpdatedDate" column="l_last_updated_date" />
+		<result property="preppedDate" column="l_prepped_date" />
+		<result property="macAddress" column="l_mac_address" />
+		<result property="status" column="l_status" />
+		<result property="statusNotes" column="l_status_notes" />
+		<result property="customer" column="l_customer" />
+		<result property="contractNumber" column="l_contract_number" />
+	</resultMap>
+
+	<sql id="columns">
+		laptop_pk,
+		l.product_name AS l_product_name,
+		l.computer_name AS l_computer_name,
+		l.tag AS l_tag,
+		l.model_number AS l_model_number,
+		l.serial_number AS l_serial_number,
+		l.origin AS l_origin,
+		strftime('%Y-%m-%d %H:%M:%f', l.received_date) AS l_received_date,
+		l.notes AS l_notes,
+		l.last_updated_by AS l_last_updated_by,
+		strftime('%Y-%m-%d %H:%M:%f', l.last_updated_date) AS l_last_updated_date,
+		strftime('%Y-%m-%d %H:%M:%f', l.prepped_date) AS l_prepped_date,
+		l.mac_address AS l_mac_address,
+		l.status AS l_status,
+		l.status_notes AS l_status_notes,
+		l.customer AS l_customer,
+		l.contract_number AS l_contract_number
+	</sql>
+
+	<sql id="baseSelect">
+		SELECT
+		<include refid="columns" />
+		FROM laptop l
+	</sql>
+
+	<select id="getAll" resultMap="laptopResult">
+		<include refid="baseSelect" />
+	</select>
+
+	<select id="getById" resultMap="laptopResult">
+		<include refid="baseSelect" />
+		WHERE laptop_pk = #{id}
+	</select>
+
+	<insert id="insert" useGeneratedKeys="true"
+		parameterType="com.premiersolutionshi.support.domain.Laptop">
+		INSERT INTO laptop (
+		laptop_pk,
+		product_name,
+		computer_name,
+		tag,
+		model_number,
+		serial_number,
+		origin,
+		received_date,
+		notes,
+		last_updated_by,
+		last_updated_date,
+		prepped_date,
+		mac_address,
+		status,
+		status_notes,
+		customer,
+		contract_number
+		)
+		VALUES (
+		#{laptopPk},
+		#{productName},
+		#{computerName},
+		#{tag},
+		#{modelNumber},
+		#{serialNumber},
+		#{origin},
+		#{receivedDate},
+		#{notes},
+		#{lastUpdatedBy},
+		datetime('now', 'localtime'),
+		#{preppedDate},
+		#{macAddress},
+		#{status},
+		#{statusNotes},
+		#{customer},
+		#{contractNumber}
+		)
+	</insert>
+
+	<update id="update" parameterType="com.premiersolutionshi.support.domain.Laptop">
+		UPDATE laptop SET
+		laptop_pk = #{laptopPk},
+		product_name = #{productName},
+		computer_name = #{computerName},
+		tag = #{tag},
+		model_number = #{modelNumber},
+		serial_number = #{serialNumber},
+		origin = #{origin},
+		received_date = #{receivedDate},
+		notes = #{notes},
+		last_updated_by = #{lastUpdatedBy},
+		last_updated_date = datetime('now', 'localtime'),
+		prepped_date = #{preppedDate},
+		mac_address = #{macAddress},
+		status = #{status},
+		status_notes = #{statusNotes},
+		customer = #{customer},
+		contract_number = #{contractNumber}
+		WHERE laptop_pk = #{id}
+	</update>
+
+	<delete id="deleteById">
+		DELETE FROM laptop
+		WHERE laptop_pk = #{id}
+	</delete>
+</mapper>

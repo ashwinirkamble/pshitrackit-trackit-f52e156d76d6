@@ -1,0 +1,1 @@
+<% response.sendRedirect("menu.do");  %>

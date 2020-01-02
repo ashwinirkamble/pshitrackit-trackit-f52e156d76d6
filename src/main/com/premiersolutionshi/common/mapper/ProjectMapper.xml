@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.premiersolutionshi.common.dao.ProjectDao">
+	<resultMap type="Customer" id="customerResult">
+		<result property="customerName" column="p_customer" />
+		<collection property="projects" resultMap="projectResult" />
+	</resultMap>
+
+	<resultMap type="Project" id="projectResult">
+		<id property="id" column="project_pk" />
+		<result property="projectName" column="p_project_name" />
+		<result property="description" column="p_description" />
+		<result property="customer" column="p_customer" />
+		<result property="createdBy" column="p_created_by" />
+	</resultMap>
+
+	<sql id="columns">
+		project_pk,
+		p.project_name AS p_project_name,
+		p.description AS p_description,
+		p.customer AS p_customer,
+		p.created_by AS p_created_by
+	</sql>
+
+	<sql id="baseSelect">
+		SELECT
+		<include refid="columns" />
+		FROM project p
+	</sql>
+
+	<sql id="baseOrderBy">ORDER BY p.customer, p.project_pk</sql>
+
+	<select id="getAll" resultMap="projectResult">
+		<include refid="baseSelect" />
+		<include refid="baseOrderBy" />
+	</select>
+
+	<select id="getCustomers" resultMap="customerResult">
+		<include refid="baseSelect" />
+		<include refid="baseOrderBy" />
+	</select>
+
+	<select id="getById" resultMap="projectResult">
+		<include refid="baseSelect" />
+		WHERE project_pk = #{id}
+	</select>
+
+	<select id="getByUserFk" resultMap="projectResult">
+		<include refid="baseSelect" />
+		INNER JOIN user_project up ON p.project_pk = up.project_fk
+		WHERE up.user_fk = #{userFk}
+	</select>
+
+	<insert id="insert" useGeneratedKeys="true" parameterType="Project">
+		INSERT INTO project (
+		project_name,
+		description,
+		customer,
+		created_by
+		)
+		VALUES (
+		#{projectName},
+		#{description},
+		#{customer},
+		#{createdBy}
+		)
+	</insert>
+
+	<update id="update" parameterType="Project">
+		UPDATE project SET
+		project_name = {projectName},
+		description = #{description},
+		customer = #{customer},
+		created_by = #{createdBy}
+		WHERE project_pk = #{id}
+	</update>
+
+	<delete id="deleteById">
+		DELETE FROM project
+		WHERE project_pk = #{id}
+	</delete>
+</mapper>

@@ -1,0 +1,17 @@
+<div id="navigation-bar">
+<ul>
+	<li><a href="menu.do">Home</a></li>
+	<logic:notEmpty name="navbar_projectBean">
+
+		<li class="project-name"><bean:write name="navbar_projectBean" property="projectName"/></li>
+		<li><a href="project.do?action=taskList&projectPk=<bean:write name="navbar_projectBean" property="projectPk"/>">Task List</a></li>
+		<logic:equal name="navbar_projectBean" property="projectPk" value="1">
+			<li><a href="system.do?action=hardwareSoftwareSummary">Hardware/Software</a></li>
+			<li><a href="backfile.do?action=workflowSummary">Backfile Workflow</a></li>
+		</logic:equal>
+		<li><a href="project.do?action=taskAgendaList&agenda=Staff&projectPk=<bean:write name="navbar_projectBean" property="projectPk"/>">Staff Agenda</a></li>
+		<li><a href="project.do?action=taskAgendaList&agenda=Client&projectPk=<bean:write name="navbar_projectBean" property="projectPk"/>">Client Agenda</a></li>
+		<li><a href="project.do?action=pocList&projectPk=<bean:write name="navbar_projectBean" property="projectPk"/>">POC</a></li>
+	</logic:notEmpty>
+</ul>
+</div>

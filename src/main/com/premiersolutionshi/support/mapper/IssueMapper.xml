@@ -1,0 +1,530 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.premiersolutionshi.support.dao.IssueDao">
+	<resultMap type="Issue" id="issueResult">
+		<id property="id" column="issue_pk" />
+		<result property="projectFk" column="i_project_fk" />
+		<result property="shipFk" column="i_ship_fk" />
+		<result property="issueCategoryFk" column="i_issue_category_fk" />
+		<result property="configuredSystemFk" column="i_configured_system_fk" />
+		<result property="atoFk" column="i_ato_fk" />
+
+		<result property="title" column="i_title" />
+		<result property="description" column="i_description" />
+		<result property="statusCode" column="i_status_code" />
+
+		<!-- TODO: we want to stop relying on the "text" version of "status" -->
+		<result property="status" column="i_status" />
+
+		<result property="priority" column="i_priority" />
+		<result property="phase" column="i_phase" />
+		<result property="openedBy" column="i_opened_by" />
+		<result property="openedDate" column="i_opened_date" />
+		<result property="closedDate" column="i_closed_date" />
+		<result property="trainer" column="i_trainer" />
+		<result property="resolution" column="i_resolution" />
+		<result property="totalTime" column="i_total_time" />
+		<result property="createdBy" column="i_created_by" />
+		<result property="createdDate" column="i_created_date" />
+		<result property="lastUpdatedBy" column="i_last_updated_by" />
+		<result property="lastUpdatedDate" column="i_last_updated_date" />
+		<result property="initiatedBy" column="i_initiated_by" />
+		<result property="dept" column="i_dept" />
+		<result property="isEmailSent" column="i_is_email_sent" />
+		<result property="isEmailResponded" column="i_is_email_responded" />
+		<result property="isTrainingProvided" column="i_is_training_provided" />
+		<result property="isTrainingOnsite" column="i_is_training_onsite" />
+		<result property="autoCloseDate" column="i_auto_close_date" />
+		<result property="autoCloseStatus" column="i_auto_close_status" />
+		<result property="priorityReason" column="i_priority_reason" />
+		<result property="laptopIssue" column="i_laptop_issue" />
+		<result property="scannerIssue" column="i_scanner_issue" />
+		<result property="softwareIssue" column="i_software_issue" />
+
+		<result property="personAssigned" column="i_person_assigned" />
+		<result property="supportVisitDate" column="i_support_visit_date" />
+		<result property="supportVisitLoc" column="i_support_visit_loc" />
+		<result property="supportVisitTime" column="i_support_visit_time" />
+		<result property="supportVisitEndTime" column="i_support_visit_end_time" />
+		<result property="supportVisitReason" column="i_support_visit_reason" />
+		<result property="supportVisitLocNotes" column="i_support_visit_loc_notes" />
+
+		<association property="issueCategory" notNullColumn="issue_category_pk"
+			resultMap="com.premiersolutionshi.support.dao.IssueCategoryDao.issueCategoryResult" />
+
+		<association property="ship" notNullColumn="ship_pk"
+			resultMap="com.premiersolutionshi.support.dao.ShipDao.shipResult" />
+
+		<association property="configuredSystem" notNullColumn="configured_system_pk"
+			resultMap="com.premiersolutionshi.support.dao.ConfiguredSystemDao.configuredSystemSimpleResult" />
+
+		<collection property="issueFileList" notNullColumn="file_pk"
+			resultMap="com.premiersolutionshi.common.dao.FileInfoDao.fileInfoResult" />
+	</resultMap>
+
+	<resultMap type="Issue" id="issueWithCommentsResult" extends="issueResult">
+		<collection property="issueCommentList" notNullColumn="issue_comments_pk"
+			resultMap="com.premiersolutionshi.support.dao.IssueCommentsDao.issueCommentsResult" />
+	</resultMap>
+
+	<resultMap type="FkAndStringList" id="fkAndAtoListResult">
+		<result property="fk" column="fk" />
+		<collection property="stringList" ofType="java.lang.String">
+			<result column="ato_date_str" />
+		</collection>
+	</resultMap>
+
+	<resultMap type="IssueSupportVisit" id="issueSupportVisitResult">
+		<id property="id" column="issue_pk" />
+		<result property="personAssigned" column="i_person_assigned" />
+		<result property="supportVisitDate" column="i_support_visit_date" />
+		<result property="supportVisitLoc" column="i_support_visit_loc" />
+		<result property="supportVisitTime" column="i_support_visit_time" />
+		<result property="supportVisitEndTime" column="i_support_visit_end_time" />
+		<result property="supportVisitReason" column="i_support_visit_reason" />
+		<result property="supportVisitLocNotes" column="i_support_visit_loc_notes" />
+
+		<association property="issueCategory" notNullColumn="issue_category_pk"
+			resultMap="com.premiersolutionshi.support.dao.IssueCategoryDao.issueCategoryResult" />
+	</resultMap>
+
+	<sql id="columns">
+		issue_pk,
+		i.project_fk AS i_project_fk,
+		i.ship_fk AS i_ship_fk,
+		i.configured_system_fk AS i_configured_system_fk,
+		i.ato_fk AS i_ato_fk,
+		i.issue_category_fk AS i_issue_category_fk,
+		i.title AS i_title,
+		i.description AS i_description,
+		i.status AS i_status,
+		i.status_code AS i_status_code,
+		i.priority AS i_priority,
+		--i.category AS i_category, --depreciated
+		i.phase AS i_phase,
+		i.opened_by AS i_opened_by,
+		strftime('%Y-%m-%d %H:%M:%f', i.opened_date) AS i_opened_date,
+		strftime('%Y-%m-%d %H:%M:%f', i.closed_date) AS i_closed_date,
+		i.trainer AS i_trainer,
+		i.resolution AS i_resolution,
+		i.total_time AS i_total_time,
+		i.created_by AS i_created_by,
+		strftime('%Y-%m-%d %H:%M:%f', i.created_date) AS i_created_date,
+		i.last_updated_by AS i_last_updated_by,
+		strftime('%Y-%m-%d %H:%M:%f', i.last_updated_date) AS i_last_updated_date,
+		i.initiated_by AS i_initiated_by,
+		i.dept AS i_dept,
+		i.is_email_sent AS i_is_email_sent,
+		i.is_email_responded AS i_is_email_responded,
+		i.is_training_provided AS i_is_training_provided,
+		i.is_training_onsite AS i_is_training_onsite,
+		strftime('%Y-%m-%d %H:%M:%f', i.auto_close_date) AS i_auto_close_date,
+		i.priority_reason AS i_priority_reason,
+		i.laptop_issue AS i_laptop_issue,
+		i.scanner_issue AS i_scanner_issue,
+		i.software_issue AS i_software_issue,
+		i.auto_close_status AS i_auto_close_status,
+		<include refid="supportVisitColumns" />
+	</sql>
+
+	<sql id="supportVisitColumns">
+		i.person_assigned AS i_person_assigned,
+		strftime('%Y-%m-%d %H:%M:%f', i.support_visit_date) AS i_support_visit_date,
+		i.support_visit_loc AS i_support_visit_loc,
+		i.support_visit_time AS i_support_visit_time,
+		i.support_visit_end_time AS i_support_visit_end_time,
+		i.support_visit_reason AS i_support_visit_reason,
+		i.support_visit_loc_notes AS i_support_visit_loc_notes
+	</sql>
+
+	<sql id="statusOpenIssue">
+		AND i.status NOT IN ('5 - Closed', '6 - Closed (Successful)', '7 - Closed
+		(No Response)', '8 - Closed (Unavailable)')
+	</sql>
+
+	<sql id="statusCodeOpenIssue">
+		AND i.status_code &lt;= 4
+	</sql>
+
+	<select id="getConfiguredSystemOpenAtoIssues" resultMap="fkAndAtoListResult">
+		SELECT
+		i.configured_system_fk AS fk,
+		strftime('%Y%m%d', a.ato_date) AS ato_date_str
+		FROM issue i
+		INNER JOIN ato a ON a.ato_pk = i.ato_fk
+		WHERE i.ato_fk IS NOT NULL
+		AND i.configured_system_fk IS NOT NULL
+		<include refid="statusOpenIssue" />
+	</select>
+
+	<select id="getShipOpenAtoIssues" resultMap="fkAndAtoListResult">
+		SELECT
+		i.ship_fk AS fk,
+		strftime('%Y%m%d', a.ato_date) AS ato_date_str
+		FROM issue i
+		INNER JOIN ato a ON a.ato_pk = i.ato_fk
+		WHERE i.ato_fk IS NOT NULL
+		AND i.ship_fk IS NOT NULL
+		<include refid="statusOpenIssue" />
+	</select>
+
+	<sql id="baseColumns">
+		<include refid="columns" />
+		,
+		<include refid="com.premiersolutionshi.support.dao.IssueCategoryDao.columns" />
+		,
+		<include refid="com.premiersolutionshi.common.dao.FileInfoDao.columns" />
+		,
+		<include refid="com.premiersolutionshi.support.dao.ShipDao.columns" />
+		,
+		<include refid="com.premiersolutionshi.support.dao.PocDao.columns" />
+		,
+		<include
+			refid="com.premiersolutionshi.support.dao.ConfiguredSystemDao.columns" />
+		,
+		<include refid="com.premiersolutionshi.support.dao.LaptopDao.columns" />
+	</sql>
+
+	<sql id="baseFrom">
+		FROM issue i
+		LEFT OUTER JOIN issue_category ic ON issue_category_pk =
+		i.issue_category_fk
+		LEFT OUTER JOIN ship s ON ship_pk = i.ship_fk
+		LEFT OUTER JOIN poc p ON ship_pk = p.ship_fk
+		LEFT OUTER JOIN configured_system cs ON configured_system_pk =
+		i.configured_system_fk
+		LEFT OUTER JOIN laptop l ON l.laptop_pk = cs.laptop_fk
+		LEFT OUTER JOIN (
+		issue_file if
+		INNER JOIN file_info fi ON file_pk = if.file_fk AND fi.deleted != 1
+		) ON issue_pk = if.issue_fk
+	</sql>
+
+	<sql id="baseSelect">
+		SELECT
+		<include refid="baseColumns" />
+		<include refid="baseFrom" />
+	</sql>
+
+	<sql id="orderBy">
+		ORDER BY issue_pk, p.email, l.computer_name, file_pk DESC
+	</sql>
+
+	<select id="getByAtoFk" resultMap="issueResult">
+		<include refid="baseSelect" />
+		WHERE i.ato_fk = #{atoFk}
+		<include refid="orderBy" />
+	</select>
+
+	<select id="getOpenByCategoryNames" resultMap="issueResult">
+		<include refid="baseSelect" />
+		WHERE ic.category IN (
+		<foreach collection="list" item="item" separator=",">#{item}
+		</foreach>
+		)
+		<include refid="statusOpenIssue" />
+		<include refid="orderBy" />
+	</select>
+
+	<select id="getByPkArr" resultMap="issueResult">
+		<include refid="baseSelect" />
+		WHERE issue_pk IN (
+		<foreach collection="list" item="item" separator=",">#{item}
+		</foreach>
+		)
+		<include refid="orderBy" />
+	</select>
+
+	<select id="getOpenedIssuePksByShipPksAndCategoryNames"
+		resultType="java.lang.Integer">
+		SELECT issue_pk
+		FROM issue i
+		INNER JOIN issue_category ic ON ic.issue_category_pk = i.issue_category_fk
+		WHERE ic.category IN (
+		<foreach collection="categoryNameList" item="item" separator=",">#{item}
+		</foreach>
+		)
+		AND ship_fk IN (
+		<foreach collection="shipPkList" item="item" separator=",">#{item}
+		</foreach>
+		)
+		<include refid="statusOpenIssue" />
+	</select>
+
+	<select id="getAll" resultMap="issueResult">
+		<include refid="baseSelect" />
+		<include refid="orderBy" />
+	</select>
+
+	<select id="getOpenedByShipPk" resultMap="issueResult">
+		<include refid="baseSelect" />
+		WHERE i.ship_fk = #{shipPk}
+		<include refid="statusOpenIssue" />
+		<include refid="orderBy" />
+	</select>
+
+	<select id="getCount" resultMap="issueResult">
+		SELECT COUNT(*) AS record_count FROM issue;
+	</select>
+
+	<select id="getById" resultMap="issueWithCommentsResult">
+		SELECT
+		<include refid="baseColumns" />
+		,
+		<include refid="com.premiersolutionshi.support.dao.IssueCommentsDao.columns" />
+		<include refid="baseFrom" />
+		LEFT OUTER JOIN issue_comments ic ON issue_pk = ic.issue_fk
+		WHERE i.issue_pk = #{id}
+		<include refid="orderBy" />
+		, issue_comments_pk DESC
+	</select>
+
+	<select id="getLastSupportVisitByShipFk" resultMap="issueSupportVisitResult">
+		SELECT
+		issue_pk,
+		<include refid="supportVisitColumns" />
+		,
+		<include refid="com.premiersolutionshi.support.dao.IssueCategoryDao.columns" />
+		,
+		MAX(i.support_visit_date) AS last_support_visit_date
+		FROM issue i
+		INNER JOIN issue_category ic ON issue_category_pk = i.issue_category_fk
+		WHERE i.ship_fk = #{shipPk}
+	</select>
+
+	<sql id="baseInsert">
+		INSERT INTO issue (
+		project_fk,
+		ship_fk,
+		title,
+		description,
+		status,
+		status_code,
+		priority,
+		category,
+		phase,
+		opened_by,
+		opened_date,
+		closed_date,
+		person_assigned,
+		support_visit_date,
+		support_visit_loc,
+		support_visit_time,
+		trainer,
+		resolution,
+		total_time,
+		created_by,
+		created_date,
+		last_updated_by,
+		last_updated_date,
+		initiated_by,
+		dept,
+		is_email_sent,
+		is_email_responded,
+		is_training_provided,
+		is_training_onsite,
+		ato_fk,
+		auto_close_date,
+		issue_category_fk,
+		priority_reason,
+		support_visit_end_time,
+		support_visit_reason,
+		laptop_issue,
+		scanner_issue,
+		software_issue,
+		support_visit_loc_notes,
+		auto_close_status,
+		configured_system_fk
+		) VALUES
+	</sql>
+
+	<!-- <insert id="insertFileJoin"> INSERT INTO issue_file (issue_fk,file_fk) 
+		VALUES (#{issueFk}, #{fileFk}); </insert> -->
+	<insert id="insertMultipleFileJoins" parameterType="java.util.ArrayList">
+		INSERT INTO issue_file (file_fk, issue_fk) VALUES
+		<foreach item="item" index="index" collection="list"
+			separator=",">
+			(#{item.fk1}, #{item.fk2})
+		</foreach>
+	</insert>
+
+	<insert id="deleteFileJoin">
+		DELETE FROM issue_file WHERE issue_fk = #{issueFk} AND file_fk = #{fileFk}
+	</insert>
+
+	<insert id="insert" useGeneratedKeys="true"
+		parameterType="com.premiersolutionshi.support.domain.Issue">
+		<include refid="baseInsert" />
+		(
+		#{projectFk},
+		#{shipFk},
+		#{title},
+		#{description},
+		#{status},
+		#{statusCode},
+		#{priority},
+		'null', --'category' requires a value
+		#{phase},
+		#{openedBy},
+		#{openedDateSql},
+		#{closedDateSql},
+		#{personAssigned},
+		#{supportVisitDateSql},
+		#{supportVisitLoc},
+		#{supportVisitTime},
+		#{trainer},
+		#{resolution},
+		#{totalTime},
+		#{createdBy},
+		datetime('now', 'localtime'), --created_date
+		#{lastUpdatedBy},
+		datetime('now', 'localtime'), --last_updated_date
+		#{initiatedBy},
+		#{dept},
+		#{isEmailSent},
+		#{isEmailResponded},
+		#{isTrainingProvided},
+		#{isTrainingOnsite},
+		#{atoFk},
+		#{autoCloseDateSql},
+		#{issueCategoryFk},
+		#{priorityReason},
+		#{supportVisitEndTime},
+		#{supportVisitReason},
+		#{laptopIssue},
+		#{scannerIssue},
+		#{softwareIssue},
+		#{supportVisitLocNotes},
+		#{autoCloseStatus},
+		#{configuredSystemFk}
+		)
+	</insert>
+
+	<insert id="insertAll" useGeneratedKeys="true" parameterType="java.util.ArrayList">
+		<include refid="baseInsert" />
+		<foreach item="item" index="index" collection="list"
+			separator=",">
+			(
+			#{item.projectFk},
+			#{item.shipFk},
+			#{item.title},
+			#{item.description},
+			#{item.status},
+			#{item.statusCode},
+			#{item.priority},
+			'null', --'category' requires a value
+			#{item.phase},
+			#{item.openedBy},
+			#{item.openedDateSql},
+			#{item.closedDateSql},
+			#{item.personAssigned},
+			#{item.supportVisitDateSql},
+			#{item.supportVisitLoc},
+			#{item.supportVisitTime},
+			#{item.trainer},
+			#{item.resolution},
+			#{item.totalTime},
+			#{item.createdBy},
+			datetime('now', 'localtime'), --created_date
+			#{item.lastUpdatedBy},
+			datetime('now', 'localtime'), --last_updated_date
+			#{item.initiatedBy},
+			#{item.dept},
+			#{item.isEmailSent},
+			#{item.isEmailResponded},
+			#{item.isTrainingProvided},
+			#{item.isTrainingOnsite},
+			#{item.atoFk},
+			#{item.autoCloseDateSql},
+			#{item.issueCategoryFk},
+			#{item.priorityReason},
+			#{item.supportVisitEndTime},
+			#{item.supportVisitReason},
+			#{item.laptopIssue},
+			#{item.scannerIssue},
+			#{item.softwareIssue},
+			#{item.supportVisitLocNotes},
+			#{item.autoCloseStatus},
+			#{item.configuredSystemFk}
+			)
+		</foreach>
+	</insert>
+
+	<select id="getAutoCloseIssueCount" resultType="java.lang.Integer">
+		SELECT COUNT(*) AS auto_close_issue_count
+		FROM issue
+		WHERE status_code &lt; 5
+		AND auto_close_date IS NOT NULL
+		AND auto_close_date &lt; datetime('now', 'localtime')
+	</select>
+
+	<update id="autoCloseIssues">
+		UPDATE issue SET
+		resolution = 'Automatically closed by the system.',
+		status = IFNULL(auto_close_status, '7 - Closed (No Response)'),
+		status_code = (
+		CASE IFNULL(auto_close_status, '7 - Closed (No Response)')
+		WHEN '5 - Closed' THEN 5
+		WHEN '6 - Closed (Successful)' THEN 6
+		WHEN '7 - Closed (No Response)' THEN 7
+		WHEN '8 - Closed (Unavailable)' THEN 8
+		ELSE 7
+		END
+		),
+		closed_date = date('now', 'localtime')
+		WHERE status_code &lt; 5
+		AND auto_close_date IS NOT NULL
+		AND auto_close_date &lt; datetime('now', 'localtime')
+	</update>
+
+	<update id="update" parameterType="com.premiersolutionshi.support.domain.Issue">
+		UPDATE issue SET
+		project_fk = #{projectFk},
+		ship_fk = #{shipFk},
+		title = #{title},
+		description = #{description},
+		status = #{status},
+		status_code = #{statusCode},
+		priority = #{priority},
+		phase = #{phase},
+		opened_by = #{openedBy},
+		opened_date = #{openedDateSql},
+		closed_date = #{closedDateSql},
+		person_assigned = #{personAssigned},
+		support_visit_date = #{supportVisitDateSql},
+		support_visit_loc = #{supportVisitLoc},
+		support_visit_time = #{supportVisitTime},
+		trainer = #{trainer},
+		resolution = #{resolution},
+		total_time = #{totalTime},
+		created_by = #{createdBy},
+		created_date = #{createdDateSql},
+		last_updated_by = #{lastUpdatedBy},
+		last_updated_date = datetime('now', 'localtime'),
+		initiated_by = #{initiatedBy},
+		dept = #{dept},
+		is_email_sent = #{isEmailSent},
+		is_email_responded = #{isEmailResponded},
+		is_training_provided = #{isTrainingProvided},
+		is_training_onsite = #{isTrainingOnsite},
+		ato_fk = #{atoFk},
+		auto_close_date = #{autoCloseDateSql},
+		issue_category_fk = #{issueCategoryFk},
+		priority_reason = #{priorityReason},
+		support_visit_end_time = #{supportVisitEndTime},
+		support_visit_reason = #{supportVisitReason},
+		laptop_issue = #{laptopIssue},
+		scanner_issue = #{scannerIssue},
+		software_issue = #{softwareIssue},
+		support_visit_loc_notes = #{supportVisitLocNotes},
+		auto_close_status = #{autoCloseStatus},
+		configured_system_fk = #{configuredSystemFk}
+		WHERE issue_pk = #{id}
+	</update>
+
+	<delete id="deleteById">
+		DELETE FROM issue
+		WHERE issue_pk = #{id}
+	</delete>
+</mapper>

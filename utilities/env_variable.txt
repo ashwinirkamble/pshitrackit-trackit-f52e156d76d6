@@ -1,0 +1,4 @@
+ANT_HOME=C:\java\apache-ant-1.8.2
+JAVA_HOME=C:\java\jdk1.6.0_41
+TOMCAT_HOME=C:\java\apache-tomcat-6.0.35
+CLASSPATH=.;%tomcat_home%\lib\servlet-api.jar;D:\ismael\svn\logcop-facet\lib\poi-3.7-20101029.jar;D:\ismael\svn\logcop-facet\lib\poi-ooxml-3.7-20101029.jar;D:\ismael\svn\logcop-facet\lib\poi-ooxml-schemas-3.7-20101029.jar;D:\ismael\svn\logcop-facet\lib\SeatAuthClient.jar;

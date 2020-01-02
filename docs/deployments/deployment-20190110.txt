@@ -1,0 +1,23 @@
+-------------------------------------------------------------------------------
+  Deployment Email
+-------------------------------------------------------------------------------
+
+To: PremierSolutionsHI Support;
+Cc: Amanda Crabtree; David Tribble
+Subject: TrackIT Deployed 1/10/2019
+
+TrackIT Team,
+
+Deployment updates:
+
+* (FIXED) I’m not able to put a Comment or attach a file into a new issue. I have to save first and then edit it to do so.
+* (FIXED) Closed Date automatically put in the current date when status was changed to Closed.
+* (FIXED) To add, when trying to comment on an issue, it cuts off a lot of the info without a way to view it, I tried clicking on that arrow, even dragging it down with no luck. It however worked when I logged into google chrome.
+* POC List Updated
+
+Awaiting responses for High Priority Items 3 and 7. Continuing to work on Status Reports.
+
+v/r,
+Lewis Nakao | Software Engineer | Premier Solutions Hi, LLC
+Email: lewis.nakao@premiersoltuionshi.com 
+desk 808.784.3310 main 808.396.4444 ext 110 cell 541.357.7473

@@ -1,0 +1,268 @@
+
+	/****************************************************************************
+	 * Function: sendTaskAddEmail
+	 * @deprecated: 2014.03.07 ATT :: Replaced with sendTaskAddHtmlEmail
+	 ****************************************************************************/
+	@Deprecated protected static void sendTaskAddEmail(ProjectBean inputBean, int taskPk, LoginBean loginBean, HttpServletRequest request) {
+		try {
+			Email email = new SimpleEmail();
+			email.setHostName("clientsmtp.pacxa.com");
+			email.setSmtpPort(25);
+
+			email.setFrom("support@premiersolutionshi.com");
+
+			email.addTo("amanda@premiersolutionshi.com");
+			email.addCc("anthonyt@premiersolutionshi.com");
+
+			email.setSubject("[Automated] New Task #" + taskPk);
+
+			StringBuffer msgBody = new StringBuffer();
+
+			msgBody.append("http://" + request.getServerName() + "/project.do?action=taskDetail&taskPk=" + taskPk + "\r\n\r\n");
+
+			msgBody.append("Added By: " + loginBean.getFullName() + "\r\n");
+
+			if(!CommonMethods.isEmpty(inputBean.getTitle())) 					msgBody.append("Title: " + inputBean.getTitle() + "\r\n\r\n");
+			if(!CommonMethods.isEmpty(inputBean.getDescription())) 		msgBody.append("Description: " + inputBean.getDescription().trim() + "\r\n\r\n");
+			if(!CommonMethods.isEmpty(inputBean.getCategory())) 			msgBody.append("Category: " + inputBean.getCategory() + "\r\n\r\n");
+			if(!CommonMethods.isEmpty(inputBean.getSource())) 				msgBody.append("Source: " + inputBean.getSource() + "\r\n\r\n");
+			if(!CommonMethods.isEmpty(inputBean.getStatus())) 				msgBody.append("Status: " + inputBean.getStatus() + "\r\n\r\n");
+			if(!CommonMethods.isEmpty(inputBean.getPriority()))		 		msgBody.append("Priority: " + inputBean.getPriority() + "\r\n\r\n");
+			if(!CommonMethods.isEmpty(inputBean.getUic())) 						msgBody.append("UIC: " + inputBean.getUic() + "\r\n\r\n");
+			if(!CommonMethods.isEmpty(inputBean.getPersonAssigned()))	msgBody.append("Person Assigned: " + inputBean.getPersonAssigned() + "\r\n\r\n");
+			if(!CommonMethods.isEmpty(inputBean.getIsInternal())) 		msgBody.append("Is Internal: " + inputBean.getIsInternal() + "\r\n\r\n");
+
+			if (inputBean.getDescriptionArr().length > 0) {
+				msgBody.append("Sub Tasks\r\n");
+				for (int i = 0; i < inputBean.getDescriptionArr().length; i++) {
+					if (!CommonMethods.isEmpty(inputBean.getDescriptionArr()[i])) {
+						msgBody.append(inputBean.getDescriptionArr()[i]
+														+ (!CommonMethods.isEmpty(inputBean.getPersonAssignedArr()[i]) ? " [Assigned to " + inputBean.getPersonAssignedArr()[i] + "]" : "")
+														+ (!CommonMethods.isEmpty(inputBean.getStatusArr()[i]) ? " [Status " + inputBean.getStatusArr()[i] + "]" : "")
+														+ (!CommonMethods.isEmpty(inputBean.getCompletedDateArr()[i]) ? " [Completed Date " + inputBean.getCompletedDateArr()[i] + "]" : "")
+														+ (!CommonMethods.isEmpty(inputBean.getDueDateArr()[i]) ? " [Due Date " + inputBean.getDueDateArr()[i] + "]" : "")
+														+ "\r\n");
+					} //end of if
+				} //end of for
+				msgBody.append("\r\n");
+			} //end of if
+
+			if(!CommonMethods.isEmpty(inputBean.getSubTasks())) 					msgBody.append("Sub Tasks (free-text): " + inputBean.getSubTasks() + "\r\n\r\n");
+			if(!CommonMethods.isEmpty(inputBean.getNotes())) 						msgBody.append("Notes: " + inputBean.getNotes() + "\r\n\r\n");
+			if(!CommonMethods.isEmpty(inputBean.getFollowUpDate())) 			msgBody.append("Follow Up Date: " + inputBean.getFollowUpDate() + "\r\n\r\n");
+			if(!CommonMethods.isEmpty(inputBean.getDueDate())) 					msgBody.append("Due Date: " + inputBean.getDueDate() + "\r\n\r\n");
+			if(!CommonMethods.isEmpty(inputBean.getCompletedDate())) 		msgBody.append("Completed Date: " + inputBean.getCompletedDate() + "\r\n\r\n");
+			if(!CommonMethods.isEmpty(inputBean.getStaffMeetingInd())) 	msgBody.append("Staff Meeting Ind: " + inputBean.getStaffMeetingInd() + "\r\n\r\n");
+			if(!CommonMethods.isEmpty(inputBean.getClientMeetingInd())) 	msgBody.append("Client Meeting Ind: " + inputBean.getClientMeetingInd() + "\r\n\r\n");
+
+			if (inputBean.getFileList() != null) {
+				msgBody.append("Files\r\n");
+				for (FormFile file : inputBean.getFileList()) {
+					if (file.getFileSize() > 0) {
+						msgBody.append("File: " + file.getFileName() + "\r\n");
+					} //end of if
+				} //end of for
+			} //end of for
+
+			email.setMsg(msgBody.toString());
+
+			// send the email
+			email.send();
+		} catch (Exception e) {
+			debugLog("ERROR", "sendTaskAddEmail", e);
+		} //end of catch
+	} //end of sendTaskAddEmail
+
+	/****************************************************************************
+	 * Function: sendTaskEditEmail
+	 * @deprecated: 2014.03.07 ATT :: Replaced by sendTaskEditHtmlEmail
+	 ****************************************************************************/
+	@Deprecated protected static void sendTaskEditEmail(ProjectBean oldBean, ProjectBean newBean, LoginBean loginBean) {
+		try {
+			Email email = new SimpleEmail();
+			email.setHostName("clientsmtp.pacxa.com");
+			email.setSmtpPort(25);
+
+			email.setFrom("support@premiersolutionshi.com");
+
+			email.addTo("amanda@premiersolutionshi.com");
+			email.addCc("anthonyt@premiersolutionshi.com");
+
+			email.setSubject("[Automated] Task #" + newBean.getTaskPk() + " Updated");
+
+			StringBuffer msgBody = new StringBuffer();
+
+			msgBody.append("http://10.40.49.55/project.do?action=taskDetail&taskPk=" + newBean.getTaskPk() + "\r\n\r\n");
+
+			msgBody.append("Updated By: " + loginBean.getFullName() + "\r\n\r\n");
+
+			if(!CommonMethods.nes(oldBean.getTitle()).equals(CommonMethods.nes(newBean.getTitle()))) 										msgBody.append("Title: " + oldBean.getTitle() + " -> " + newBean.getTitle() + "\r\n\r\n");
+
+			if(!CommonMethods.nes(oldBean.getDescription()).equals(CommonMethods.nes(newBean.getDescription())))
+				msgBody.append("Description:\r\n[old] " + oldBean.getDescription() + "\r\n[new]" + newBean.getDescription() + "\r\n\r\n");
+
+			if(!CommonMethods.nes(oldBean.getCategory()).equals(CommonMethods.nes(newBean.getCategory()))) 							msgBody.append("Category: "        + CommonMethods.nvl(oldBean.getCategory(),       "(none)") + " -> " + CommonMethods.nvl(newBean.getCategory(), "(none)") + "\r\n\r\n");
+			if(!CommonMethods.nes(oldBean.getSource()).equals(CommonMethods.nes(newBean.getSource()))) 									msgBody.append("Source: "          + CommonMethods.nvl(oldBean.getSource(),         "(none)") + " -> " + CommonMethods.nvl(newBean.getSource(), "(none)") + "\r\n\r\n");
+			if(!CommonMethods.nes(oldBean.getStatus()).equals(CommonMethods.nes(newBean.getStatus()))) 									msgBody.append("Status: "          + CommonMethods.nvl(oldBean.getStatus(),         "(none)") + " -> " + CommonMethods.nvl(newBean.getStatus(), "(none)") + "\r\n\r\n");
+			if(!CommonMethods.nes(oldBean.getPriority()).equals(CommonMethods.nes(newBean.getPriority())))		 					msgBody.append("Priority: "        + CommonMethods.nvl(oldBean.getPriority(),       "(none)") + " -> " + CommonMethods.nvl(newBean.getPriority(), "(none)") + "\r\n\r\n");
+			if(!CommonMethods.nes(oldBean.getUic()).equals(CommonMethods.nes(newBean.getUic()))) 												msgBody.append("UIC: "             + CommonMethods.nvl(oldBean.getUic(),            "(none)") + " -> " + CommonMethods.nvl(newBean.getUic(), "(none)") + "\r\n\r\n");
+			if(!CommonMethods.nes(oldBean.getPersonAssigned()).equals(CommonMethods.nes(newBean.getPersonAssigned()))) 	msgBody.append("Person Assigned: " + CommonMethods.nvl(oldBean.getPersonAssigned(), "(none)") + " -> " + CommonMethods.nvl(newBean.getPersonAssigned(), "(none)") + "\r\n\r\n");
+			if(!CommonMethods.nes(oldBean.getIsInternal()).equals(CommonMethods.nvl(newBean.getIsInternal(), "N"))) msgBody.append("Is Internal: " + oldBean.getIsInternal() + " -> " + newBean.getIsInternal() + "\r\n\r\n");
+
+			//Future Features
+			StringBuffer ffBody = new StringBuffer();
+			if(!CommonMethods.nes(oldBean.getQuarterYear()).equals(CommonMethods.nes(newBean.getQuarterYear())))		 		 ffBody.append("Target Quarter: "         + CommonMethods.nvl(oldBean.getQuarterYear(),       "(none)") + " -> " + CommonMethods.nvl(newBean.getQuarterYear(), "(none)") + "\r\n");
+			if(!CommonMethods.nes(oldBean.getEffortArea()).equals(CommonMethods.nes(newBean.getEffortArea())))		 			 ffBody.append("Area of Effort: "         + CommonMethods.nvl(oldBean.getEffortArea(),       "(none)") + " -> " + CommonMethods.nvl(newBean.getEffortArea(), "(none)") + "\r\n");
+			if(!CommonMethods.nes(oldBean.getLoe()).equals(CommonMethods.nes(newBean.getLoe())))		 					           ffBody.append("Level of Effort: "        + CommonMethods.nvl(oldBean.getLoe(),       "(none)") + " -> " + CommonMethods.nvl(newBean.getLoe(), "(none)") + "\r\n");
+			if(!CommonMethods.nes(oldBean.getEffortType()).equals(CommonMethods.nes(newBean.getEffortType())))		 			 ffBody.append("Type of Effort: "         + CommonMethods.nvl(oldBean.getEffortType(),       "(none)") + " -> " + CommonMethods.nvl(newBean.getEffortType(), "(none)") + "\r\n");
+			if(!CommonMethods.nes(oldBean.getDocNotes()).equals(CommonMethods.nes(newBean.getDocNotes())))		 				 	 ffBody.append("Documentation Notes: "    + CommonMethods.nvl(oldBean.getDocNotes(),       "(none)") + " -> " + CommonMethods.nvl(newBean.getDocNotes(), "(none)") + "\r\n");
+			if(!CommonMethods.nes(oldBean.getVersionIncluded()).equals(CommonMethods.nes(newBean.getVersionIncluded()))) ffBody.append("Fixed/Added in Version: " + CommonMethods.nvl(oldBean.getVersionIncluded(),       "(none)") + " -> " + CommonMethods.nvl(newBean.getVersionIncluded(), "(none)") + "\r\n");
+
+			if (ffBody.length() > 0) {
+				msgBody.append("Future Features\r\n");
+				msgBody.append(ffBody);
+				msgBody.append("\r\n");
+			} //end of if
+
+			ArrayList<String> newSubTaskList = new ArrayList<String>();
+			if (newBean.getDescriptionArr().length > 0) {
+				for (int i = 0; i < newBean.getDescriptionArr().length; i++) {
+					if (!CommonMethods.isEmpty(newBean.getDescriptionArr()[i])) {
+						newSubTaskList.add(newBean.getDescriptionArr()[i]
+														+ (!CommonMethods.isEmpty(newBean.getPersonAssignedArr()[i]) ? " [Assigned to " + newBean.getPersonAssignedArr()[i] + "]" : "")
+														+ (!CommonMethods.isEmpty(newBean.getStatusArr()[i]) ? " [Status " + newBean.getStatusArr()[i] + "]" : "")
+														+ (!CommonMethods.isEmpty(newBean.getCompletedDateArr()[i]) ? " [Completed Date " + newBean.getCompletedDateArr()[i] + "]" : "")
+														+ (!CommonMethods.isEmpty(newBean.getDueDateArr()[i]) ? " [Due Date " + newBean.getDueDateArr()[i] + "]" : "")
+														);
+					} //end of if
+				} //end of for
+			} //end of if
+
+			//Old Tasks
+			ArrayList<String> oldSubTaskList = new ArrayList<String>();
+			if (oldBean.getSubTaskList().size() > 0) {
+				for (ProjectBean subTaskBean : oldBean.getSubTaskList()) {
+						oldSubTaskList.add(subTaskBean.getDescription()
+														+ (!CommonMethods.isEmpty(subTaskBean.getPersonAssigned()) ? " [Assigned to " + subTaskBean.getPersonAssigned() + "]" : "")
+														+ (!CommonMethods.isEmpty(subTaskBean.getStatus()) ? " [Status " + subTaskBean.getStatus() + "]" : "")
+														+ (!CommonMethods.isEmpty(subTaskBean.getCompletedDate()) ? " [Completed Date " + subTaskBean.getCompletedDate() + "]" : "")
+														+ (!CommonMethods.isEmpty(subTaskBean.getDueDate()) ? " [Due Date " + subTaskBean.getDueDate() + "]" : "")
+														);
+				} //end of for
+			} //end of if
+
+
+			if (newSubTaskList.size() > 0 || oldSubTaskList.size() > 0) {
+				msgBody.append("Sub Tasks\r\n");
+				for (int i = 0; i < Math.max(newSubTaskList.size(), oldSubTaskList.size()); i++) {
+					String newSubTask = i < newSubTaskList.size() ? newSubTaskList.get(i) : "";
+					String oldSubTask = i < oldSubTaskList.size() ? oldSubTaskList.get(i) : "";
+					if (!newSubTask.equals(oldSubTask)) {
+						if (!CommonMethods.isEmpty(newSubTask) && !CommonMethods.isEmpty(oldSubTask)) { //Updated
+							msgBody.append("[old] " + oldSubTask + "\r\n[new] " + newSubTask + "\r\n");
+						} else if (CommonMethods.isEmpty(oldSubTask)) {	//Inserted
+							msgBody.append("INSERTED -> " + newSubTask + "\r\n");
+						} else { //Deleted
+							msgBody.append(oldSubTask + " -> DELETED\r\n");
+						}
+					}
+				} //end of for
+				msgBody.append("\r\n");
+			} //end of if
+
+
+			if(!oldBean.getSubTasks().equals(newBean.getSubTasks()))
+				msgBody.append("Sub Tasks (free-text):\r\n[old] " + oldBean.getSubTasks() + "\r\n\r\n[new]" + newBean.getSubTasks() + "\r\n\r\n");
+
+			if(!oldBean.getNotes().equals(newBean.getNotes()))
+				msgBody.append("Notes:\r\n[old] " + oldBean.getNotes() + "\r\n\r\n[new]" + newBean.getNotes() + "\r\n\r\n");
+
+			if(!oldBean.getFollowUpDate().equals(newBean.getFollowUpDate())) 					msgBody.append("Follow Up Date: " + CommonMethods.nvl(oldBean.getFollowUpDate(), "(none)") + " -> " + CommonMethods.nvl(newBean.getFollowUpDate(), "(none)") + "\r\n\r\n");
+			if(!oldBean.getDueDate().equals(newBean.getDueDate())) 										msgBody.append("Due Date: " + CommonMethods.nvl(oldBean.getDueDate(), "(none)") + " -> " + CommonMethods.nvl(newBean.getDueDate(), "(none)") + "\r\n\r\n");
+			if(!oldBean.getCompletedDate().equals(newBean.getCompletedDate()))				msgBody.append("Completed Date: " + CommonMethods.nvl(oldBean.getCompletedDate(), "(none)") + " -> " + CommonMethods.nvl(newBean.getCompletedDate(), "(none)") + "\r\n\r\n");
+			if(!oldBean.getStaffMeetingInd().equals(CommonMethods.nvl(newBean.getStaffMeetingInd(), "N")))		msgBody.append("Staff Meeting Ind: " + oldBean.getStaffMeetingInd() + " -> " + newBean.getStaffMeetingInd() + "\r\n\r\n");
+			if(!oldBean.getClientMeetingInd().equals(CommonMethods.nvl(newBean.getClientMeetingInd(), "N")))	msgBody.append("Client Meeting Ind: " + oldBean.getClientMeetingInd() + " -> " + newBean.getClientMeetingInd() + "\r\n\r\n");
+
+			if (newBean.getFileList() != null) {
+				msgBody.append("Files\r\n");
+				for (FormFile file : newBean.getFileList()) {
+					if (file.getFileSize() > 0) {
+						msgBody.append("File Uploaded: " + file.getFileName() + "\r\n");
+					} //end of if
+				} //end of for
+			} //end of for
+
+			for (String filePk : newBean.getDeleteFilePkArr()) {
+				msgBody.append("File #" + filePk + " deleted\r\n");
+			} //end of for
+
+			email.setMsg(msgBody.toString());
+
+			// send the email
+			email.send();
+		} catch (Exception e) {
+			debugLog("ERROR", "sendTaskEditEmail", e);
+		} //end of catch
+	} //end of sendTaskEditEmail
+	
+	/****************************************************************************
+	 * Function: sendTaskDeleteEmail
+	 ****************************************************************************/
+	protected static void sendTaskDeleteEmail(ProjectBean inputBean, LoginBean loginBean) {
+		try {
+			Email email = new SimpleEmail();
+			email.setHostName("clientsmtp.pacxa.com");
+			email.setSmtpPort(25);
+
+			email.setFrom("support@premiersolutionshi.com");
+
+			email.addTo("amanda@premiersolutionshi.com");
+			email.addCc("anthonyt@premiersolutionshi.com");
+
+			email.setSubject("[Automated] Task #" + inputBean.getTaskPk() + " Deleted");
+
+			StringBuffer msgBody = new StringBuffer();
+
+			msgBody.append("Deleted By: " + loginBean.getFullName() + "\r\n\r\n");
+
+			if(!CommonMethods.isEmpty(inputBean.getTitle())) 					msgBody.append("Title: " + inputBean.getTitle() + "\r\n\r\n");
+			if(!CommonMethods.isEmpty(inputBean.getDescription())) 		msgBody.append("Description: " + inputBean.getDescription().trim() + "\r\n\r\n");
+			if(!CommonMethods.isEmpty(inputBean.getCategory())) 			msgBody.append("Category: " + inputBean.getCategory() + "\r\n\r\n");
+			if(!CommonMethods.isEmpty(inputBean.getSource())) 				msgBody.append("Source: " + inputBean.getSource() + "\r\n\r\n");
+			if(!CommonMethods.isEmpty(inputBean.getStatus())) 				msgBody.append("Status: " + inputBean.getStatus() + "\r\n\r\n");
+			if(!CommonMethods.isEmpty(inputBean.getPriority()))		 		msgBody.append("Priority: " + inputBean.getPriority() + "\r\n\r\n");
+			if(!CommonMethods.isEmpty(inputBean.getUic())) 						msgBody.append("UIC: " + inputBean.getUic() + "\r\n\r\n");
+			if(!CommonMethods.isEmpty(inputBean.getPersonAssigned())) msgBody.append("Person Assigned: " + inputBean.getPersonAssigned() + "\r\n\r\n");
+			if(!CommonMethods.isEmpty(inputBean.getIsInternal())) 		msgBody.append("Is Internal: " + inputBean.getIsInternal() + "\r\n\r\n");
+
+			if (inputBean.getSubTaskList().size() > 0) {
+				msgBody.append("Sub Tasks\r\n");
+				for (ProjectBean subTaskBean : inputBean.getSubTaskList()) {
+					msgBody.append(subTaskBean.getDescription() + "\r\n");
+				} //end of for
+				msgBody.append("\r\n");
+			} //end of if
+
+			if(!CommonMethods.isEmpty(inputBean.getSubTasks())) 				msgBody.append("Sub Tasks (free-text): " + inputBean.getSubTasks() + "\r\n\r\n");
+			if(!CommonMethods.isEmpty(inputBean.getNotes())) 						msgBody.append("Notes: " + inputBean.getNotes() + "\r\n\r\n");
+			if(!CommonMethods.isEmpty(inputBean.getFollowUpDate())) 		msgBody.append("Follow Up Date: " + inputBean.getFollowUpDate() + "\r\n\r\n");
+			if(!CommonMethods.isEmpty(inputBean.getDueDate())) 					msgBody.append("Due Date: " + inputBean.getDueDate() + "\r\n\r\n");
+			if(!CommonMethods.isEmpty(inputBean.getCompletedDate())) 		msgBody.append("Completed Date: " + inputBean.getCompletedDate() + "\r\n\r\n");
+			if(!CommonMethods.isEmpty(inputBean.getStaffMeetingInd())) 	msgBody.append("Staff Meeting Ind: " + inputBean.getStaffMeetingInd() + "\r\n\r\n");
+			if(!CommonMethods.isEmpty(inputBean.getClientMeetingInd())) msgBody.append("Client Meeting Ind: " + inputBean.getClientMeetingInd() + "\r\n\r\n");
+
+			if (inputBean.getFileList() != null) {
+				msgBody.append("Files\r\n");
+				for (FileBean fileBean : inputBean.getTaskFileList()) {
+					msgBody.append("File: " + fileBean.getFilename() + "\r\n");
+				} //end of for
+			} //end of for
+
+			email.setMsg(msgBody.toString());
+
+			// send the email
+			email.send();
+		} catch (Exception e) {
+			debugLog("ERROR", "sendTaskDeleteEmail", e);
+		} //end of catch
+	} //end of sendTaskDeleteEmail

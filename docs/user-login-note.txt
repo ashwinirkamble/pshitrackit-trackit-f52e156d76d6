@@ -1,0 +1,10 @@
+================================================================================
+ User Log on
+================================================================================
+
+Logging in is handled by a "server.xml" configuration on Tomcat found here:
+
+C:\Java\apache-tomcat-8.5.29\conf\server.xml
+
+The application of user roles is found there too.
+

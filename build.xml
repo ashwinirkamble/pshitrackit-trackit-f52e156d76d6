@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE project PUBLIC "" "./docs/xml-schema/ant.dtd">
+<project name="trackit" default="build-restart" basedir=".">
+	<!-- <property environment="env" /> <property name="apache.home" value="C:/Java/apache-httpd-2.4.25" 
+		/> -->
+	<property name="tomcat.home" value="C:/Java/apache-tomcat-8.5.5" />
+
+	<property name="build.dir" value="c:/cloaked" />
+	<property name="app.name" value="pshi" />
+	<property name="app.dir" value="${build.dir}/${app.name}" />
+	<property name="build.webinf" value="${app.dir}/WEB-INF" />
+	<property name="staticWeb.dir" value="${build.dir}/www/app" />
+	<property name="content.dir" value="./WebContent" />
+	<property name="lib.dir" value="./lib" />
+	<property name="compile.debug" value="on" />
+	<property name="compile.depreciation" value="off" />
+	<property name="compile.optimize" value="on" />
+
+	<target name="build" depends="copy-content">
+		<javac srcdir="./src/main" destdir="${build.webinf}/classes"
+			debug="${compile.debug}" deprecation="${compile.deprecation}"
+			optimize="${compile.optimize}" encoding="utf-8" source="1.8" target="1.8"
+			verbose="off" includeantruntime="true">
+			<classpath>
+				<path>
+					<fileset dir="${lib.dir}" />
+				</path>
+				<path>
+					<fileset dir="${tomcat.home}/lib">
+						<include name="**/*.jar" />
+					</fileset>
+				</path>
+			</classpath>
+		</javac>
+		<copy todir="${build.webinf}/classes">
+			<fileset dir="./src/main" includes="**/*.xml" />
+		</copy>
+	</target>
+
+	<target name="build-restart" depends="stop-tomcat, build, start-tomcat"
+		description="Stops Tomcat, Builds, Starts." />
+
+	<target name="clean-build" depends="stop-tomcat, clean, build"
+		description="Clean Build" />
+
+	<target name="deploy-to-prod-prep" description="Deploy to production preparation."
+		depends="stop-tomcat, update-build-number, clean-build, deploy-prod-config, deploy-zip-move-app, deploy-revert-prod-config, deploy-open-rd" />
+
+	<target name="deploy-prod-config">
+		<copy todir="${build.webinf}" overwrite="true">
+			<fileset dir="./WEB-INF-prod" />
+		</copy>
+	</target>
+
+	<target name="copy-content">
+		<mkdir dir="${app.dir}" />
+		<mkdir dir="${build.webinf}/config" />
+		<mkdir dir="${build.webinf}/classes" />
+		<mkdir dir="${build.webinf}/lib" />
+		<mkdir dir="${build.dir}/www/app" />
+		<copy todir="${app.dir}">
+			<fileset dir="${content.dir}" excludes="**/*.*~,**/*.#*, **/*.scc" />
+		</copy>
+		<copy todir="${build.webinf}">
+			<fileset dir="./WebContent/WEB-INF" />
+		</copy>
+		<copy todir="${build.webinf}/lib">
+			<fileset dir="${lib.dir}" includes="**/*.jar" />
+		</copy>
+		<copy todir="${build.dir}/www/app">
+			<fileset dir="./www/app" excludes="**/*.*~,**/*.#*, **/*.scc" />
+		</copy>
+	</target>
+
+	<target name="deploy-revert-prod-config">
+		<copy todir="${build.webinf}" overwrite="true">
+			<fileset dir="./WebContent/WEB-INF" />
+		</copy>
+	</target>
+
+	<target name="update-build-number">
+		<buildnumber file="./WEB-INF/config/build.properties" />
+	</target>
+
+	<target name="deploy-zip-move-app">
+		<zip destfile="C:/cloaked/pshi.zip" basedir="C:/cloaked/pshi" />
+		<move file="C:/cloaked/pshi.zip" todir="c:/sqlite3_db" />
+		<!-- for testing: <move file="C:/cloaked/pshi.zip" todir="C:/sqlite3_db"/> -->
+	</target>
+
+	<target name="deploy-open-rd">
+		<exec executable="C:\WINDOWS\system32\mstsc.exe" />
+	</target>
+
+	<target name="deploy-run-script">
+		<exec dir="./docs/scripts" executable="cmd">
+			<!-- <arg line="/c run-trackit-deploy-on-prod.bat"/> -->
+			<arg line="/c test.bat" />
+		</exec>
+	</target>
+
+	<target name="stop-clean-build-start" depends="stop-tomcat, clean, build, start-tomcat" />
+
+	<target name="restart-tomcat" depends="stop-tomcat, start-tomcat" />
+
+	<target name="start-tomcat">
+		<exec executable="cmd" dir="${tomcat.home}/bin">
+			<arg value="/c ${tomcat.home}/bin/startup.bat" />
+		</exec>
+	</target>
+
+	<target name="stop-tomcat">
+		<exec executable="cmd" dir="${tomcat.home}/bin">
+			<arg value="/c ${tomcat.home}/bin/shutdown.bat" />
+		</exec>
+	</target>
+
+	<target name="clean">
+		<delete dir="${app.dir}" />
+		<delete dir="${build.dir}/www/app" />
+	</target>
+
+	<!-- This isn't used and is not tested. <target name="war" depends="build"> 
+		<property name="version.number" value="1.0" /> <buildnumber file="build.properties" 
+		/> <tstamp> <format property="TODAY" pattern="yyyy-MM-dd HH:mm:ss" /> </tstamp> 
+		<manifest file="MANIFEST.MF"> <attribute name="Build-Version" value="${version.number}.${build.number}" 
+		/> <attribute name="Build-Date" value="${TODAY}" /> </manifest> <war destfile="./${app.name}.war" 
+		webxml="./WEB-INF/web.xml" manifest="MANIFEST.MF"> <zipfileset dir="${content.dir}" 
+		excludes="**/*.*~,**/*.#*, **/*.scc" /> <zipfileset dir="./WEB-INF/" prefix="WEB-INF" 
+		/> <lib dir="${lib.dir}/" /> <classes dir="${build.webinf}/classes" /> </war> 
+		</target> -->
+
+	<!-- What gets generated from this has a lot of validation errors that I 
+		corrected. <target name="ant-dtd-gen"> <antstructure output="ant.dtd"/> </target> -->
+</project>

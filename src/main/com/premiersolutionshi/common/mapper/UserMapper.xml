@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.premiersolutionshi.common.dao.UserDao">
+	<resultMap type="User" id="userResult">
+		<id property="id" column="user_pk" />
+		<result property="username" column="user_username" />
+		<result property="lastName" column="user_last_name" />
+		<result property="firstName" column="user_first_name" />
+		<result property="organization" column="user_organization" />
+		<result property="title" column="user_title" />
+		<result property="email" column="user_email" />
+		<result property="workNumber" column="user_work_number" />
+		<result property="quickDial" column="user_quick_dial" />
+		<result property="faxNumber" column="user_fax_number" />
+		<result property="cellNumber" column="user_cell_number" />
+		<result property="enabled" column="user_enabled" />
+		<result property="lastUpdatedBy" column="user_last_updated_by" />
+		<result property="lastUpdatedDate" column="user_last_updated_date" />
+	</resultMap>
+
+	<sql id="columns">
+		user_pk,
+		u.username AS user_username,
+		u.last_name AS user_last_name,
+		u.first_name AS user_first_name,
+		u.organization AS user_organization,
+		u.title AS user_title,
+		u.email AS user_email,
+		u.work_number AS user_work_number,
+		u.quick_dial AS user_quick_dial,
+		u.fax_number AS user_fax_number,
+		u.cell_number AS user_cell_number,
+		u.enabled AS user_enabled,
+		u.last_updated_by AS user_last_updated_by,
+		strftime('%Y-%m-%d %H:%M:%f', u.last_updated_date) AS user_last_updated_date
+	</sql>
+
+	<sql id="baseSelect">
+		SELECT
+		<include refid="columns" />
+		FROM users u
+	</sql>
+
+	<select id="getAll" resultMap="userResult">
+		<include refid="baseSelect" />
+	</select>
+
+	<select id="getByUsername" resultMap="userResult">
+		<include refid="baseSelect" />
+		WHERE u.username = #{username}
+	</select>
+
+	<select id="getUsernames" resultMap="userResult">
+		SELECT username
+		FROM users
+	</select>
+</mapper>

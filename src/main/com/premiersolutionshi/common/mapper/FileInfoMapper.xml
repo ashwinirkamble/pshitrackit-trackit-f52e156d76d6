@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.premiersolutionshi.common.dao.FileInfoDao">
+	<resultMap type="FileInfo" id="fileInfoResult">
+		<id property="id" column="file_pk" />
+		<result property="filename" column="fi_filename" />
+		<result property="extension" column="fi_extension" />
+		<result property="contentType" column="fi_content_type" />
+		<result property="filesize" column="fi_filesize" />
+		<result property="deleted" column="fi_deleted" />
+		<result property="uploadedBy" column="fi_uploaded_by" />
+		<result property="uploadedDate" column="fi_uploaded_date" />
+	</resultMap>
+
+	<sql id="columns">
+		file_pk,
+		fi.filename AS fi_filename,
+		fi.extension AS fi_extension,
+		fi.content_type AS fi_content_type,
+		fi.filesize AS fi_filesize,
+		fi.deleted AS fi_deleted,
+		fi.uploaded_by AS fi_uploaded_by,
+		strftime('%Y-%m-%d %H:%M:%f', fi.uploaded_date) AS fi_uploaded_date
+	</sql>
+
+	<sql id="baseSelect">
+		SELECT
+		<include refid="columns" />
+		FROM file_info fi
+	</sql>
+
+	<select id="getAll" resultMap="fileInfoResult">
+		<include refid="baseSelect" />
+	</select>
+
+	<select id="getById" resultMap="fileInfoResult">
+		<include refid="baseSelect" />
+		WHERE file_pk = #{id}
+	</select>
+
+	<insert id="insert" useGeneratedKeys="true" parameterType="FileInfo">
+		INSERT INTO file_info (
+		filename,
+		extension,
+		content_type,
+		filesize,
+		deleted,
+		uploaded_by,
+		uploaded_date
+		)
+		VALUES (
+		#{filename},
+		#{extension},
+		#{contentType},
+		#{filesize},
+		#{deleted},
+		#{uploadedBy},
+		datetime('now', 'localtime')
+		)
+	</insert>
+
+	<update id="update" parameterType="FileInfo">
+		UPDATE file_info SET
+		filename = {filename},
+		extension = #{extension},
+		content_type = #{contentType},
+		filesize = #{filesize},
+		deleted = #{deleted}
+		WHERE file_pk = #{id}
+	</update>
+
+	<delete id="deleteById">
+		DELETE FROM file_info
+		WHERE file_pk = #{id}
+	</delete>
+</mapper>
