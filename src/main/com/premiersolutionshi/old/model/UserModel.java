@@ -702,7 +702,8 @@ public class UserModel extends BaseModel {
         return resultList;
     }
 
-   /*ashwini */
+   
+    
     public static ArrayList<UserBean> getCurrentPtoTravelList1(Connection conn, LoginBean loginBean, HttpServletRequest request) {
         ArrayList<UserBean> resultList = new ArrayList<UserBean>();
         
@@ -736,7 +737,9 @@ public class UserModel extends BaseModel {
         }
     	return resultList;
     }
- /*ashwini currentPto working */
+    
+    //Added Code for getting current PTO travel list By Ashwini on 15 Oct 2019
+    
  public static ArrayList<UserBean> getCurrentPtoTravelList(Connection conn, LoginBean loginBean,HttpServletRequest request) {
     	
 
@@ -777,75 +780,7 @@ public class UserModel extends BaseModel {
       }
         return resultList;
     }
-    
-    /* ashwini 12/2 wokring hardcoding*/
-    /*
-    public static ArrayList<UserBean> getCurrentPtoTravelList(Connection conn, LoginBean loginBean) {
-    	
-        //String sqlStmt ="SELECT first_name, last_name, start_date_fmt, end_date_fmt, leave_type, location FROM pto_travel_vw where start_date_fmt";
-
-        StringBuffer sqlStmt = new StringBuffer("SELECT first_name, last_name, start_date_fmt, end_date_fmt, leave_type, location FROM pto_travel_vw where start_date_fmt='12/02/2019'");
-        UserBean parentBean = null;
-        ArrayList<UserBean> resultList = new ArrayList<UserBean>();
-
-      
-       int size=0;
-      if(loginBean!=null)
-      {
-        try (PreparedStatement pStmt = conn.prepareStatement(sqlStmt.toString())) {
-            ResultSet rs = pStmt.executeQuery();
-            ResultSetMetaData rsmd = rs.getMetaData();
-
-            int columnsNumber = rsmd.getColumnCount();
-
-            
-            while (rs.next()) {
-                for (int i = 1; i <= columnsNumber; i++) {
-                    if (i > 1) System.out.print(",  ");
-                    String columnValue = rs.getString(i);
-                    System.out.println(columnValue + " | " + rsmd.getColumnName(i));
-                }
-                System.out.println("");
-
-                
-                if(CommonMethods.isValidDateStr(rs.getString("start_date_fmt")) && CommonMethods.dateDiff(CommonMethods.getDate("MM/DD/YYYY"), rs.getString("start_date_fmt")) <= 0
-                    	  && CommonMethods.isValidDateStr(rs.getString("end_date_fmt")) && CommonMethods.dateDiff(CommonMethods.getDate("MM/DD/YYYY"),rs.getString("end_date_fmt")) >= 0)
-                    	 {  
-                     System.out.println("You are under if statement");
-
-                      
-                      parentBean = new UserBean();
-                      parentBean.setTaskList(new ArrayList<UserBean>());
-
-                      UserBean resultBean = new UserBean();
-
-                       resultBean.setLastName(rs.getString("last_name"));
-                       resultBean.setFirstName(rs.getString("first_name"));
-                       resultBean.setStartDate(rs.getString("start_date_fmt"));
-                       resultBean.setEndDate(rs.getString("end_date_fmt"));
-                       resultBean.setLeaveType(rs.getString("leave_type"));
-                       
-                      parentBean.getTaskList().add(resultBean);
-
-
-                    }
-              resultList.add(parentBean);
-            }
-            
-             
-              
-            //  System.out.println("size of resultset= "+size);
-           
-            System.out.println("Size of resultList ="+resultList.size());
-       } catch (Exception e) {
-            debugLog("SQL", "getCurrentPtoTravelList", e, logger);
-
-        	System.out.println("error in current PTO "+e);
-        }
-      }
-        return resultList;
-    }
-*/    
+  
     
     public static HashMap<String, List<CalendarItemBean>> getPtoTravelMap(Connection conn, int month, int year) {
         String sqlStmt = "SELECT first_name, last_name, start_date_fmt, end_date_fmt, leave_type, location "

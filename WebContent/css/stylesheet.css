@@ -1,5 +1,6 @@
 /* ---------------------------------------------------------- */
 
+/* added code For Home page box  Ashwini 20 nov 2019*/
 div#box1
 {
 	border-radius: 20px;
@@ -688,7 +689,7 @@ div.col1 > table, div.col1 > div, div.col1 > form, div.col1 > nav, div.col1 > ol
   padding: 7px 10px;
   }
 
-/*changes ashwini*/
+/*added Code for datatable on home screen by Ashwini */
 
 /* dataTable_style2 styles
 ---------------------------------------------------------- */

@@ -50,7 +50,7 @@
         </ul>
       </div>
       <div class="col-5" class="panel panel-default" id="box1">
-       <%--ashwini 11/21 --%>
+       <%--added code by Ashwini 21 nov 2019 --%>
         
      <logic:iterate id="leftbar_projectBean" name="leftbar_projectList" type="com.premiersolutionshi.old.bean.ProjectBean">
      <logic:iterate id="leftbar_resultBean" name="leftbar_projectBean" property="taskList" type="com.premiersolutionshi.old.bean.ProjectBean">          <bean:define id="projectPk" value="${leftbar_resultBean.projectPk}"/>
@@ -89,6 +89,8 @@
             </logic:iterate>
          </div>
           </div>
+   
+          <%--added code for Current PTO/Travel by Ashwini 21 nov 2019 --%>
           
        <div class=row>
        <div class=col-10>

@@ -10,7 +10,8 @@ import org.apache.log4j.PropertyConfigurator;
  */
 public class Log4jInit extends HttpServlet {
     private static final long serialVersionUID = -6745314663661839586L;
-
+    private String pathToBeIgnored="/com/premiersolutionshi/mail/";
+    
     public void init() {
         ServletContext servletContext = getServletContext();
         String prefix = servletContext == null ? "" : servletContext.getRealPath("/");
@@ -18,5 +19,7 @@ public class Log4jInit extends HttpServlet {
         if (file != null) {
             PropertyConfigurator.configure(prefix + file);
         }
+      
     }
 }
+

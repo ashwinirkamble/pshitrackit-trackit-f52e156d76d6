@@ -53,14 +53,13 @@
     <init-param>
       <param-name>log4j-init-file</param-name>
       <param-value>/WEB-INF/config/log4j.properties</param-value>
-    </init-param>
-
+ 	   </init-param>
     <load-on-startup>1</load-on-startup>
   </servlet>
   
   <servlet>
     <servlet-name>TrackItEmailServlet</servlet-name>    
-	<servlet-class>com.premiersolutionshi.mail.TrackItEmailServlet</servlet-class>    
+	<servlet-class>com.premiersolutionshi.mail.ReminderEmailSchedulerServlet</servlet-class>    
 	<load-on-startup>2</load-on-startup>
   </servlet>
     

@@ -304,9 +304,9 @@ public class UserBean extends LastUpdatedBean {
     	this.size=size;
     }
   
-/*set arraylist of currentpto ashwini*/  
-   
-   
+ 
+   // Added code for Manage PTO List on home screen by Ashwini on 14-nov-2019
+
     private ArrayList<UserBean> list = null;
 	public ArrayList<UserBean> getList()
 	{
