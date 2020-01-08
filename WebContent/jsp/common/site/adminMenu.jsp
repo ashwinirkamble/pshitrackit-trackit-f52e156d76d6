@@ -57,7 +57,7 @@
             </a>
           </li>
 	  
-	   <%--Ashwini comment start%-->
+	   <%--Comment out Ashwini comment start%-->
           <%-- <li class="pshi-menu-list-item" style="${isDevEnv ? '' : 'display:none;'}">
             <a class="nav-link" href="statusReport.do">
               <i class="material-icons">assignment</i>
