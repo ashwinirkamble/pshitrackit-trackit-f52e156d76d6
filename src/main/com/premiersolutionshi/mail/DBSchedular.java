@@ -14,13 +14,13 @@ import org.apache.log4j.PropertyConfigurator;
 
 /**
 * @author Ashwini
-* @version 1.0, 4-Dec-2019
+* @version 1.1, 4-Dec-2019
+* @since   JDK 8, Apache Struts 1.3.10
 */ 
 
 public class DBSchedular{
 	
 	public static final DateTimeFormatter COMMON_BASIC_FORMAT_DATE = DateTimeFormatter.ofPattern("MM/dd/yyyy");
- //   private static Logger logger = Logger.getLogger(DBSchedular.class.getSimpleName());
 	private static Logger logger = Logger.getLogger("MailLogger");
 	
 	//convert date to basic format
@@ -30,8 +30,7 @@ public class DBSchedular{
 
   public Collection<String> connect()
 	{
-	  //list of email address
-		ArrayList  mailTo=new ArrayList();
+		ArrayList  mailTo=new ArrayList();					 //list of email address
 		UserInfo resultBean = new UserInfo();
 				try{
 			    Connection conn=null;
@@ -45,25 +44,22 @@ public class DBSchedular{
 			    }catch(Exception e){
 			    	logError("DBSchedular | connect","Error in Database Connectivity", e);
 			    }
-			    
-				String date=getNowInBasicFormatDate();
-	    	    String sqlStmt="SELECT user_fk,first_name, last_name,email, start_date_fmt, end_date_fmt, leave_type, location FROM pto_travel_vw";
+			String date=getNowInBasicFormatDate();
+			String sqlStmt="SELECT user_fk,first_name, last_name,email, start_date_fmt, end_date_fmt, leave_type, location FROM pto_travel_vw";
 	    	    //execute query
 	    	    PreparedStatement pStmt=conn.prepareStatement(sqlStmt);
 			    ResultSet rs = pStmt.executeQuery();
-			     int size=0;
 			     while(rs.next())
 			      {
 			    	 //check travel end date equals to current date and travel type is "Travel"
 				  if(rs.getString("end_date_fmt").equals(date) && rs.getString("leave_type").equals("Travel"))
 				  {
-					  size++;
 					  String email=rs.getString("email");
 					  
 					  //check email ID is null or not
 					  if(email==null || email.equals(""))
 					  	{
-						  logError("DBSchedular | connect","No email ID provided for user"+rs.getString("first_name")+" "+rs.getString("last_name"));
+						 logger.error("No email ID provided for user "+rs.getString("first_name")+" "+rs.getString("last_name"));
 					  	}
 					  else
 					  	{
@@ -80,17 +76,16 @@ public class DBSchedular{
 	return mailTo;                          //return list of e-Mail address
 	}
   
- private void logError(String functionName, String statement) {
-      logError(functionName, statement, null);
-  }
+ 
 
  private void logError(String functionName, String statement, Exception e) {
       if (e != null) {
-          logger.error(String.format("%11s%-30s | %-34s | %s", "", "ERROR", functionName, statement), e);
+          logger.error(String.format("%11s%-30s | %s", "", "ERROR", functionName, statement), e);
           e.printStackTrace();
-      }
+      	}
       else {
-          logger.error(String.format("%11s%-30s | %-34s | %s", "", "ERROR", functionName, statement));
-      }
+    	  		logger.error(String.format("%11s%-30s | %s", "", "ERROR", functionName, statement));
+      	}
   }
+ 
 }
